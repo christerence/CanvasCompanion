@@ -41,11 +41,14 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:fontFamily="orbitron" />
+                android:layout_weight="1"
+                android:background="#001"
+                android:fontFamily="orbitron"
+                android:textColor="#FFF" />
 
         </LinearLayout>
 
@@ -63,34 +66,43 @@
                 android:layout_marginLeft="20dp"
                 android:textColor="#000"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginRight="3dp"/>
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginRight="20dp"
-                android:fontFamily="orbitron" />
+                android:fontFamily="orbitron"
+                android:textColor="#FFF"
+                android:background="#001"
+                android:layout_marginLeft="20dp"/>
 
         </LinearLayout>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
             android:fontFamily="orbitron"
-            android:text="Login" />
+            android:text="Login"
+            android:textColor="#FFF"
+            android:background="#001"/>
 
         <Button
             android:layout_width="200sp"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:fontFamily="orbitron"
-            android:text="Canvas\nLogin" />
+            android:text="Canvas Login"
+            android:textColor="#FFF"
+            android:background="#001"/>
 
         <TextView
-            android:layout_marginTop="80dp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="orbitron"
