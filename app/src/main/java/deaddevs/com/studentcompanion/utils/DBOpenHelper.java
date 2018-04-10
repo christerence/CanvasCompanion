@@ -12,6 +12,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TITLE = "NAME";
     public static final String COLUMN_ID = "ID";
 
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + "(" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
