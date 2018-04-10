@@ -6,6 +6,7 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String authKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,5 +16,13 @@ public class MainActivity extends AppCompatActivity {
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    public void saveInfo(String name) {
+
+    }
+
+    public String getAuthKey() {
+        return authKey;
     }
 }
