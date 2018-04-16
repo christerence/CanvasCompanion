@@ -2,6 +2,7 @@
 Android Development Class Project
 
 Canvas Integrated Companion Application. 
+With Helpful Study Solutions
 
 ## Using APIs: 
 - Canvas API
