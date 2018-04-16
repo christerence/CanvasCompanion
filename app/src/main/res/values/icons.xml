@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="disabled">&#xf008;</string>
+    <string name="profile">&#xf007;</string>
+    <string name="settings">&#xf1de;</string>
+    <string name="todo">&#xf46d;</string>
+    <string name="course">&#xf0cb;</string>
 </resources>

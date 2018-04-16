@@ -12,18 +12,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private String TAG = "LoginScreen";
 
 
@@ -33,23 +41,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-
-
+        db = FirebaseFirestore.getInstance();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         TextView title = findViewById(R.id.Title);
         title.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
-
         TextView userText = findViewById(R.id.UserText);
         userText.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
-
-
         TextView passText = findViewById(R.id.PassText);
         passText.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
-
-
         TextView trademark = findViewById(R.id.TradeMark);
         trademark.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
     }
@@ -104,6 +106,34 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
             setContentView(R.layout.activity_core);
         }
+    }
+
+    public void writeNewUser(String uid) {
+        String first = "placeHolder";
+        String last = "placeHolder";
+        String canvas = "placeHolder";
+        String photo = "placeHolder";
+
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", first);
+        user.put("last", last);
+        user.put("Canvas", canvas);
+        user.put("PhotoURL", photo);
+
+
+        db.collection("users").document(uid).set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
     public void saveInfo(String name) {
