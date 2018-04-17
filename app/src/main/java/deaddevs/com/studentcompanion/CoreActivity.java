@@ -1,9 +1,12 @@
 package deaddevs.com.studentcompanion;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class CoreActivity extends AppCompatActivity {
     CourseListFragment course;
@@ -61,6 +64,14 @@ public class CoreActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+
+    public void signOut(View v) {
+        FirebaseAuth.getInstance().signOut();
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+        setContentView(R.layout.activity_main);
     }
 
 

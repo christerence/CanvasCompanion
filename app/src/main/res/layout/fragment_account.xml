@@ -15,20 +15,22 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/AccountBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="handleBack"
-                android:text="back" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Account"
-                android:textSize="30dp" />
+                android:text="Profile"
+                android:textSize="30dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/AccountBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="handleBack"
+                android:layout_weight="1"
+                android:text="@string/backRight" />
 
         </LinearLayout>
 
