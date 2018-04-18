@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="deaddevs.com.studentcompanion">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -24,7 +23,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".CoreActivity"></activity>
+        <activity android:name=".CoreActivity" />
+        <activity android:name=".SignUp"></activity>
     </application>
 
 </manifest>

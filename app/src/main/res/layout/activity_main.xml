@@ -103,8 +103,9 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:fontFamily="orbitron"
-            android:text="Canvas Login"
+            android:text="Sign-Up"
             android:textColor="#FFF"
+            android:onClick="signUp"
             android:background="#001"/>
 
         <TextView

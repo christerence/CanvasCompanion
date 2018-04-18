@@ -31,7 +31,6 @@ import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
     private String TAG = "LoginScreen";
 
 
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -108,32 +106,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void writeNewUser(String uid) {
-        String first = "placeHolder";
-        String last = "placeHolder";
-        String canvas = "placeHolder";
-        String photo = "placeHolder";
-
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", first);
-        user.put("last", last);
-        user.put("Canvas", canvas);
-        user.put("PhotoURL", photo);
-
-
-        db.collection("users").document(uid).set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+    public void signUp(View v) {
+        Intent i = new Intent(getApplicationContext(), SignUp.class);
+        startActivity(i);
+        setContentView(R.layout.activity_sign_up);
     }
 
     public void saveInfo(String name) {
