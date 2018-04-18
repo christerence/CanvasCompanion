@@ -19,12 +19,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private String TAG = "LoginScreen";
+    private FirebaseFirestore db;
 
 
     private String authKey;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -100,10 +104,48 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateUI(FirebaseUser x) {
         if(x != null) {
-            Intent i = new Intent(getApplicationContext(), CoreActivity.class);
-            startActivity(i);
-            setContentView(R.layout.activity_core);
+            Task<DocumentSnapshot> task =
+                    FirebaseFirestore.getInstance().collection("users").document(x.getUid()).get();
+            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot o) {
+                    Intent i = new Intent(getApplicationContext(), CoreActivity.class);
+                    i.putExtra("USER_FIRST", o.getString("first"));
+                    i.putExtra("USER_LAST", o.getString("last"));
+                    i.putExtra("CANVAS_KEY", o.getString("Canvas"));
+                    i.putExtra("USER_EMAIL", o.getString("Email"));
+                    startActivity(i);
+                    setContentView(R.layout.activity_core);
+                }
+            });
+            task.addOnFailureListener(new OnFailureListener() {
+                public void onFailure(Exception e) {
+                    // handle any errors here
+                }
+            });
         }
+    }
+
+    public String getUserData(String uid) {
+        DocumentReference docRef = db.collection("users").document(uid);
+        final String[] toReturn = {""};
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, document.getData().toString());
+                        toReturn[0] = String.valueOf(document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        return toReturn[0];
     }
 
     public void signUp(View v) {
@@ -112,9 +154,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
     }
 
-    public void saveInfo(String name) {
-
-    }
+    public void saveInfo(String name) {}
 
     public String getAuthKey() {
         return authKey;

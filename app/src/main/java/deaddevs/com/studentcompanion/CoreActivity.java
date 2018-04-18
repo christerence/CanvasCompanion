@@ -3,8 +3,10 @@ package deaddevs.com.studentcompanion;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -17,6 +19,11 @@ public class CoreActivity extends AppCompatActivity {
     AssignmentPageFragment assignmentpage;
 
     String currPage = "Course";
+
+    String first;
+    String last;
+    String email;
+    String canvasKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,20 @@ public class CoreActivity extends AppCompatActivity {
             course.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
         }
+        if(getIntent() != null) {
+            first = getIntent().getStringExtra("USER_FIRST");
+            last = getIntent().getStringExtra("USER_LAST");
+            email = getIntent().getStringExtra("USER_EMAIL");
+            canvasKey = getIntent().getStringExtra("CANVAS_KEY");
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        TextView view = findViewById(R.id.HelloText);
+        view.setText("Hello, " + first + ".");
     }
 
     public void handleNav(View v) {

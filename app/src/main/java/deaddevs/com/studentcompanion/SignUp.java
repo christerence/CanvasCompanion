@@ -41,6 +41,8 @@ public class SignUp extends AppCompatActivity {
 
 		mAuth = FirebaseAuth.getInstance();
 		db = FirebaseFirestore.getInstance();
+
+
 	}
 
 	public void backToLogin(View v) {
