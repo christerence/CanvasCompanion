@@ -1,14 +1,25 @@
 package deaddevs.com.studentcompanion;
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import deaddevs.com.studentcompanion.utils.CanvasApi;
+import deaddevs.com.studentcompanion.utils.DatabaseManager;
 
 public class CoreActivity extends AppCompatActivity {
     CourseListFragment course;
@@ -25,10 +36,23 @@ public class CoreActivity extends AppCompatActivity {
     String email;
     String canvasKey;
 
+    CanvasApi canvas;
+
+    List<String> courses;
+    DatabaseManager db;
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        db.deleteAll();
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_core);
+        db = new DatabaseManager(this);
+
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -47,12 +71,17 @@ public class CoreActivity extends AppCompatActivity {
             email = getIntent().getStringExtra("USER_EMAIL");
             canvasKey = getIntent().getStringExtra("CANVAS_KEY");
         }
+
+        if(canvasKey != null) {
+            canvas = new CanvasApi(this);
+
+            canvas.initiateRestCallForCourses();
+        }
     }
 
-    @Override
+	@Override
     protected void onStart() {
         super.onStart();
-
         TextView view = findViewById(R.id.HelloText);
         view.setText("Hello, " + first + ".");
     }
@@ -87,6 +116,16 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.close();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db.open();
+    }
 
     public void signOut(View v) {
         FirebaseAuth.getInstance().signOut();
@@ -94,7 +133,6 @@ public class CoreActivity extends AppCompatActivity {
         startActivity(i);
         setContentView(R.layout.activity_main);
     }
-
 
     public void handleBack(View v) {
         switch(currPage) {
@@ -129,7 +167,35 @@ public class CoreActivity extends AppCompatActivity {
 
     }
 
+    public void updateList() {
+        ListView courselist = findViewById(R.id.CourseListView);
+        ArrayList<String> coursesName = new ArrayList<>();
+        for(int i = 0; i < courses.size(); i++) {
+            String name = courses.get(i).split("///")[1];
+            coursesName.add(name);
+        }
+        List<String> coursesNameAsList = coursesName;
+        ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, coursesNameAsList);
+        courselist.setAdapter(coursesadapter);
+    }
 
+    public void handleAdd(View v) {
+        Intent i = new Intent(this, AddActivity.class);
+        startActivity(i);
+        setContentView(R.layout.activity_add);
+    }
 
+    public void handleRemove(View v) {
+        //remove from list
+    }
 
+    public void saveInfo(String name) {
+        db.insertCanvasInfo(name);
+        courses = db.getAllRecord();
+        updateList();
+    }
+
+    public String getAuthKey() {
+        return canvasKey;
+    }
 }

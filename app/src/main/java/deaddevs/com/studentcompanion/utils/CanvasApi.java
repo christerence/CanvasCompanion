@@ -1,5 +1,5 @@
 package deaddevs.com.studentcompanion.utils;
-
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,9 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import deaddevs.com.studentcompanion.CoreActivity;
 import deaddevs.com.studentcompanion.MainActivity;
-
-
 
 /**
  * Grabs the Data from Canvas Api
@@ -26,7 +25,7 @@ import deaddevs.com.studentcompanion.MainActivity;
 public class CanvasApi implements Response.Listener<String>, Response.ErrorListener {
 
     private String authKey;
-    MainActivity mainActivity;
+    CoreActivity core;
     RequestQueue queue;
 
     //Example
@@ -46,9 +45,10 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
     //authenticate
     final String AUTHENTICATE = "?access_token=";
 
-    public CanvasApi(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        authKey = mainActivity.getAuthKey();
+    public CanvasApi(CoreActivity core) {
+        this.core = core;
+        authKey = core.getAuthKey();
+		queue = Volley.newRequestQueue(core);
     }
 
     public void initiateRestCallForCourses() {
@@ -90,9 +90,8 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
             for(int i = 0; i < object.length(); i++) {
                 JSONObject value = object.getJSONObject(i);
                 String courseName = value.getString("name");
-                mainActivity.saveInfo(courseName);
+                core.saveInfo(courseName);
             }
-
         } catch(JSONException e) {
             e.printStackTrace();
         }

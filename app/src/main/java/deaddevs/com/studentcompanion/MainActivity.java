@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import deaddevs.com.studentcompanion.utils.DatabaseManager;
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
 
-    private String authKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     // handle any errors here
                 }
             });
+
         }
     }
 
@@ -152,11 +153,5 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), SignUp.class);
         startActivity(i);
         setContentView(R.layout.activity_sign_up);
-    }
-
-    public void saveInfo(String name) {}
-
-    public String getAuthKey() {
-        return authKey;
     }
 }

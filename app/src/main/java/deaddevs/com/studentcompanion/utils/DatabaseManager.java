@@ -45,6 +45,13 @@ public class DatabaseManager {
         return result;
     }
 
+    public void deleteAll() {
+        if (sqLiteDatabase.isOpen()) {
+            sqLiteDatabase.execSQL("DELETE FROM " + DBOpenHelper.TABLE_NAME);
+        }
+    }
+
+
 
 
 
