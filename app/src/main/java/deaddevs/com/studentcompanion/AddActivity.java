@@ -50,6 +50,7 @@ public class AddActivity extends AppCompatActivity {
 		String[] items = new String[]{"Low", "Medium", "High"};
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
 		dropdown.setAdapter(adapter);
+
 	}
 
 	public void handleReset(View v) {
@@ -63,8 +64,16 @@ public class AddActivity extends AppCompatActivity {
 	}
 
 	public void handleCancel(View v) {
-		Intent i = new Intent(getApplicationContext(), CoreActivity.class);
-		startActivity(i);
+		Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
+		outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
+		outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
+		outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
+		outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
+		outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
+		outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
+		outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
+		outState.putExtra("FROM", "ADD");
+		startActivity(outState);
 		setContentView(R.layout.activity_core);
 	}
 

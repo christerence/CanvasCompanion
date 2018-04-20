@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("USER_LAST", o.getString("last"));
                     i.putExtra("CANVAS_KEY", o.getString("Canvas"));
                     i.putExtra("USER_EMAIL", o.getString("Email"));
+                    i.putExtra("FROM", "LOGIN");
                     startActivity(i);
                     setContentView(R.layout.activity_core);
                 }

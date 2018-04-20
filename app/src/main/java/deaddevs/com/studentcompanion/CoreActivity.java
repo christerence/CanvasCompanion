@@ -52,6 +52,27 @@ public class CoreActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        if(getIntent() != null && getIntent().getStringExtra("FROM").equals("LOGIN")) {
+            first = getIntent().getStringExtra("USER_FIRST");
+            last = getIntent().getStringExtra("USER_LAST");
+            email = getIntent().getStringExtra("USER_EMAIL");
+            canvasKey = getIntent().getStringExtra("CANVAS_KEY");
+            if(canvasKey != null) {
+                canvas = new CanvasApi(this);
+                canvas.initiateRestCallForCourses();
+            }
+        } else if(getIntent() != null && getIntent().getStringExtra("FROM").equals("ADD")) {
+
+            first = getIntent().getStringExtra("FIRST");
+            Log.d("SUP", first);
+            last = getIntent().getStringExtra("SECOND");
+            email = getIntent().getStringExtra("EMAIL");
+            canvasKey = getIntent().getStringExtra("CANVASKEY");
+            cleared = getIntent().getBooleanExtra("CLEAR", true);
+            courses = getIntent().getStringArrayListExtra("COURSE_LIST");
+            currPage = getIntent().getStringExtra("CURRPAGE");
+        }
+
         switch(currPage) {
             case "Course":
                 if(findViewById(R.id.CourseList) != null) {
@@ -94,19 +115,6 @@ public class CoreActivity extends AppCompatActivity {
                 }
                 break;
         }
-
-        if(getIntent() != null) {
-            first = getIntent().getStringExtra("USER_FIRST");
-            last = getIntent().getStringExtra("USER_LAST");
-            email = getIntent().getStringExtra("USER_EMAIL");
-            canvasKey = getIntent().getStringExtra("CANVAS_KEY");
-        }
-
-        if(canvasKey != null) {
-            canvas = new CanvasApi(this);
-
-            canvas.initiateRestCallForCourses();
-        }
     }
 
     @Override
@@ -127,7 +135,7 @@ public class CoreActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if(savedInstanceState != null) {
             first = savedInstanceState.getString("FIRST");
-            last = savedInstanceState.getString("LAST");
+            last = savedInstanceState.getString("SECOND");
             email = savedInstanceState.getString("EMAIL");
             canvasKey = savedInstanceState.getString("CANVASKEY");
             cleared = savedInstanceState.getBoolean("CLEAR");
@@ -174,8 +182,11 @@ public class CoreActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        TextView view = findViewById(R.id.HelloText);
-        view.setText("Hello, " + first + ".");
+        if(currPage.equals("Course")) {
+            TextView view = findViewById(R.id.HelloText);
+            view.setText("Hello, " + first + ".");
+        }
+
     }
 
     public void handleNav(View v) {
@@ -265,7 +276,7 @@ public class CoreActivity extends AppCompatActivity {
             case "Profile":
                 savedInstanceState = profile.getArguments();
                 first = savedInstanceState.getString("FIRST");
-                last = savedInstanceState.getString("LAST");
+                last = savedInstanceState.getString("SECOND");
                 email = savedInstanceState.getString("EMAIL");
                 canvasKey = savedInstanceState.getString("CANVASKEY");
                 cleared = savedInstanceState.getBoolean("CLEAR");
@@ -295,7 +306,7 @@ public class CoreActivity extends AppCompatActivity {
             case "Settings":
                 savedInstanceState = settings.getArguments();
                 first = savedInstanceState.getString("FIRST");
-                last = savedInstanceState.getString("LAST");
+                last = savedInstanceState.getString("SECOND");
                 email = savedInstanceState.getString("EMAIL");
                 canvasKey = savedInstanceState.getString("CANVASKEY");
                 cleared = savedInstanceState.getBoolean("CLEAR");
@@ -326,7 +337,7 @@ public class CoreActivity extends AppCompatActivity {
             case "ToDo":
                 savedInstanceState = calendar.getArguments();
                 first = savedInstanceState.getString("FIRST");
-                last = savedInstanceState.getString("LAST");
+                last = savedInstanceState.getString("SECOND");
                 email = savedInstanceState.getString("EMAIL");
                 canvasKey = savedInstanceState.getString("CANVASKEY");
                 cleared = savedInstanceState.getBoolean("CLEAR");
@@ -369,8 +380,16 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleAdd(View v) {
-        Intent i = new Intent(this, AddActivity.class);
-        startActivity(i);
+        Intent outState = new Intent(this, AddActivity.class);
+        outState.putExtra("FIRST", first);
+        outState.putExtra("SECOND", last);
+        outState.putExtra("EMAIL", email);
+        outState.putExtra("CANVASKEY", canvasKey);
+        outState.putExtra("CLEAR", cleared);
+        ArrayList<String> savelist = (ArrayList<String>) courses;
+        outState.putExtra("COURSE_LIST", savelist);
+        outState.putExtra("CURRPAGE", currPage);
+        startActivity(outState);
         setContentView(R.layout.activity_add);
     }
 
