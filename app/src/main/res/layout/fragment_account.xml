@@ -14,24 +14,45 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Profile"
+                android:textColor="#000"
+                android:fontFamily="serif-monospace"
                 android:textSize="30dp"
                 android:layout_weight="1"/>
-
             <Button
                 android:id="@+id/AccountBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="handleBack"
                 android:layout_weight="1"
+                android:background="#FFF"
                 android:text="@string/backRight" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PlaceHolder"
+                android:layout_margin="20dp"
+                android:textSize="25sp"
+                android:id="@+id/FullName"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PlaceHolder"
+                android:layout_margin="20dp"
+                android:textSize="20sp"
+                android:id="@+id/Email"/>
         </LinearLayout>
 
         <LinearLayout
