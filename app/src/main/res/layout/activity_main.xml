@@ -71,9 +71,12 @@
                 android:layout_weight="1"
                 android:background="@drawable/editbackground"
                 android:fontFamily="orbitron"
+                android:textSize="20sp"
                 android:lines="1"
                 android:maxLines="1"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/color_cursor"/>
 
         </LinearLayout>
 
@@ -103,11 +106,14 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
+                android:textSize="20sp"
                 android:background="@drawable/editbackground"
                 android:fontFamily="orbitron"
                 android:lines="1"
+                android:inputType="text"
                 android:maxLines="1"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textCursorDrawable="@drawable/color_cursor"/>
 
         </LinearLayout>
 
