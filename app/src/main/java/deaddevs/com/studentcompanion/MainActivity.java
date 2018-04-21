@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -50,14 +51,11 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        TextView title = findViewById(R.id.Title);
-        title.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
-        TextView userText = findViewById(R.id.UserText);
-        userText.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
-        TextView passText = findViewById(R.id.PassText);
-        passText.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
-        TextView trademark = findViewById(R.id.TradeMark);
-        trademark.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
+        TextView TradeMark = findViewById(R.id.TradeMark);
+        TradeMark.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
+
+        EditText passInfo = findViewById(R.id.passInfo);
+        passInfo.setTransformationMethod(new PasswordTransformationMethod());
     }
 
     @Override
