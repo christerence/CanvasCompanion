@@ -1,5 +1,6 @@
 package deaddevs.com.studentcompanion;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +66,8 @@ public class CoreActivity extends AppCompatActivity {
     List<String> courses;
     ArrayList<String> todos;
     DatabaseManager db;
+
+    List<String> toRemove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -465,7 +471,34 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleRemove(View v) {
-        //remove from list
+        JSONArray json = new JSONArray(todos);
+        for(int i = 0; i < toRemove.size(); i++) {
+            for(int j = 0; j < json.length(); j++) {
+                try {
+                    JSONObject val = json.getJSONObject(j);
+                    if(val.getString("title").equals(toRemove.get(i))) {
+                        todos.set(i, "remove");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+
+        todos.removeAll(Collections.singleton("remove"));
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore ffdb = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") DocumentReference docRef = ffdb.collection("users").document(mAuth.getUid());
+        Map<String, Object> newArray = new HashMap<>();
+        newArray.put("To Do List", todos);
+        docRef.update(newArray);
+        try {
+            updateToDo();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveInfo(String name) {
@@ -505,6 +538,23 @@ public class CoreActivity extends AppCompatActivity {
             view = getLayoutInflater().inflate(R.layout.todolistitem, null);
             TextView title = view.findViewById((R.id.ToDoItemName));
             title.setText(names.get(i));
+            final String name = names.get(i);
+
+            if(toRemove == null) {
+            	toRemove = new ArrayList<>();
+			}
+
+            CheckBox repeatChkBx = ( CheckBox ) view.findViewById( R.id.CheckBoxItem );
+            repeatChkBx.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ( ((CheckBox)v).isChecked() ) {
+                        toRemove.add(name);
+                    } else {
+                        toRemove.remove(name);
+                    }
+                }
+            });
             return view;
         }
     }
