@@ -485,8 +485,6 @@ public class CoreActivity extends AppCompatActivity {
 
             }
         }
-
-
         todos.removeAll(Collections.singleton("remove"));
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore ffdb = FirebaseFirestore.getInstance();
