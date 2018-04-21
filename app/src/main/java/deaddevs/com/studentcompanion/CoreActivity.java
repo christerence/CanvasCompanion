@@ -1,15 +1,20 @@
 package deaddevs.com.studentcompanion;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -73,6 +78,9 @@ public class CoreActivity extends AppCompatActivity {
             email = getIntent().getStringExtra("USER_EMAIL");
             canvasKey = getIntent().getStringExtra("CANVAS_KEY");
             todos = getIntent().getStringArrayListExtra("TO_DO_LIST");
+            if(todos == null) {
+                todos = new ArrayList<String>();
+            }
             if(canvasKey != null) {
                 canvas = new CanvasApi(this);
                 canvas.initiateRestCallForCourses();
@@ -87,6 +95,7 @@ public class CoreActivity extends AppCompatActivity {
             currPage = getIntent().getStringExtra("CURRPAGE");
             todos = getIntent().getStringArrayListExtra("TODOLIST");
         }
+
 
         switch(currPage) {
             case "Course":
@@ -195,6 +204,12 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    public void handleGood(View v) {
+        //need to implement music service
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=ISNBfryBkSo")));
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -230,6 +245,11 @@ public class CoreActivity extends AppCompatActivity {
                     profile.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.Profile, profile).commit();
                 }
+                getSupportFragmentManager().executePendingTransactions();
+                TextView wholename = findViewById(R.id.FullName);
+                wholename.setText(first + " " + last);
+                TextView emailtext = findViewById(R.id.Email);
+                emailtext.setText(email);
                 break;
             case R.id.SettingPic:
                 currPage = "Settings";
@@ -413,8 +433,8 @@ public class CoreActivity extends AppCompatActivity {
             todoname.add(name);
         }
         List<String> todoList = todoname;
-        ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, todoList);
-        todo.setAdapter(coursesadapter);
+        CustomAdapter adapter = new CustomAdapter(todoList);
+        todo.setAdapter(adapter);
     }
 
     public void updateList() {
@@ -457,4 +477,36 @@ public class CoreActivity extends AppCompatActivity {
     public String getAuthKey() {
         return canvasKey;
     }
+
+
+    private class CustomAdapter extends BaseAdapter {
+        private List<String> names;
+        @Override
+        public int getCount() {
+            return todos.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return 0;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        public CustomAdapter(List<String> names) {
+            this.names = names;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.todolistitem, null);
+            TextView title = view.findViewById((R.id.ToDoItemName));
+            title.setText(names.get(i));
+            return view;
+        }
+    }
+
 }
