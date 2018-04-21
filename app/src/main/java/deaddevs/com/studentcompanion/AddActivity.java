@@ -73,6 +73,7 @@ public class AddActivity extends AppCompatActivity {
 		outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
 		outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
 		outState.putExtra("FROM", "ADD");
+		outState.putExtra("TODOLIST", getIntent().getStringArrayListExtra("TODOLIST"));
 		startActivity(outState);
 		setContentView(R.layout.activity_core);
 	}
@@ -120,15 +121,66 @@ public class AddActivity extends AppCompatActivity {
 								newArray.put("To Do List", toSend);
 								docRef.update(newArray);
 
-								Intent i = new Intent(getApplicationContext(), CoreActivity.class);
-								i.putExtra("To do Array", toSend);
-								startActivity(i);
-								setContentView(R.layout.activity_core);
+								docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+									@Override
+									public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+										if (task.isSuccessful()) {
+											DocumentSnapshot document = task.getResult();
+											if (document.exists()) {
+												Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
+												outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
+												outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
+												outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
+												outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
+												outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
+												outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
+												outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
+												outState.putExtra("FROM", "ADD");
+												ArrayList<String> newToDoList = (ArrayList<String>) document.get("To Do List");
+												outState.putExtra("TODOLIST", newToDoList);
+												startActivity(outState);
+												setContentView(R.layout.activity_core);
+											} else {
+												Log.d(TAG, "No such document");
+											}
+										} else {
+											Log.d(TAG, "get failed with ", task.getException());
+										}
+									}
+								});
 
 							} catch (JSONException e) {
 								Map<String, Object> newArray = new HashMap<>();
 								newArray.put("To Do List", toSend);
 								docRef.update(newArray);
+
+								docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+									@Override
+									public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+										if (task.isSuccessful()) {
+											DocumentSnapshot document = task.getResult();
+											if (document.exists()) {
+												Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
+												outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
+												outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
+												outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
+												outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
+												outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
+												outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
+												outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
+												outState.putExtra("FROM", "ADD");
+												ArrayList<String> newToDoList = (ArrayList<String>) document.get("To Do List");
+												outState.putExtra("TODOLIST", newToDoList);
+												startActivity(outState);
+												setContentView(R.layout.activity_core);
+											} else {
+												Log.d(TAG, "No such document");
+											}
+										} else {
+											Log.d(TAG, "get failed with ", task.getException());
+										}
+									}
+								});
 							}
 
 						} else {

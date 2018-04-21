@@ -24,7 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
@@ -114,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("USER_LAST", o.getString("last"));
                     i.putExtra("CANVAS_KEY", o.getString("Canvas"));
                     i.putExtra("USER_EMAIL", o.getString("Email"));
+                    ArrayList<String> collection = (ArrayList<String>) o.get("To Do List");
+                    i.putExtra("TO_DO_LIST", collection);
                     i.putExtra("FROM", "LOGIN");
                     startActivity(i);
                     setContentView(R.layout.activity_core);

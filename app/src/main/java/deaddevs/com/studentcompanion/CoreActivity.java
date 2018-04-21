@@ -3,6 +3,7 @@ package deaddevs.com.studentcompanion;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import deaddevs.com.studentcompanion.utils.CanvasApi;
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
@@ -41,6 +55,7 @@ public class CoreActivity extends AppCompatActivity {
     CanvasApi canvas;
 
     List<String> courses;
+    ArrayList<String> todos;
     DatabaseManager db;
 
     @Override
@@ -57,20 +72,20 @@ public class CoreActivity extends AppCompatActivity {
             last = getIntent().getStringExtra("USER_LAST");
             email = getIntent().getStringExtra("USER_EMAIL");
             canvasKey = getIntent().getStringExtra("CANVAS_KEY");
+            todos = getIntent().getStringArrayListExtra("TO_DO_LIST");
             if(canvasKey != null) {
                 canvas = new CanvasApi(this);
                 canvas.initiateRestCallForCourses();
             }
         } else if(getIntent() != null && getIntent().getStringExtra("FROM").equals("ADD")) {
-
             first = getIntent().getStringExtra("FIRST");
-            Log.d("SUP", first);
             last = getIntent().getStringExtra("SECOND");
             email = getIntent().getStringExtra("EMAIL");
             canvasKey = getIntent().getStringExtra("CANVASKEY");
             cleared = getIntent().getBooleanExtra("CLEAR", true);
             courses = getIntent().getStringArrayListExtra("COURSE_LIST");
             currPage = getIntent().getStringExtra("CURRPAGE");
+            todos = getIntent().getStringArrayListExtra("TODOLIST");
         }
 
         switch(currPage) {
@@ -113,6 +128,7 @@ public class CoreActivity extends AppCompatActivity {
                     calendar.setArguments(getIntent().getExtras());
                     getSupportFragmentManager().beginTransaction().add(R.id.ToDoList, calendar).commit();
                 }
+                getSupportFragmentManager().executePendingTransactions();
                 break;
         }
     }
@@ -185,8 +201,13 @@ public class CoreActivity extends AppCompatActivity {
         if(currPage.equals("Course")) {
             TextView view = findViewById(R.id.HelloText);
             view.setText("Hello, " + first + ".");
+        } else if (currPage.equals("ToDo")){
+            try {
+                updateToDo();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     public void handleNav(View v) {
@@ -205,6 +226,7 @@ public class CoreActivity extends AppCompatActivity {
                     ArrayList<String> savelist = (ArrayList<String>) courses;
                     outState.putStringArrayList("COURSE_LIST", savelist);
                     outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
                     profile.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.Profile, profile).commit();
                 }
@@ -222,13 +244,14 @@ public class CoreActivity extends AppCompatActivity {
                     ArrayList<String> savelist = (ArrayList<String>) courses;
                     outState.putStringArrayList("COURSE_LIST", savelist);
                     outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
                     settings.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.Settings, settings).commit();
                 }
                 break;
             case R.id.TodoPic:
                 currPage = "ToDo";
-                if(findViewById(R.id.Profile) != null) {
+                if(findViewById(R.id.ToDoList) != null) {
                     calendar = new CalendarFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -239,8 +262,14 @@ public class CoreActivity extends AppCompatActivity {
                     ArrayList<String> savelist = (ArrayList<String>) courses;
                     outState.putStringArrayList("COURSE_LIST", savelist);
                     outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
                     calendar.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.ToDoList, calendar).commit();
+                }
+                try {
+                    updateToDo();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 break;
         }
@@ -251,6 +280,7 @@ public class CoreActivity extends AppCompatActivity {
         super.onPause();
         db.close();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -282,6 +312,7 @@ public class CoreActivity extends AppCompatActivity {
                 cleared = savedInstanceState.getBoolean("CLEAR");
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(profile).commit();
                 if(findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment();
@@ -294,6 +325,7 @@ public class CoreActivity extends AppCompatActivity {
                     ArrayList<String> savelist = (ArrayList<String>) courses;
                     outState.putStringArrayList("COURSE_LIST", savelist);
                     outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
                     course.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
                 }
@@ -312,6 +344,7 @@ public class CoreActivity extends AppCompatActivity {
                 cleared = savedInstanceState.getBoolean("CLEAR");
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(settings).commit();
                 if(findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment();
@@ -324,13 +357,13 @@ public class CoreActivity extends AppCompatActivity {
                     ArrayList<String> savelist = (ArrayList<String>) courses;
                     outState.putStringArrayList("COURSE_LIST", savelist);
                     outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
                     course.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
                 }
                 getSupportFragmentManager().executePendingTransactions();
                 view = findViewById(R.id.HelloText);
                 view.setText("Hello, " + first + ".");
-                updateList();
                 updateList();
                 currPage = "Course";
                 break;
@@ -343,6 +376,7 @@ public class CoreActivity extends AppCompatActivity {
                 cleared = savedInstanceState.getBoolean("CLEAR");
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(calendar).commit();
                 if(findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment();
@@ -355,6 +389,7 @@ public class CoreActivity extends AppCompatActivity {
                     ArrayList<String> savelist = (ArrayList<String>) courses;
                     outState.putStringArrayList("COURSE_LIST", savelist);
                     outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
                     course.setArguments(outState);
                     getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
                 }
@@ -365,6 +400,21 @@ public class CoreActivity extends AppCompatActivity {
                 currPage = "Course";
                 break;
         }
+    }
+
+    public void updateToDo() throws JSONException {
+        getSupportFragmentManager().executePendingTransactions();
+        ListView todo = findViewById(R.id.ToDos);
+        ArrayList<String> todoname = new ArrayList<>();
+        JSONArray convertTodo = new JSONArray(todos);
+        for(int i = 0; i < todos.size(); i++) {
+            JSONObject value = convertTodo.getJSONObject(i);
+            String name = value.getString("title");
+            todoname.add(name);
+        }
+        List<String> todoList = todoname;
+        ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, todoList);
+        todo.setAdapter(coursesadapter);
     }
 
     public void updateList() {
@@ -389,6 +439,7 @@ public class CoreActivity extends AppCompatActivity {
         ArrayList<String> savelist = (ArrayList<String>) courses;
         outState.putExtra("COURSE_LIST", savelist);
         outState.putExtra("CURRPAGE", currPage);
+        outState.putExtra("TODOLIST", todos);
         startActivity(outState);
         setContentView(R.layout.activity_add);
     }
