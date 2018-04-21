@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         EditText user = findViewById(R.id.userInfo);
         EditText pass = findViewById(R.id.passInfo);
 
-        if(user.getText() != null && pass.getText() != null) {
+        if(!user.getText().toString().isEmpty() && !pass.getText().toString().isEmpty()) {
             signIn(user.getText().toString(), pass.getText().toString());
         }
     }
