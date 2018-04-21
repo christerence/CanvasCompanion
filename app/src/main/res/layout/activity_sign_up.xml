@@ -5,25 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignUp">
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:onClick="backToLogin"/>
+        android:background="#512da8"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backbutton"
+            android:onClick="backToLogin"
+            android:textColor="#fff"
+            android:id="@+id/backbutton"
+            android:textSize="20dp"
+            android:padding="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:fontFamily="orbitron"
+            android:gravity="center"
+            />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SIGN UP"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:fontFamily="orbitron"
-            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,13 +58,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="First Name:"/>
+                android:text="First Name:"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Joe"
                 android:id="@+id/firstsignup"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,13 +77,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Name:"/>
+                android:text="Last Name:"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Hanson"
                 android:id="@+id/lastsignup"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,13 +96,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email:"/>
+                android:text="Email:"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="joehanson@gmail.com"
                 android:id="@+id/emailsignup"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
         </LinearLayout>
 
         <LinearLayout
@@ -87,13 +116,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password:"/>
+                android:text="Password:"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="pass"
                 android:id="@+id/passwordsignup"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
         </LinearLayout>
 
 
@@ -104,13 +137,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Canvas API Key:"/>
+                android:text="Canvas API Key:"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="hex"
                 android:id="@+id/tokensignup"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:fontFamily="orbitron"/>
         </LinearLayout>
         <Button
             android:layout_width="wrap_content"

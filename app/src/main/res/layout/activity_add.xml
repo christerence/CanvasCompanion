@@ -49,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:inputType="textCapSentences|textMultiLine"
-            android:id="@+id/taskdescription"/>
+            android:id="@+id/taskdescription"
+            android:gravity="top|left"/>
     </LinearLayout>
 
     <LinearLayout

@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
+
 public class SignUp extends AppCompatActivity {
 
 	private FirebaseAuth mAuth;
@@ -43,6 +45,8 @@ public class SignUp extends AppCompatActivity {
 		db = FirebaseFirestore.getInstance();
 
 
+		TextView backbutton = findViewById(R.id.backbutton);
+		backbutton.setTypeface(FontAwesomeHelper.getTypeface(this, FontAwesomeHelper.FONTAWESOME));
 	}
 
 	public void backToLogin(View v) {
