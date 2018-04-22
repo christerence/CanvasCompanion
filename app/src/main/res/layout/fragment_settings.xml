@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="deaddevs.com.studentcompanion.SettingsFragment">
+    tools:context="deaddevs.com.studentcompanion.SettingsFragment"
+    android:background="@drawable/loginbg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,37 +13,50 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:background="#512da8"
+            android:padding="10dp"
+            android:layout_marginBottom="40dp">
 
-            <Button
-                android:id="@+id/settingsBack"
+            <TextView
                 android:layout_width="wrap_content"
-                android:onClick="handleBack"
                 android:layout_height="wrap_content"
-                android:text="back" />
+                android:text="@string/backbutton"
+                android:onClick="onBack"
+                android:textColor="#fff"
+                android:id="@+id/backbutton"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:fontFamily="orbitron"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:paddingLeft="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
                 android:text="Settings"
-                android:textSize="30dp" />
-
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:fontFamily="orbitron"
+                android:gravity="center"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notifications"
-                android:textSize="30dp" />
+                android:textSize="30dp"
+                android:fontFamily="orbitron"
+                android:textColor="#fff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +68,10 @@
                     android:id="@+id/notifications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="on" />
+                    android:text="on"
+                    android:textSize="20sp"
+                    android:background="#00acc1"
+                    android:textColor="#fff"/>
 
             </LinearLayout>
 
@@ -63,14 +80,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location"
-                android:textSize="30dp" />
+                android:textSize="30dp"
+                android:fontFamily="orbitron"
+                android:textColor="#fff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,7 +102,10 @@
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="on" />
+                    android:text="on"
+                    android:textSize="20sp"
+                    android:background="#00acc1"
+                    android:textColor="#fff"/>
 
             </LinearLayout>
 
@@ -91,14 +114,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Support"
-                android:textSize="30dp" />
+                android:textSize="30sp"
+                android:fontFamily="orbitron"
+                android:textColor="#fff" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,7 +136,10 @@
                     android:id="@+id/support"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="more" />
+                    android:text="more"
+                    android:textSize="20sp"
+                    android:background="#00acc1"
+                    android:textColor="#fff"/>
 
             </LinearLayout>
 
@@ -119,14 +148,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Privacy Policy"
-                android:textSize="30dp" />
+                android:textSize="30sp"
+                android:fontFamily="orbitron"
+                android:textColor="#fff" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -138,7 +170,10 @@
                     android:id="@+id/privacy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="more" />
+                    android:text="more"
+                    android:textSize="20sp"
+                    android:background="#00acc1"
+                    android:textColor="#fff"/>
 
             </LinearLayout>
 
@@ -147,14 +182,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Leave A Review"
-                android:textSize="30dp" />
+                android:textSize="30sp"
+                android:fontFamily="orbitron"
+                android:textColor="#fff" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -166,7 +204,10 @@
                     android:id="@+id/review"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="more" />
+                    android:text="more"
+                    android:textSize="20sp"
+                    android:background="#00acc1"
+                    android:textColor="#fff"/>
 
             </LinearLayout>
 
@@ -184,7 +225,9 @@
                 android:onClick="signOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign Out" />
+                android:text="Sign Out"
+                android:textSize="20sp"
+                android:background="@drawable/buttongradient"/>
 
         </LinearLayout>
 

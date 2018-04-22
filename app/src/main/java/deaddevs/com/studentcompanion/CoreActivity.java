@@ -458,10 +458,10 @@ public class CoreActivity extends AppCompatActivity {
 //        });
     }
 
-    public void updateAssignmentPage(){
-        TextView title = findViewById(R.id.HWTitle);
-        TextView desc = findViewById(R.id.HWDescription);
-    }
+//    public void updateAssignmentPage(){
+//        TextView title = findViewById(R.id.HWTitle);
+//        TextView desc = findViewById(R.id.HWDescription);
+//    }
 
     public void updateList() {
         ListView courselist = findViewById(R.id.CourseListView);

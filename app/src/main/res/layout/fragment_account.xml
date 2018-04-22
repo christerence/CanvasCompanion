@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="deaddevs.com.studentcompanion.AccountFragment">
+    tools:context="deaddevs.com.studentcompanion.AccountFragment"
+    android:background="@drawable/loginbg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,12 +34,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/rightbutton"
-                android:onClick="backTo"
+                android:onClick="handleBack"
                 android:textColor="#fff"
                 android:id="@+id/backbutton"
                 android:textSize="20sp"
                 android:padding="10dp"
-                android:fontFamily="orbitron"
                 android:paddingRight="10dp"
                 android:textAlignment="center"
                 android:paddingLeft="10dp"/>
