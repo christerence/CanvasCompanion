@@ -154,7 +154,7 @@
                 android:layout_marginRight="20dp"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="20sp"
-                android:inputType="text"/>
+                android:inputType="textEmailAddress"/>
         </LinearLayout>
 
         <LinearLayout

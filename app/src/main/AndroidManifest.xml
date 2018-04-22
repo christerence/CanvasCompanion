@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".utils.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,10 +33,14 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".CoreActivity" />
+        <activity android:name=".CoreActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SignUp"
             android:screenOrientation="portrait"/>
-        <activity android:name=".AddActivity"></activity>
+        <activity android:name=".AddActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>
