@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
@@ -21,6 +22,9 @@ public class AccountFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         Button back = v.findViewById(R.id.AccountBack);
         back.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
+
+        TextView backbutton = v.findViewById(R.id.backbutton);
+        backbutton.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
         return v;
     }
 

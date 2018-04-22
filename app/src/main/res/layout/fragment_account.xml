@@ -12,26 +12,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="#512da8"
+            android:padding="10dp"
+            android:layout_marginBottom="50dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
                 android:text="Profile"
-                android:textColor="#000"
-                android:fontFamily="serif-monospace"
-                android:textSize="30dp"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/AccountBack"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:fontFamily="orbitron"
+                android:gravity="center"
+                />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="handleBack"
-                android:layout_weight="1"
-                android:background="#FFF"
-                android:text="@string/backRight" />
+                android:text="@string/rightbutton"
+                android:onClick="backTo"
+                android:textColor="#fff"
+                android:id="@+id/backbutton"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:fontFamily="orbitron"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:paddingLeft="10dp"/>
         </LinearLayout>
 
         <LinearLayout
