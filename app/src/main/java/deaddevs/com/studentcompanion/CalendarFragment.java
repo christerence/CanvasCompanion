@@ -13,11 +13,7 @@ import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
 
 public class CalendarFragment extends Fragment {
-
-
-    public CalendarFragment() {
-        // Required empty public constructor
-    }
+    public CalendarFragment() {}
 
 
     @Override
