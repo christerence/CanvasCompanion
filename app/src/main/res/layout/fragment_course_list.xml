@@ -7,17 +7,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/loginbg">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="#512da8">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/profile"
                 android:textSize="20dp"
-                android:textColor="#000"
+                android:textColor="#fff"
                 android:id="@+id/ProfilePic"
                 android:onClick="handleNav"
                 android:layout_marginTop="10dp"
@@ -29,8 +31,8 @@
                 android:layout_height="80dp"
                 android:text="My Courses"
                 android:fontFamily="orbitron"
-                android:textSize="20dp"
-                android:textColor="#000"
+                android:textSize="20sp"
+                android:textColor="#fff"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
                 android:layout_weight="1"
@@ -41,7 +43,7 @@
                 android:text="@string/settings"
                 android:id="@+id/SettingPic"
                 android:textSize="20dp"
-                android:textColor="#000"
+                android:textColor="#fff"
                 android:onClick="handleNav"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
@@ -52,21 +54,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="#5f3cb3">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Hello, User."
                 android:textSize="40sp"
                 android:id="@+id/HelloText"
-                android:textColor="#000"
+                android:textColor="#fff"
+                android:layout_marginLeft="18dp"
                 android:layout_weight="1"/>
 
             <DigitalClock
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textColor="#000"
+                android:textColor="#fff"
                 android:layout_weight="3"/>
 
         </LinearLayout>
@@ -75,10 +79,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="How's everything going?"
-            android:textSize="15sp"
-            android:textColor="#000"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="10dp"/>
+            android:fontFamily="orbitron"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            android:background="#00acc1"
+            android:textAlignment="center"/>
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -87,19 +92,27 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:onClick="handleGood"
             android:id="@+id/thegood"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="#00acc1"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            android:fontFamily="orbitron"
             android:text="Shiloh"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/CourseListLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@drawable/selected">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,14 +120,16 @@
                     android:id="@+id/CourseListPic"
                     android:layout_marginTop="5dp"
                     android:textSize="20sp"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:textAlignment="center"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="#512da8"
+                android:id="@+id/ToDoLayout">
                 <TextView
                     android:layout_width="match_parent"
                     android:id="@+id/TodoPic"
@@ -123,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="@string/todo"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:textAlignment="center"/>
             </LinearLayout>
 
