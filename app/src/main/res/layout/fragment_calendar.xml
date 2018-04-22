@@ -7,110 +7,123 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/loginbg"
         android:orientation="vertical">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_weight="40"
-            android:layout_height="0dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="80dp"
-                        android:text="To Do List"
-                        android:fontFamily="orbitron"
-                        android:textSize="20dp"
-                        android:textColor="#000"
-                        android:layout_marginTop="10dp"
-                        android:textAlignment="center"
-                        android:layout_weight="1"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:orientation="horizontal">
-                    <CalendarView
-                        android:id="@+id/Calendar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Things To Do:"
-                    android:textColor="#000"/>
-
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:id="@+id/ToDos"
-                    android:layout_margin="10dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Add"
-                        android:onClick="handleAdd"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:onClick="handleRemove"
-                        android:text="Remove"/>
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:fontFamily="orbitron"
+                android:text="To Do List"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="20dp"
+                android:background="#512da8"/>
+
+
+                <CalendarView
+                    android:id="@+id/Calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Things To Do:"
+                android:fontFamily="orbitron"
+                android:textColor="#fff"
+                android:textAlignment="center"
+                android:background="#512da8"
+                android:textSize="20dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/ToDos"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_margin="10dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:onClick="handleAdd"
+                                android:text="Add" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:onClick="handleRemove"
+                                android:text="Remove" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="#512da8">
+
                 <TextView
+                    android:id="@+id/CourseListPic2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/course"
-                    android:id="@+id/CourseListPic2"
-                    android:onClick="handleBack"
                     android:layout_marginTop="5dp"
-                    android:textSize="20sp"
-                    android:textColor="#000"
-                    android:textAlignment="center"/>
+                    android:onClick="handleBack"
+                    android:text="@string/course"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@drawable/selected">
+
                 <TextView
-                    android:layout_width="match_parent"
                     android:id="@+id/TodoPic2"
-                    android:textSize="20sp"
-                    android:onClick="handleNav"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:onClick="handleNav"
                     android:text="@string/todo"
-                    android:textColor="#000"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
 
