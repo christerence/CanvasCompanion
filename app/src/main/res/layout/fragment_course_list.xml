@@ -19,16 +19,7 @@
             <TextView
                 android:id="@+id/ProfilePic"
                 android:layout_width="wrap_content"
-<<<<<<< HEAD
-                android:layout_height="wrap_content"
-=======
                 android:layout_height="match_parent"
-                android:text="@string/profile"
-                android:textSize="20dp"
-                android:textColor="#fff"
-                android:id="@+id/ProfilePic"
-                android:onClick="handleNav"
->>>>>>> a30e2b117cdbf3e9541e089883184f4b5464bcb4
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:onClick="handleNav"
@@ -51,16 +42,7 @@
             <TextView
                 android:id="@+id/SettingPic"
                 android:layout_width="wrap_content"
-<<<<<<< HEAD
-                android:layout_height="wrap_content"
-=======
                 android:layout_height="match_parent"
-                android:text="@string/settings"
-                android:id="@+id/SettingPic"
-                android:textSize="20dp"
-                android:textColor="#fff"
-                android:onClick="handleNav"
->>>>>>> a30e2b117cdbf3e9541e089883184f4b5464bcb4
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:onClick="handleNav"
