@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/loginbg"
     tools:context="deaddevs.com.studentcompanion.CoursePageFragment">
 
     <LinearLayout
@@ -12,37 +13,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/coursePageBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="back" />
+            android:background="#512da8"
+            android:padding="10dp"
+            android:layout_marginBottom="50dp">
 
             <TextView
-                android:id="@+id/coursePageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/backbutton"
+                android:onClick="backToLogin"
+                android:textColor="#fff"
+                android:id="@+id/backbutton"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:fontFamily="orbitron"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:paddingLeft="10dp"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
                 android:text="Course Title"
-                android:textSize="30dp" />
-
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:fontFamily="orbitron"
+                android:gravity="center"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Grade:"
-                android:textSize="30dp" />
+                android:textSize="30sp"
+                android:fontFamily="orbitron"
+                android:textColor="#fff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,7 +71,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="99.99%"
-                    android:textSize="30dp"/>
+                    android:textSize="30sp"
+                    android:fontFamily="orbitron"
+                    android:textColor="#fff"/>
 
             </LinearLayout>
 
@@ -66,12 +84,17 @@
             android:layout_height="wrap_content"
             android:textSize="30dp"
             android:layout_marginTop="20dp"
-            android:text="Assignments:"/>
+            android:text="Assignments:"
+            android:background="@drawable/gradienttitle"
+            android:fontFamily="orbitron"
+            android:textColor="#fff"
+            android:layout_marginLeft="20dp"/>
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/AssignmentList" />
+            android:id="@+id/AssignmentList"
+            android:layout_marginLeft="20dp"/>
 
     </LinearLayout>
 
