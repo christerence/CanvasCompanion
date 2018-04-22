@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -441,6 +442,25 @@ public class CoreActivity extends AppCompatActivity {
         List<String> todoList = todoname;
         CustomAdapter adapter = new CustomAdapter(todoList);
         todo.setAdapter(adapter);
+
+
+//        todo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                if(findViewById(R.id.AssignmentPage) != null) {
+//                    assignmentpage = new AssignmentPageFragment();
+//                    assignmentpage.setArguments(getIntent().getExtras());
+//                    getSupportFragmentManager().beginTransaction().add(R.id.AssignmentPage, assignmentpage).commit();
+//                }
+//                getSupportFragmentManager().executePendingTransactions();
+//
+//            }
+//        });
+    }
+
+    public void updateAssignmentPage(){
+        TextView title = findViewById(R.id.HWTitle);
+        TextView desc = findViewById(R.id.HWDescription);
     }
 
     public void updateList() {
@@ -510,9 +530,9 @@ public class CoreActivity extends AppCompatActivity {
         return canvasKey;
     }
 
-
     private class CustomAdapter extends BaseAdapter {
         private List<String> names;
+        private int itemid;
         @Override
         public int getCount() {
             return todos.size();
@@ -525,7 +545,7 @@ public class CoreActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(int i) {
-            return 0;
+            return i;
         }
 
         public CustomAdapter(List<String> names) {
@@ -535,6 +555,8 @@ public class CoreActivity extends AppCompatActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             view = getLayoutInflater().inflate(R.layout.todolistitem, null);
+
+            itemid = i;
             TextView title = view.findViewById((R.id.ToDoItemName));
             title.setText(names.get(i));
             final String name = names.get(i);
