@@ -1,6 +1,7 @@
 package deaddevs.com.studentcompanion;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -70,6 +71,7 @@ public class CoreActivity extends AppCompatActivity {
 
     List<String> toRemove;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,20 +81,20 @@ public class CoreActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        if(getIntent() != null && getIntent().getStringExtra("FROM").equals("LOGIN")) {
+        if (getIntent() != null && getIntent().getStringExtra("FROM").equals("LOGIN")) {
             first = getIntent().getStringExtra("USER_FIRST");
             last = getIntent().getStringExtra("USER_LAST");
             email = getIntent().getStringExtra("USER_EMAIL");
             canvasKey = getIntent().getStringExtra("CANVAS_KEY");
             todos = getIntent().getStringArrayListExtra("TO_DO_LIST");
-            if(todos == null) {
+            if (todos == null) {
                 todos = new ArrayList<String>();
             }
-            if(canvasKey != null) {
+            if (canvasKey != null) {
                 canvas = new CanvasApi(this);
                 canvas.initiateRestCallForCourses();
             }
-        } else if(getIntent() != null && getIntent().getStringExtra("FROM").equals("ADD")) {
+        } else if (getIntent() != null && getIntent().getStringExtra("FROM").equals("ADD")) {
             first = getIntent().getStringExtra("FIRST");
             last = getIntent().getStringExtra("SECOND");
             email = getIntent().getStringExtra("EMAIL");
@@ -104,19 +106,19 @@ public class CoreActivity extends AppCompatActivity {
         }
 
 
-        switch(currPage) {
+        switch (currPage) {
             case "Course":
-                if(findViewById(R.id.CourseList) != null) {
+                if (findViewById(R.id.CourseList) != null) {
                     if (savedInstanceState != null) {
                         return;
                     }
-                    course = new CourseListFragment();
+                    course = new CourseListFragment(this);
                     course.setArguments(getIntent().getExtras());
                     getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
                 }
                 break;
             case "Profile":
-                if(findViewById(R.id.Profile) != null) {
+                if (findViewById(R.id.Profile) != null) {
                     if (savedInstanceState != null) {
                         return;
                     }
@@ -126,7 +128,7 @@ public class CoreActivity extends AppCompatActivity {
                 }
                 break;
             case "Settings":
-                if(findViewById(R.id.Settings) != null) {
+                if (findViewById(R.id.Settings) != null) {
                     if (savedInstanceState != null) {
                         return;
                     }
@@ -136,7 +138,7 @@ public class CoreActivity extends AppCompatActivity {
                 }
                 break;
             case "ToDo":
-                if(findViewById(R.id.ToDoList) != null) {
+                if (findViewById(R.id.ToDoList) != null) {
                     if (savedInstanceState != null) {
                         return;
                     }
@@ -165,7 +167,7 @@ public class CoreActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             first = savedInstanceState.getString("FIRST");
             last = savedInstanceState.getString("SECOND");
             email = savedInstanceState.getString("EMAIL");
@@ -175,9 +177,9 @@ public class CoreActivity extends AppCompatActivity {
             currPage = savedInstanceState.getString("CURRPAGE");
 
 
-            switch(currPage) {
+            switch (currPage) {
                 case "Course":
-                    if(findViewById(R.id.CourseList) != null) {
+                    if (findViewById(R.id.CourseList) != null) {
                         course = new CourseListFragment();
                         course.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
@@ -185,21 +187,21 @@ public class CoreActivity extends AppCompatActivity {
                     updateList();
                     break;
                 case "Profile":
-                    if(findViewById(R.id.Profile) != null) {
+                    if (findViewById(R.id.Profile) != null) {
                         profile = new AccountFragment();
                         profile.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.Profile, profile).commit();
                     }
                     break;
                 case "Settings":
-                    if(findViewById(R.id.Settings) != null) {
+                    if (findViewById(R.id.Settings) != null) {
                         settings = new SettingsFragment();
                         settings.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.Settings, settings).commit();
                     }
                     break;
                 case "ToDo":
-                    if(findViewById(R.id.ToDoList) != null) {
+                    if (findViewById(R.id.ToDoList) != null) {
                         calendar = new CalendarFragment();
                         calendar.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.ToDoList, calendar).commit();
@@ -220,10 +222,10 @@ public class CoreActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(currPage.equals("Course")) {
+        if (currPage.equals("Course")) {
             TextView view = findViewById(R.id.HelloText);
             view.setText("Hello, " + first + ".");
-        } else if (currPage.equals("ToDo")){
+        } else if (currPage.equals("ToDo")) {
             try {
                 updateToDo();
             } catch (JSONException e) {
@@ -234,10 +236,10 @@ public class CoreActivity extends AppCompatActivity {
 
     public void handleNav(View v) {
         getSupportFragmentManager().beginTransaction().remove(course).commit();
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.ProfilePic:
                 currPage = "Profile";
-                if(findViewById(R.id.Profile) != null) {
+                if (findViewById(R.id.Profile) != null) {
                     profile = new AccountFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -260,7 +262,7 @@ public class CoreActivity extends AppCompatActivity {
                 break;
             case R.id.SettingPic:
                 currPage = "Settings";
-                if(findViewById(R.id.Settings) != null) {
+                if (findViewById(R.id.Settings) != null) {
                     settings = new SettingsFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -278,7 +280,7 @@ public class CoreActivity extends AppCompatActivity {
                 break;
             case R.id.TodoPic:
                 currPage = "ToDo";
-                if(findViewById(R.id.ToDoList) != null) {
+                if (findViewById(R.id.ToDoList) != null) {
                     calendar = new CalendarFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -312,7 +314,7 @@ public class CoreActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         db.open();
-        if(!cleared) {
+        if (!cleared) {
             db.deleteAll();
             cleared = true;
         }
@@ -329,7 +331,7 @@ public class CoreActivity extends AppCompatActivity {
     public void handleBack(View v) {
         Bundle savedInstanceState;
         TextView view;
-        switch(currPage) {
+        switch (currPage) {
             case "Profile":
                 savedInstanceState = profile.getArguments();
                 first = savedInstanceState.getString("FIRST");
@@ -341,7 +343,7 @@ public class CoreActivity extends AppCompatActivity {
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(profile).commit();
-                if(findViewById(R.id.CourseList) != null) {
+                if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -373,7 +375,7 @@ public class CoreActivity extends AppCompatActivity {
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(settings).commit();
-                if(findViewById(R.id.CourseList) != null) {
+                if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -405,7 +407,7 @@ public class CoreActivity extends AppCompatActivity {
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(calendar).commit();
-                if(findViewById(R.id.CourseList) != null) {
+                if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment();
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
@@ -434,7 +436,7 @@ public class CoreActivity extends AppCompatActivity {
         ListView todo = findViewById(R.id.ToDos);
         ArrayList<String> todoname = new ArrayList<>();
         JSONArray convertTodo = new JSONArray(todos);
-        for(int i = 0; i < todos.size(); i++) {
+        for (int i = 0; i < todos.size(); i++) {
             JSONObject value = convertTodo.getJSONObject(i);
             String name = value.getString("title");
             todoname.add(name);
@@ -466,12 +468,12 @@ public class CoreActivity extends AppCompatActivity {
     public void updateList() {
         ListView courselist = findViewById(R.id.CourseListView);
         ArrayList<String> coursesName = new ArrayList<>();
-        for(int i = 0; i < courses.size(); i++) {
+        for (int i = 0; i < courses.size(); i++) {
             String name = courses.get(i).split("///")[1];
             coursesName.add(name);
         }
         List<String> coursesNameAsList = coursesName;
-        ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, coursesNameAsList);
+        ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coursesNameAsList);
         courselist.setAdapter(coursesadapter);
     }
 
@@ -491,13 +493,13 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleRemove(View v) {
-        if(toRemove != null) {
+        if (toRemove != null) {
             JSONArray json = new JSONArray(todos);
-            for(int i = 0; i < toRemove.size(); i++) {
-                for(int j = 0; j < json.length(); j++) {
+            for (int i = 0; i < toRemove.size(); i++) {
+                for (int j = 0; j < json.length(); j++) {
                     try {
                         JSONObject val = json.getJSONObject(j);
-                        if(val.getString("title").equals(toRemove.get(i))) {
+                        if (val.getString("title").equals(toRemove.get(i))) {
                             todos.set(i, "remove");
                         }
                     } catch (JSONException e) {
@@ -533,6 +535,7 @@ public class CoreActivity extends AppCompatActivity {
     private class CustomAdapter extends BaseAdapter {
         private List<String> names;
         private int itemid;
+
         @Override
         public int getCount() {
             return todos.size();
@@ -561,15 +564,15 @@ public class CoreActivity extends AppCompatActivity {
             title.setText(names.get(i));
             final String name = names.get(i);
 
-            if(toRemove == null) {
-            	toRemove = new ArrayList<>();
-			}
+            if (toRemove == null) {
+                toRemove = new ArrayList<>();
+            }
 
-            CheckBox repeatChkBx = ( CheckBox ) view.findViewById( R.id.CheckBoxItem );
+            CheckBox repeatChkBx = (CheckBox) view.findViewById(R.id.CheckBoxItem);
             repeatChkBx.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ( ((CheckBox)v).isChecked() ) {
+                    if (((CheckBox) v).isChecked()) {
                         toRemove.add(name);
                     } else {
                         toRemove.remove(name);
@@ -578,6 +581,11 @@ public class CoreActivity extends AppCompatActivity {
             });
             return view;
         }
+    }
+
+    public void navToCoursePage(String courseName) {
+        coursepage = new CoursePageFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
     }
 
 }
