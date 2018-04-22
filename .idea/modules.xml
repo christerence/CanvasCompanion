@@ -3,7 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/StudentCompanion.iml" filepath="$PROJECT_DIR$/StudentCompanion.iml" />
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/../../../davis/git-repos/StudentCompanion/StudentCompanion.iml" filepath="$PROJECT_DIR$/../../../davis/git-repos/StudentCompanion/StudentCompanion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../davis/git-repos/StudentCompanion/app/app.iml" filepath="$PROJECT_DIR$/../../../davis/git-repos/StudentCompanion/app/app.iml" />
+>>>>>>> a30e2b117cdbf3e9541e089883184f4b5464bcb4
     </modules>
   </component>
 </project>
