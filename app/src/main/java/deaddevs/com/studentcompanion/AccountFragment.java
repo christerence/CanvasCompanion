@@ -23,4 +23,5 @@ public class AccountFragment extends Fragment {
         back.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
         return v;
     }
+
 }
