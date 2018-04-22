@@ -471,31 +471,32 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleRemove(View v) {
-        JSONArray json = new JSONArray(todos);
-        for(int i = 0; i < toRemove.size(); i++) {
-            for(int j = 0; j < json.length(); j++) {
-                try {
-                    JSONObject val = json.getJSONObject(j);
-                    if(val.getString("title").equals(toRemove.get(i))) {
-                        todos.set(i, "remove");
+        if(toRemove != null) {
+            JSONArray json = new JSONArray(todos);
+            for(int i = 0; i < toRemove.size(); i++) {
+                for(int j = 0; j < json.length(); j++) {
+                    try {
+                        JSONObject val = json.getJSONObject(j);
+                        if(val.getString("title").equals(toRemove.get(i))) {
+                            todos.set(i, "remove");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-
             }
-        }
-        todos.removeAll(Collections.singleton("remove"));
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore ffdb = FirebaseFirestore.getInstance();
-        @SuppressLint("RestrictedApi") DocumentReference docRef = ffdb.collection("users").document(mAuth.getUid());
-        Map<String, Object> newArray = new HashMap<>();
-        newArray.put("To Do List", todos);
-        docRef.update(newArray);
-        try {
-            updateToDo();
-        } catch (JSONException e) {
-            e.printStackTrace();
+            todos.removeAll(Collections.singleton("remove"));
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseFirestore ffdb = FirebaseFirestore.getInstance();
+            @SuppressLint("RestrictedApi") DocumentReference docRef = ffdb.collection("users").document(mAuth.getUid());
+            Map<String, Object> newArray = new HashMap<>();
+            newArray.put("To Do List", todos);
+            docRef.update(newArray);
+            try {
+                updateToDo();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

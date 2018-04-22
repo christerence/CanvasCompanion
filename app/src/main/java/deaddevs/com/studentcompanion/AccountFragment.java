@@ -27,4 +27,5 @@ public class AccountFragment extends Fragment {
         backbutton.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
         return v;
     }
+
 }

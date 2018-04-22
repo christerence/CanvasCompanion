@@ -78,7 +78,7 @@ public class AddActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_core);
 	}
 
-	public void handleAddToFirebase(View v) throws JSONException {
+	public void handleAddToFirebase(View v) {
 		@SuppressLint("RestrictedApi") String uid = mAuth.getUid();
 		EditText title = findViewById(R.id.tasktitle);
 		EditText description = findViewById(R.id.taskdescription);

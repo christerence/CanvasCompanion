@@ -11,11 +11,8 @@ import android.widget.TextView;
 
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
-
 public class CalendarFragment extends Fragment {
     public CalendarFragment() {}
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -28,5 +25,4 @@ public class CalendarFragment extends Fragment {
         todoList.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
         return v;
     }
-
 }
