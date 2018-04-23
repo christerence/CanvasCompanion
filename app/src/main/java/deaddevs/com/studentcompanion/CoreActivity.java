@@ -180,7 +180,7 @@ public class CoreActivity extends AppCompatActivity {
             switch (currPage) {
                 case "Course":
                     if (findViewById(R.id.CourseList) != null) {
-                        course = new CourseListFragment();
+                        course = new CourseListFragment(this);
                         course.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
                     }
@@ -344,7 +344,7 @@ public class CoreActivity extends AppCompatActivity {
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(profile).commit();
                 if (findViewById(R.id.CourseList) != null) {
-                    course = new CourseListFragment();
+                    course = new CourseListFragment(this);
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
                     outState.putString("SECOND", last);
@@ -376,7 +376,7 @@ public class CoreActivity extends AppCompatActivity {
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(settings).commit();
                 if (findViewById(R.id.CourseList) != null) {
-                    course = new CourseListFragment();
+                    course = new CourseListFragment(this);
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
                     outState.putString("SECOND", last);
@@ -408,7 +408,7 @@ public class CoreActivity extends AppCompatActivity {
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
                 getSupportFragmentManager().beginTransaction().remove(calendar).commit();
                 if (findViewById(R.id.CourseList) != null) {
-                    course = new CourseListFragment();
+                    course = new CourseListFragment(this);
                     Bundle outState = new Bundle();
                     outState.putString("FIRST", first);
                     outState.putString("SECOND", last);
@@ -428,6 +428,38 @@ public class CoreActivity extends AppCompatActivity {
                 updateList();
                 currPage = "Course";
                 break;
+            case "CoursePage":
+                savedInstanceState = coursepage.getArguments();
+                first = savedInstanceState.getString("FIRST");
+                last = savedInstanceState.getString("SECOND");
+                email = savedInstanceState.getString("EMAIL");
+                canvasKey = savedInstanceState.getString("CANVASKEY");
+                cleared = savedInstanceState.getBoolean("CLEAR");
+                courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+                currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
+                getSupportFragmentManager().beginTransaction().remove(coursepage).commit();
+                if (findViewById(R.id.CourseList) != null) {
+                    course = new CourseListFragment(this);
+                    Bundle outState = new Bundle();
+                    outState.putString("FIRST", first);
+                    outState.putString("SECOND", last);
+                    outState.putString("EMAIL", email);
+                    outState.putString("CANVASKEY", canvasKey);
+                    outState.putBoolean("CLEAR", cleared);
+                    ArrayList<String> savelist = (ArrayList<String>) courses;
+                    outState.putStringArrayList("COURSE_LIST", savelist);
+                    outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
+                    course.setArguments(outState);
+                    getSupportFragmentManager().beginTransaction().add(R.id.CourseList, course).commit();
+                }
+                getSupportFragmentManager().executePendingTransactions();
+                view = findViewById(R.id.HelloText);
+                view.setText("Hello, " + first + ".");
+                updateList();
+                //course.setOnClicks();
+                currPage = "Course";
         }
     }
 
@@ -584,8 +616,24 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void navToCoursePage(String courseName) {
-        coursepage = new CoursePageFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
+        getSupportFragmentManager().beginTransaction().remove(course).commit();
+        currPage = "CoursePage";
+        if (findViewById(R.id.CourseList) != null) {
+            coursepage = new CoursePageFragment();
+            Bundle outState = new Bundle();
+            outState.putString("FIRST", first);
+            outState.putString("SECOND", last);
+            outState.putString("EMAIL", email);
+            outState.putString("CANVASKEY", canvasKey);
+            outState.putBoolean("CLEAR", cleared);
+            ArrayList<String> savelist = (ArrayList<String>) courses;
+            outState.putStringArrayList("COURSE_LIST", savelist);
+            outState.putString("CURRPAGE", currPage);
+            outState.putStringArrayList("TODOLIST", todos);
+            coursepage.setArguments(outState);
+            getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
+        }
+
     }
 
 }

@@ -19,6 +19,7 @@ import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 public class CourseListFragment extends Fragment {
 
     CoreActivity core;
+    ListView courseList;
 
     public CourseListFragment() {
 
@@ -38,8 +39,18 @@ public class CourseListFragment extends Fragment {
         TextView setting = v.findViewById(R.id.SettingPic);
         TextView courselist = v.findViewById(R.id.CourseListPic);
         TextView todoList = v.findViewById(R.id.TodoPic);
-        final ListView courseList = v.findViewById(R.id.CourseListView);
+        courseList = v.findViewById(R.id.CourseListView);
 
+        setOnClicks();
+
+        profile.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
+        setting.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
+        courselist.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
+        todoList.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
+        return v;
+    }
+
+    public void setOnClicks() {
         courseList.setClickable(true);
         courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -50,11 +61,5 @@ public class CourseListFragment extends Fragment {
                 core.navToCoursePage(str);
             }
         });
-
-        profile.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
-        setting.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
-        courselist.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
-        todoList.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
-        return v;
     }
 }

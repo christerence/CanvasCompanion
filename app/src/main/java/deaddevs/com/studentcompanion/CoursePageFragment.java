@@ -16,6 +16,8 @@ public class CoursePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_course_page, container, false);
+        TextView TradeMark = v.findViewById(R.id.backbutton);
+        TradeMark.setTypeface(FontAwesomeHelper.getTypeface(getContext(), FontAwesomeHelper.FONTAWESOME));
         return v;
     }
 }
