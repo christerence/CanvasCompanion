@@ -809,7 +809,9 @@ public class CoreActivity extends AppCompatActivity {
 
     public void updateName(String musicName) {
         Button good = findViewById(R.id.thegood);
-        good.setText("Now playing: " + musicName);
+        if (good != null) {
+            good.setText("Now playing: " + musicName);
+        }
     }
 
     private ServiceConnection musicServiceConnection = new ServiceConnection() {
