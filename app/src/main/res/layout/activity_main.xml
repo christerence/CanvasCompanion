@@ -75,7 +75,7 @@
                 android:lines="1"
                 android:maxLines="1"
                 android:textColor="#000"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:textCursorDrawable="@drawable/color_cursor"/>
 
         </LinearLayout>

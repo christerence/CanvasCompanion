@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/backbutton"
-                android:onClick="onBack"
+                android:onClick="handleBack"
                 android:textColor="#fff"
                 android:id="@+id/backbutton"
                 android:textSize="20dp"
@@ -137,6 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="more"
+                    android:onClick="onClickSettings"
                     android:textSize="20sp"
                     android:background="#00acc1"
                     android:textColor="#fff"/>
@@ -171,6 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="more"
+                    android:onClick="onClickSettings"
                     android:textSize="20sp"
                     android:background="#00acc1"
                     android:textColor="#fff"/>
@@ -210,8 +212,6 @@
                     android:textColor="#fff"/>
 
             </LinearLayout>
-
-
         </LinearLayout>
 
         <LinearLayout
