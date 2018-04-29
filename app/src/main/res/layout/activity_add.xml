@@ -134,6 +134,7 @@
             android:layout_height="wrap_content"
             android:onClick="handleCancel"
             android:text="Cancel"
+            android:id="@+id/cancel_addItem"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:fontFamily="orbitron"

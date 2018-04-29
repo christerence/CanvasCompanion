@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -38,6 +39,8 @@ public class AddActivity extends AppCompatActivity {
 	private FirebaseAuth mAuth;
 	private FirebaseFirestore db;
 
+	private Button cancel_addItem;
+
 	private String TAG = "ADDPAGE";
 
 	@Override
@@ -46,6 +49,8 @@ public class AddActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_add);
 		mAuth = FirebaseAuth.getInstance();
 		db = FirebaseFirestore.getInstance();
+
+		cancel_addItem = (Button)findViewById(R.id.cancel_addItem);
 
 		Spinner dropdown = findViewById(R.id.importancespinner);
 		String[] items = new String[]{"Low", "Medium", "High"};
@@ -63,6 +68,12 @@ public class AddActivity extends AppCompatActivity {
 		description.setText("");
 		drop.setSelection(0);
 	}
+
+	// added override for back press to prevent crashing to go back to activity_core screen
+	@Override
+    public void onBackPressed() {
+	    this.handleCancel(cancel_addItem);
+    }
 
 	public void handleCancel(View v) {
 		Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
