@@ -1,17 +1,26 @@
 package deaddevs.com.studentcompanion;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.IBinder;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +40,8 @@ import java.util.Map;
 
 import deaddevs.com.studentcompanion.utils.CanvasApi;
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
+import deaddevs.com.studentcompanion.utils.MusicCompletionReceiver;
+import deaddevs.com.studentcompanion.utils.MusicService;
 
 public class CoreActivity extends AppCompatActivity {
     CourseListFragment course;
@@ -58,7 +69,15 @@ public class CoreActivity extends AppCompatActivity {
 
     List<String> toRemove;
 
+    MusicService musicService;
+    MusicCompletionReceiver musicCompletionReceiver;
+    Intent startMusicServiceIntent;
+    boolean isInitialized = false;
+    boolean isBound = false;
 
+    public static final String INITIALIZE_STATUS = "intialization status";
+    public static final String MUSIC_PLAYING = "music playing";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +165,15 @@ public class CoreActivity extends AppCompatActivity {
                 getSupportFragmentManager().executePendingTransactions();
                 break;
         }
+        if (savedInstanceState != null && currPage.equals("Course")) {
+            isInitialized = savedInstanceState.getBoolean(INITIALIZE_STATUS);
+            ((Button)findViewById(R.id.thegood)).setText(savedInstanceState.getString(MUSIC_PLAYING));
+        }
+        startMusicServiceIntent = new Intent(this, MusicService.class);
+        if (!isInitialized) {
+            startService(startMusicServiceIntent); isInitialized = true;
+        }
+        musicCompletionReceiver=new MusicCompletionReceiver(this);
     }
 
     @Override
@@ -159,6 +187,10 @@ public class CoreActivity extends AppCompatActivity {
         ArrayList<String> savelist = (ArrayList<String>) courses;
         outState.putStringArrayList("COURSE_LIST", savelist);
         outState.putString("CURRPAGE", currPage);
+        if(currPage.equals("Course")) {
+            outState.putBoolean(INITIALIZE_STATUS,isInitialized);
+            outState.putString(MUSIC_PLAYING, ((Button)findViewById(R.id.thegood)).getText().toString());
+        }
     }
 
     @Override
@@ -217,8 +249,19 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleGood(View v) {
-        //need to implement music service
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=ISNBfryBkSo")));
+        if(isBound){
+            switch (musicService.getPlayingStatus()) {
+                case 0:
+                    musicService.startMusic();
+                    break;
+                case 1:
+                    musicService.pauseMusic();
+                    break;
+                case 2:
+                    musicService.resumeMusic();
+                    break;
+            }
+        }
     }
 
     @Override
@@ -310,6 +353,11 @@ public class CoreActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         db.close();
+        if(isBound) {
+            unbindService(musicServiceConnection);
+            isBound=false;
+        }
+        unregisterReceiver(musicCompletionReceiver);
     }
 
     @Override
@@ -320,7 +368,10 @@ public class CoreActivity extends AppCompatActivity {
             db.deleteAll();
             cleared = true;
         }
-
+        if (isInitialized && !isBound) {
+            bindService(startMusicServiceIntent, musicServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+        registerReceiver(musicCompletionReceiver, new IntentFilter(MusicService.COMPLETE_INTENT));
     }
 
     public void signOut(View v) {
@@ -637,6 +688,42 @@ public class CoreActivity extends AppCompatActivity {
             TextView title = view.findViewById((R.id.ToDoItemName));
             title.setText(names.get(i));
             final String name = names.get(i);
+            String description = "";
+            String date = "";
+            String importance = "";
+
+            JSONArray convertTodo = new JSONArray(todos);
+            for (int j = 0; j < todos.size(); j++) {
+                JSONObject value = null;
+                try {
+                    value = convertTodo.getJSONObject(j);
+                    String tofind = value.getString("title");
+                    if(name.equals(tofind)) {
+                        description = value.getString("description");
+                        date = value.getString("due date");
+                        importance = value.getString("importance");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            TextView desc = view.findViewById(R.id.tododesc);
+            desc.setText("Description: " + description);
+            TextView duedate = view.findViewById(R.id.tododate);
+            duedate.setText("Due Date: " + date);
+
+            switch(importance) {
+                case "Low":
+                    ((LinearLayout)view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FFB4AC"));
+                    break;
+                case "Medium":
+                    ((LinearLayout)view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FF4A36"));
+                    break;
+                case "High":
+                    ((LinearLayout)view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FF1B00"));
+                    break;
+            }
 
             if (toRemove == null) {
                 toRemove = new ArrayList<>();
@@ -719,5 +806,24 @@ public class CoreActivity extends AppCompatActivity {
         }
         currPage = "Text";
     }
+
+    public void updateName(String musicName) {
+        Button good = findViewById(R.id.thegood);
+        good.setText("Now playing: " + musicName);
+    }
+
+    private ServiceConnection musicServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicService.MyBinder binder = (MusicService.MyBinder) iBinder;
+            musicService = binder.getService();
+            isBound = true;
+            updateName(musicService.getMusicName());
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            musicService = null; isBound = false;
+        }
+    };
 
 }

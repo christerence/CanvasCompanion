@@ -34,13 +34,18 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".CoreActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity android:name=".SignUp"
             android:screenOrientation="portrait"/>
         <activity android:name=".AddActivity"
             android:screenOrientation="portrait">
 
         </activity>
+
+        <service android:name=".utils.MusicService" android:label="Music Service" />
+        <receiver android:name=".utils.MusicCompletionReceiver"/>
     </application>
 
 </manifest>
