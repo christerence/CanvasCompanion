@@ -74,11 +74,11 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
     }
 
     public String getCourses() {
-        return PREFIX_URL+COURSES+AUTHENTICATE+authKey;
+        return PREFIX_URL+COURSES+AUTHENTICATE+authKey + "&per_page=100";
     }
 
     public String getAssignments(String ID) {
-        return PREFIX_URL+ASSIGNNMENTS_PREFIX+ID+ASSIGNMENTS_SUFFX+AUTHENTICATE+authKey;
+        return PREFIX_URL+ASSIGNNMENTS_PREFIX+ID+ASSIGNMENTS_SUFFX+AUTHENTICATE+authKey+"&per_page=100";
     }
 
     @Override

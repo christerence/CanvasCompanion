@@ -1,6 +1,8 @@
 package deaddevs.com.studentcompanion;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,13 +32,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
 	private FirebaseAuth mAuth;
 	private FirebaseFirestore db;
@@ -42,6 +48,9 @@ public class AddActivity extends AppCompatActivity {
 	private Button cancel_addItem;
 
 	private String TAG = "ADDPAGE";
+
+	int day, month, year, hour, minute;
+	int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,18 @@ public class AddActivity extends AppCompatActivity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
 		dropdown.setAdapter(adapter);
 
+		findViewById(R.id.datepicker).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Calendar c = Calendar.getInstance();
+				year = c.get(Calendar.YEAR);
+				month = c.get(Calendar.MONTH);
+				day = c.get(Calendar.DAY_OF_MONTH);
+
+				DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, AddActivity.this, year, month, day);
+				datePickerDialog.show();
+			}
+		});
 	}
 
 	public void handleReset(View v) {
@@ -95,6 +116,7 @@ public class AddActivity extends AppCompatActivity {
 		EditText title = findViewById(R.id.tasktitle);
 		EditText description = findViewById(R.id.taskdescription);
 		Spinner drop = findViewById(R.id.importancespinner);
+		Button date = findViewById(R.id.datepicker);
 
 		// tells user to enter a title if the title is empty
 		if(title.getText().toString() == null || title.getText().toString().equals("")) {
@@ -107,6 +129,7 @@ public class AddActivity extends AppCompatActivity {
 				toadd.put("title", title.getText().toString());
 				toadd.put("description", description.getText().toString());
 				toadd.put("importance", drop.getSelectedItem().toString());
+				toadd.put("due date", date.getText().toString());
 
 				final ArrayList<Map> toSend = new ArrayList<>();
 				toSend.add(toadd);
@@ -126,11 +149,13 @@ public class AddActivity extends AppCompatActivity {
 										String title = value.getString("title");
 										String description = value.getString("description");
 										String importance = value.getString("importance");
+										String date = value.getString("due date");
 
 										Map<String, Object> oldVal = new HashMap<>();
 										oldVal.put("title", title);
 										oldVal.put("description", description);
 										oldVal.put("importance", importance);
+										oldVal.put("due date", date);
 
 										toSend.add(oldVal);
 									}
@@ -212,4 +237,24 @@ public class AddActivity extends AppCompatActivity {
 	}
 
 
+	@Override
+	public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+		yearFinal = i;
+		monthFinal = i1 + 1;
+		dayFinal = i2;
+
+		Calendar c = Calendar.getInstance();
+		hour = c.get(Calendar.HOUR_OF_DAY);
+		minute = c.get(Calendar.MINUTE);
+
+		TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, AddActivity.this, hour, minute, android.text.format.DateFormat.is24HourFormat(this));
+		timePickerDialog.show();
+	}
+
+	@Override
+	public void onTimeSet(TimePicker timePicker, int i, int i1) {
+		hourFinal = i;
+		minuteFinal = i1;
+		((Button)findViewById(R.id.datepicker)).setText(monthFinal + "/" + dayFinal + "/" + yearFinal + " " + hourFinal + ":" + minuteFinal);
+	}
 }
