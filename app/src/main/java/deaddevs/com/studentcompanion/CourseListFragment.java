@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,14 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import deaddevs.com.studentcompanion.utils.DatabaseManager;
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
 
 public class CourseListFragment extends Fragment {
 
     CoreActivity core;
     ListView courseList;
+    DatabaseManager db;
 
     public CourseListFragment() {
 
@@ -28,6 +31,7 @@ public class CourseListFragment extends Fragment {
     @SuppressLint("ValidFragment")
     public CourseListFragment(CoreActivity core) {
         this.core = core;
+        db = core.getDB();
     }
 
 
@@ -58,7 +62,8 @@ public class CourseListFragment extends Fragment {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 Object o = courseList.getItemAtPosition(position);
                 String str = (String) o;
-                core.navToCoursePage(str);
+                String id = db.getID(str);
+                core.navToCoursePage(str, id);
             }
         });
     }

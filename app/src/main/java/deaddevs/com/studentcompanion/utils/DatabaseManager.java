@@ -22,10 +22,12 @@ public class DatabaseManager {
         sqLiteDatabase.close();
     }
 
-    public void insertCanvasInfo(String title) {
+    public void insertCanvasInfo(String title, String start, String uid) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBOpenHelper.COLUMN_NAME, title);
         contentValues.put(DBOpenHelper.COLUMN_GRADE, 0);
+        contentValues.put(DBOpenHelper.COLUMN_START, start);
+        contentValues.put(DBOpenHelper.COLUMN_UID, uid);
         sqLiteDatabase.insert(DBOpenHelper.TABLE_NAME, null, contentValues);
     }
 
@@ -45,14 +47,18 @@ public class DatabaseManager {
         return result;
     }
 
+    public String getID(String name) {
+        Cursor cursor = sqLiteDatabase.query(DBOpenHelper.TABLE_NAME,
+                new String[]{DBOpenHelper.COLUMN_UID},
+                DBOpenHelper.COLUMN_NAME + "=?", new String[] {name}, null, null, null);
+        cursor.moveToFirst();
+        return cursor.getString(0);
+    }
+
+
     public void deleteAll() {
         if (sqLiteDatabase.isOpen()) {
             sqLiteDatabase.execSQL("DELETE FROM " + DBOpenHelper.TABLE_NAME);
         }
     }
-
-
-
-
-
 }

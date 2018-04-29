@@ -1,36 +1,22 @@
 package deaddevs.com.studentcompanion;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
@@ -105,7 +91,6 @@ public class CoreActivity extends AppCompatActivity {
             currPage = getIntent().getStringExtra("CURRPAGE");
             todos = getIntent().getStringArrayListExtra("TODOLIST");
         }
-
 
         switch (currPage) {
             case "Course":
@@ -187,6 +172,7 @@ public class CoreActivity extends AppCompatActivity {
             cleared = savedInstanceState.getBoolean("CLEAR");
             courses = savedInstanceState.getStringArrayList("COURSE_LIST");
             currPage = savedInstanceState.getString("CURRPAGE");
+            canvas = new CanvasApi(this);
 
 
             switch (currPage) {
@@ -227,8 +213,6 @@ public class CoreActivity extends AppCompatActivity {
                     }
                     break;
             }
-
-
         }
     }
 
@@ -236,7 +220,6 @@ public class CoreActivity extends AppCompatActivity {
         //need to implement music service
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=ISNBfryBkSo")));
     }
-
 
     @Override
     protected void onStart() {
@@ -361,6 +344,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(profile).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -393,6 +377,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(settings).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -425,6 +410,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(calendar).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -457,6 +443,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(coursepage).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -525,26 +512,7 @@ public class CoreActivity extends AppCompatActivity {
         List<String> todoList = todoname;
         CustomAdapter adapter = new CustomAdapter(todoList);
         todo.setAdapter(adapter);
-
-
-//        todo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                if(findViewById(R.id.AssignmentPage) != null) {
-//                    assignmentpage = new AssignmentPageFragment();
-//                    assignmentpage.setArguments(getIntent().getExtras());
-//                    getSupportFragmentManager().beginTransaction().add(R.id.AssignmentPage, assignmentpage).commit();
-//                }
-//                getSupportFragmentManager().executePendingTransactions();
-//
-//            }
-//        });
     }
-
-//    public void updateAssignmentPage(){
-//        TextView title = findViewById(R.id.HWTitle);
-//        TextView desc = findViewById(R.id.HWDescription);
-//    }
 
     public void updateList() {
         ListView courselist = findViewById(R.id.CourseListView);
@@ -603,8 +571,33 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    public void saveInfo(String name) {
-        db.insertCanvasInfo(name);
+    public void saveHomeworkResponse(String response) {
+        try {
+            ArrayList<String> names = new ArrayList<>();
+            JSONArray obj = new JSONArray(response);
+            for(int i = 0; i < obj.length(); i++) {
+                JSONObject value = obj.getJSONObject(i);
+                names.add(value.getString("name"));
+            }
+            ListView list = findViewById(R.id.AssignmentList);
+            List<String> namesAsList = names;
+            ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, namesAsList);
+            //added null pointer check to fix crash when rapidly going back and forth from classes
+            if (list != null) {
+                list.setAdapter(coursesadapter);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DatabaseManager getDB() {
+        return db;
+    }
+
+    public void saveInfo(String name, String start, String uid) {
+        db.insertCanvasInfo(name, start, uid);
         courses = db.getAllRecord();
         updateList();
     }
@@ -664,7 +657,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    public void navToCoursePage(String courseName) {
+    public void navToCoursePage(String courseName, String id) {
         getSupportFragmentManager().beginTransaction().remove(course).commit();
         currPage = "CoursePage";
         if (findViewById(R.id.CourseList) != null) {
@@ -682,7 +675,11 @@ public class CoreActivity extends AppCompatActivity {
             coursepage.setArguments(outState);
             getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
         }
+        canvas = new CanvasApi(this);
+        getSupportFragmentManager().executePendingTransactions();
+        ((TextView)findViewById(R.id.CourseTitle)).setText(courseName);
 
+        canvas.initiateRestCallForAssignments(id);
     }
 
     public void onClickSettings(View view) {

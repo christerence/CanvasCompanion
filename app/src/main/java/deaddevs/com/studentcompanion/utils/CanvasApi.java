@@ -24,6 +24,7 @@ import deaddevs.com.studentcompanion.MainActivity;
  */
 public class CanvasApi implements Response.Listener<String>, Response.ErrorListener {
 
+    String restCallFor = "courses";
     private String authKey;
     CoreActivity core;
     RequestQueue queue;
@@ -52,6 +53,7 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
     }
 
     public void initiateRestCallForCourses() {
+        restCallFor = "courses";
         StringRequest request = new StringRequest(
                 Request.Method.GET, getCourses(),
                 this,
@@ -62,6 +64,7 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
     }
 
     public void initiateRestCallForAssignments(String ID) {
+        restCallFor = "homework";
         StringRequest request = new StringRequest(
                 Request.Method.GET, getAssignments(ID),
                 this,
@@ -71,11 +74,11 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
     }
 
     public String getCourses() {
-        return PREFIX_URL+COURSES+AUTHENTICATE+authKey;
+        return PREFIX_URL+COURSES+AUTHENTICATE+authKey + "&per_page=100";
     }
 
     public String getAssignments(String ID) {
-        return PREFIX_URL+ASSIGNNMENTS_PREFIX+ID+ASSIGNMENTS_SUFFX+AUTHENTICATE+authKey;
+        return PREFIX_URL+ASSIGNNMENTS_PREFIX+ID+ASSIGNMENTS_SUFFX+AUTHENTICATE+authKey+"&per_page=100";
     }
 
     @Override
@@ -86,11 +89,21 @@ public class CanvasApi implements Response.Listener<String>, Response.ErrorListe
     @Override
     public void onResponse(String response) {
         try {
-            JSONArray object = new JSONArray(response);
-            for(int i = 0; i < object.length(); i++) {
-                JSONObject value = object.getJSONObject(i);
-                String courseName = value.getString("name");
-                core.saveInfo(courseName);
+            switch (restCallFor) {
+                case "courses":
+                    JSONArray object = new JSONArray(response);
+                    for(int i = 0; i < object.length(); i++) {
+                        JSONObject value = object.getJSONObject(i);
+                        String courseName = value.getString("name");
+                        String startDate = value.getString("start_at");
+                        String classUID = value.getString("id");
+                        core.saveInfo(courseName, startDate, classUID);
+                    }
+                    break;
+                case "homework":
+                    core.saveHomeworkResponse(response);
+                    break;
+
             }
         } catch(JSONException e) {
             e.printStackTrace();

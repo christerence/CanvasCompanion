@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:fontFamily="orbitron"
-                android:text="Username:"
+                android:text="Email:"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="20sp"
