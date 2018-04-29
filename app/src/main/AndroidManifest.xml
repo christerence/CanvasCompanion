@@ -32,7 +32,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".CoreActivity" />
+        <activity android:name=".CoreActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SignUp"
             android:screenOrientation="portrait"/>
         <activity android:name=".AddActivity"></activity>
