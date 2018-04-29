@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/loginbg">
+    android:background="#00acc1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#00acc1">
+        android:padding="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +29,32 @@
             android:background="@drawable/buttongradient"
             android:id="@+id/CheckBoxItem"
             android:buttonTint="@color/colorPrimary"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tododesc"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:text="Description:"
+            android:textSize="15dp"
+            android:textColor="#fff"
+            android:fontFamily="orbitron"/>
+
+        <TextView
+            android:id="@+id/tododate"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:text="Due Date:"
+            android:textSize="15dp"
+            android:textColor="#fff"
+            android:fontFamily="orbitron"/>
     </LinearLayout>
 
 
