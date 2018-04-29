@@ -6,18 +6,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Information";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String TABLE_NAME = "Courses";
     public static final String COLUMN_NAME = "NAME";
     public static final String COLUMN_ID = "ID";
     public static final String COLUMN_GRADE = "GRADE";
+    public static final String COLUMN_UID = "UID";
+    public static final String COLUMN_START ="START";
 
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + "(" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_NAME + " TEXT," + COLUMN_GRADE + " INTEGER)";
+                    COLUMN_NAME + " TEXT," + COLUMN_GRADE + " INTEGER," + COLUMN_UID + " TEXT," + COLUMN_START + " TEXT" + ")";
 
 
     public DBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

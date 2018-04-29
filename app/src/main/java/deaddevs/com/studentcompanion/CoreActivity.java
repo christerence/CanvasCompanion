@@ -105,7 +105,6 @@ public class CoreActivity extends AppCompatActivity {
             todos = getIntent().getStringArrayListExtra("TODOLIST");
         }
 
-
         switch (currPage) {
             case "Course":
                 if (findViewById(R.id.CourseList) != null) {
@@ -476,26 +475,7 @@ public class CoreActivity extends AppCompatActivity {
         List<String> todoList = todoname;
         CustomAdapter adapter = new CustomAdapter(todoList);
         todo.setAdapter(adapter);
-
-
-//        todo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                if(findViewById(R.id.AssignmentPage) != null) {
-//                    assignmentpage = new AssignmentPageFragment();
-//                    assignmentpage.setArguments(getIntent().getExtras());
-//                    getSupportFragmentManager().beginTransaction().add(R.id.AssignmentPage, assignmentpage).commit();
-//                }
-//                getSupportFragmentManager().executePendingTransactions();
-//
-//            }
-//        });
     }
-
-//    public void updateAssignmentPage(){
-//        TextView title = findViewById(R.id.HWTitle);
-//        TextView desc = findViewById(R.id.HWDescription);
-//    }
 
     public void updateList() {
         ListView courselist = findViewById(R.id.CourseListView);
@@ -554,8 +534,30 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    public void saveInfo(String name) {
-        db.insertCanvasInfo(name);
+    public void saveHomeworkResponse(String response) {
+        try {
+            ArrayList<String> names = new ArrayList<>();
+            JSONArray obj = new JSONArray(response);
+            for(int i = 0; i < obj.length(); i++) {
+                JSONObject value = obj.getJSONObject(i);
+                names.add(value.getString("name"));
+            }
+            ListView list = findViewById(R.id.AssignmentList);
+            List<String> namesAsList = names;
+            ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, namesAsList);
+            list.setAdapter(coursesadapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DatabaseManager getDB() {
+        return db;
+    }
+
+    public void saveInfo(String name, String start, String uid) {
+        db.insertCanvasInfo(name, start, uid);
         courses = db.getAllRecord();
         updateList();
     }
@@ -615,7 +617,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    public void navToCoursePage(String courseName) {
+    public void navToCoursePage(String courseName, String id) {
         getSupportFragmentManager().beginTransaction().remove(course).commit();
         currPage = "CoursePage";
         if (findViewById(R.id.CourseList) != null) {
@@ -633,7 +635,10 @@ public class CoreActivity extends AppCompatActivity {
             coursepage.setArguments(outState);
             getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
         }
+        getSupportFragmentManager().executePendingTransactions();
+        ((TextView)findViewById(R.id.CourseTitle)).setText(courseName);
 
+        canvas.initiateRestCallForAssignments(id);
     }
 
 }
