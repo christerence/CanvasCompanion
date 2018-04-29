@@ -582,7 +582,10 @@ public class CoreActivity extends AppCompatActivity {
             ListView list = findViewById(R.id.AssignmentList);
             List<String> namesAsList = names;
             ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, namesAsList);
-            list.setAdapter(coursesadapter);
+            //added null pointer check to fix crash when rapidly going back and forth from classes
+            if (list != null) {
+                list.setAdapter(coursesadapter);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
