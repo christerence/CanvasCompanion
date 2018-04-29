@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -84,26 +85,32 @@ public class AddActivity extends AppCompatActivity {
 		EditText description = findViewById(R.id.taskdescription);
 		Spinner drop = findViewById(R.id.importancespinner);
 
-		if(title.getText() != null && description.getText() != null && drop.getSelectedItem().toString() != null) {
-			final Map<String, Object> toadd = new HashMap<>();
-			toadd.put("title", title.getText().toString());
-			toadd.put("description", description.getText().toString());
-			toadd.put("importance", drop.getSelectedItem().toString());
+		// tells user to enter a title if the title is empty
+		if(title.getText().toString() == null || title.getText().toString().equals("")) {
+			Toast.makeText(getApplicationContext(),"Please enter a title", Toast.LENGTH_SHORT).show();
+		}
+		else {
 
-			final ArrayList<Map> toSend = new ArrayList<>();
-			toSend.add(toadd);
+			if (title.getText() != null && description.getText() != null && drop.getSelectedItem().toString() != null) {
+				final Map<String, Object> toadd = new HashMap<>();
+				toadd.put("title", title.getText().toString());
+				toadd.put("description", description.getText().toString());
+				toadd.put("importance", drop.getSelectedItem().toString());
 
-			final DocumentReference docRef = db.collection("users").document(uid);
-			docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-				@Override
-				public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-					if (task.isSuccessful()) {
-						DocumentSnapshot document = task.getResult();
-						if (document.exists()) {
-							JSONObject map = new JSONObject(document.getData());
-							try {
+				final ArrayList<Map> toSend = new ArrayList<>();
+				toSend.add(toadd);
+
+				final DocumentReference docRef = db.collection("users").document(uid);
+				docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+					@Override
+					public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+						if (task.isSuccessful()) {
+							DocumentSnapshot document = task.getResult();
+							if (document.exists()) {
+								JSONObject map = new JSONObject(document.getData());
+								try {
 									JSONArray oldToDoList = map.getJSONArray("To Do List");
-									for(int i = 0; i < oldToDoList.length(); i++) {
+									for (int i = 0; i < oldToDoList.length(); i++) {
 										JSONObject value = oldToDoList.getJSONObject(i);
 										String title = value.getString("title");
 										String description = value.getString("description");
@@ -117,78 +124,79 @@ public class AddActivity extends AppCompatActivity {
 										toSend.add(oldVal);
 									}
 
-								Map<String, Object> newArray = new HashMap<>();
-								newArray.put("To Do List", toSend);
-								docRef.update(newArray);
+									Map<String, Object> newArray = new HashMap<>();
+									newArray.put("To Do List", toSend);
+									docRef.update(newArray);
 
-								docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-									@Override
-									public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-										if (task.isSuccessful()) {
-											DocumentSnapshot document = task.getResult();
-											if (document.exists()) {
-												Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
-												outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
-												outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
-												outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
-												outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
-												outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
-												outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
-												outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
-												outState.putExtra("FROM", "ADD");
-												ArrayList<String> newToDoList = (ArrayList<String>) document.get("To Do List");
-												outState.putExtra("TODOLIST", newToDoList);
-												startActivity(outState);
-												setContentView(R.layout.activity_core);
+									docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+										@Override
+										public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+											if (task.isSuccessful()) {
+												DocumentSnapshot document = task.getResult();
+												if (document.exists()) {
+													Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
+													outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
+													outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
+													outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
+													outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
+													outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
+													outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
+													outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
+													outState.putExtra("FROM", "ADD");
+													ArrayList<String> newToDoList = (ArrayList<String>) document.get("To Do List");
+													outState.putExtra("TODOLIST", newToDoList);
+													startActivity(outState);
+													setContentView(R.layout.activity_core);
+												} else {
+													Log.d(TAG, "No such document");
+												}
 											} else {
-												Log.d(TAG, "No such document");
+												Log.d(TAG, "get failed with ", task.getException());
 											}
-										} else {
-											Log.d(TAG, "get failed with ", task.getException());
 										}
-									}
-								});
+									});
 
-							} catch (JSONException e) {
-								Map<String, Object> newArray = new HashMap<>();
-								newArray.put("To Do List", toSend);
-								docRef.update(newArray);
+								} catch (JSONException e) {
+									Map<String, Object> newArray = new HashMap<>();
+									newArray.put("To Do List", toSend);
+									docRef.update(newArray);
 
-								docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-									@Override
-									public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-										if (task.isSuccessful()) {
-											DocumentSnapshot document = task.getResult();
-											if (document.exists()) {
-												Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
-												outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
-												outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
-												outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
-												outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
-												outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
-												outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
-												outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
-												outState.putExtra("FROM", "ADD");
-												ArrayList<String> newToDoList = (ArrayList<String>) document.get("To Do List");
-												outState.putExtra("TODOLIST", newToDoList);
-												startActivity(outState);
-												setContentView(R.layout.activity_core);
+									docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+										@Override
+										public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+											if (task.isSuccessful()) {
+												DocumentSnapshot document = task.getResult();
+												if (document.exists()) {
+													Intent outState = new Intent(getApplicationContext(), CoreActivity.class);
+													outState.putExtra("FIRST", getIntent().getStringExtra("FIRST"));
+													outState.putExtra("SECOND", getIntent().getStringExtra("SECOND"));
+													outState.putExtra("EMAIL", getIntent().getStringExtra("EMAIL"));
+													outState.putExtra("CANVASKEY", getIntent().getStringExtra("CANVASKEY"));
+													outState.putExtra("CLEAR", getIntent().getBooleanExtra("CLEAR", true));
+													outState.putExtra("COURSE_LIST", getIntent().getStringArrayListExtra("COURSE_LIST"));
+													outState.putExtra("CURRPAGE", getIntent().getStringExtra("CURRPAGE"));
+													outState.putExtra("FROM", "ADD");
+													ArrayList<String> newToDoList = (ArrayList<String>) document.get("To Do List");
+													outState.putExtra("TODOLIST", newToDoList);
+													startActivity(outState);
+													setContentView(R.layout.activity_core);
+												} else {
+													Log.d(TAG, "No such document");
+												}
 											} else {
-												Log.d(TAG, "No such document");
+												Log.d(TAG, "get failed with ", task.getException());
 											}
-										} else {
-											Log.d(TAG, "get failed with ", task.getException());
 										}
-									}
-								});
+									});
+								}
+
+							} else {
+								Log.d(TAG, "get failed with ", task.getException());
 							}
-
-						} else {
-							Log.d(TAG, "get failed with ", task.getException());
 						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
