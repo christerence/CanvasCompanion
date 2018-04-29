@@ -53,6 +53,7 @@ public class CoreActivity extends AppCompatActivity {
     CalendarFragment calendar;
     CoursePageFragment coursepage;
     AssignmentPageFragment assignmentpage;
+    TextFragment textFragment;
 
     String currPage = "Course";
 
@@ -147,6 +148,17 @@ public class CoreActivity extends AppCompatActivity {
                 }
                 getSupportFragmentManager().executePendingTransactions();
                 break;
+            case "Text":
+                if (findViewById(R.id.textPage) != null) {
+                    if (savedInstanceState != null) {
+                        return;
+                    }
+                    textFragment = new TextFragment();
+                    textFragment.setArguments(getIntent().getExtras());
+                    getSupportFragmentManager().beginTransaction().add(R.id.textPage, textFragment).commit();
+                }
+                getSupportFragmentManager().executePendingTransactions();
+                break;
         }
     }
 
@@ -204,6 +216,13 @@ public class CoreActivity extends AppCompatActivity {
                         calendar = new CalendarFragment();
                         calendar.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.ToDoList, calendar).commit();
+                    }
+                    break;
+                case "Text":
+                    if (findViewById(R.id.textPage) != null) {
+                        textFragment = new TextFragment();
+                        textFragment.setArguments(getIntent().getExtras());
+                        getSupportFragmentManager().beginTransaction().add(R.id.textPage, textFragment).commit();
                     }
                     break;
             }
@@ -459,6 +478,36 @@ public class CoreActivity extends AppCompatActivity {
                 updateList();
                 //course.setOnClicks();
                 currPage = "Course";
+                break;
+            case "Text":
+                savedInstanceState = textFragment.getArguments();
+                first = savedInstanceState.getString("FIRST");
+                last = savedInstanceState.getString("SECOND");
+                email = savedInstanceState.getString("EMAIL");
+                canvasKey = savedInstanceState.getString("CANVASKEY");
+                cleared = savedInstanceState.getBoolean("CLEAR");
+                courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+                currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
+                getSupportFragmentManager().beginTransaction().remove(textFragment).commit();
+                if (findViewById(R.id.Settings) != null) {
+                    settings = new SettingsFragment();
+                    Bundle outState = new Bundle();
+                    outState.putString("FIRST", first);
+                    outState.putString("SECOND", last);
+                    outState.putString("EMAIL", email);
+                    outState.putString("CANVASKEY", canvasKey);
+                    outState.putBoolean("CLEAR", cleared);
+                    ArrayList<String> savelist = (ArrayList<String>) courses;
+                    outState.putStringArrayList("COURSE_LIST", savelist);
+                    outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
+                    settings.setArguments(outState);
+                    getSupportFragmentManager().beginTransaction().add(R.id.Settings, settings).commit();
+                }
+                getSupportFragmentManager().executePendingTransactions();
+                currPage = "Settings";
+                break;
         }
     }
 
@@ -639,6 +688,44 @@ public class CoreActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.CourseTitle)).setText(courseName);
 
         canvas.initiateRestCallForAssignments(id);
+    }
+
+    public void onClickSettings(View view) {
+        Bundle savedInstanceState;
+        savedInstanceState = settings.getArguments();
+        first = savedInstanceState.getString("FIRST");
+        last = savedInstanceState.getString("SECOND");
+        email = savedInstanceState.getString("EMAIL");
+        canvasKey = savedInstanceState.getString("CANVASKEY");
+        cleared = savedInstanceState.getBoolean("CLEAR");
+        courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+        currPage = savedInstanceState.getString("CURRPAGE");
+        todos = savedInstanceState.getStringArrayList("TODOLIST");
+        getSupportFragmentManager().beginTransaction().remove(settings).commit();
+        if (findViewById(R.id.CourseList) != null) {
+            textFragment = new TextFragment();
+            Bundle outState = new Bundle();
+            outState.putString("FIRST", first);
+            outState.putString("SECOND", last);
+            outState.putString("EMAIL", email);
+            outState.putString("CANVASKEY", canvasKey);
+            outState.putBoolean("CLEAR", cleared);
+            ArrayList<String> savelist = (ArrayList<String>) courses;
+            outState.putStringArrayList("COURSE_LIST", savelist);
+            outState.putString("CURRPAGE", currPage);
+            outState.putStringArrayList("TODOLIST", todos);
+            textFragment.setArguments(outState);
+            getSupportFragmentManager().beginTransaction().add(R.id.textPage, textFragment).commit();
+        }
+        getSupportFragmentManager().executePendingTransactions();
+        switch (view.getId()) {
+            case R.id.support:
+                textFragment.setString(0);
+                break;
+            case R.id.privacy:
+                textFragment.setString(1);
+        }
+        currPage = "Text";
     }
 
 }
