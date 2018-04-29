@@ -48,7 +48,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:background="@drawable/gradienttitle">
+            android:background="@drawable/gradienttitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,7 +59,8 @@
                 android:text="Notifications"
                 android:textSize="30dp"
                 android:fontFamily="orbitron"
-                android:textColor="#fff"/>
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,7 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:background="@drawable/gradienttitle">
+            android:background="@drawable/gradienttitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,7 +96,8 @@
                 android:text="Location"
                 android:textSize="30dp"
                 android:fontFamily="orbitron"
-                android:textColor="#fff"/>
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,7 +123,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:background="@drawable/gradienttitle">
+            android:background="@drawable/gradienttitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -124,7 +133,8 @@
                 android:text="Support"
                 android:textSize="30sp"
                 android:fontFamily="orbitron"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,7 +161,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:background="@drawable/gradienttitle">
+            android:background="@drawable/gradienttitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -159,7 +171,8 @@
                 android:text="Privacy Policy"
                 android:textSize="30sp"
                 android:fontFamily="orbitron"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -186,7 +199,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:background="@drawable/gradienttitle">
+            android:background="@drawable/gradienttitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -194,7 +209,8 @@
                 android:text="Leave A Review"
                 android:textSize="30sp"
                 android:fontFamily="orbitron"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

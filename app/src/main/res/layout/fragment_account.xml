@@ -2,8 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="deaddevs.com.studentcompanion.AccountFragment"
-    android:background="@drawable/loginbg">
+    android:background="@drawable/loginbg"
+    tools:context="deaddevs.com.studentcompanion.AccountFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,56 +17,59 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:background="#512da8"
-            android:padding="10dp"
-            android:layout_marginBottom="50dp">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:textColor="#fff"
                 android:layout_weight="1"
                 android:fontFamily="orbitron"
                 android:gravity="center"
-                />
+                android:text="Profile"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/backbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/rightbutton"
                 android:onClick="handleBack"
-                android:textColor="#fff"
-                android:id="@+id/backbutton"
-                android:textSize="20sp"
                 android:padding="10dp"
+                android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:text="@string/rightbutton"
                 android:textAlignment="center"
-                android:paddingLeft="10dp"/>
+                android:textColor="#fff"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PlaceHolder"
-                android:layout_margin="20dp"
-                android:textSize="25sp"
-                android:id="@+id/FullName"/>
 
             <TextView
+                android:id="@+id/FullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PlaceHolder"
                 android:layout_margin="20dp"
+                android:text="PlaceHolder"
+                android:textSize="25sp"
+                android:background="#512da8"
+                android:textColor="#fff"/>
+
+            <TextView
+                android:id="@+id/Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="PlaceHolder"
                 android:textSize="20sp"
-                android:id="@+id/Email"/>
+                android:background="#512da8"
+                android:textColor="#fff"/>
         </LinearLayout>
 
         <LinearLayout
@@ -72,23 +79,26 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:background="#512da8"
                 android:text="This Week:"
-                android:textSize="30dp" />
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="10dp"
+                android:gravity="right">
 
                 <TextView
                     android:id="@+id/weekText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:text="9hr 59min" />
+                    android:text="9hr 59min"
+                    android:textSize="30dp" />
 
             </LinearLayout>
 
@@ -101,23 +111,26 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:background="#512da8"
                 android:text="All Time:"
-                android:textSize="30dp" />
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="10dp"
+                android:gravity="right">
 
                 <TextView
                     android:id="@+id/allTimeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:text="99hr 59min" />
+                    android:text="99hr 59min"
+                    android:textSize="30dp" />
 
             </LinearLayout>
 
@@ -130,36 +143,41 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:background="#512da8"
                 android:text="Locations:"
-                android:textSize="30dp" />
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:gravity="right"
-                android:orientation="vertical"
-                android:layout_marginRight="10dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/location1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:text="Top Location" />
+                    android:text="Top Location"
+                    android:textSize="20dp" />
+
                 <TextView
                     android:id="@+id/location2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:text="Second Location" />
+                    android:text="Second Location"
+                    android:textSize="20dp" />
+
                 <TextView
                     android:id="@+id/location3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:text="3rd location" />
+                    android:text="3rd location"
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -168,9 +186,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50dp"
-            android:text="Will later put graphs down here"/>
+            android:text="Will later put graphs down here"
+            android:textSize="50dp" />
 
     </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>
