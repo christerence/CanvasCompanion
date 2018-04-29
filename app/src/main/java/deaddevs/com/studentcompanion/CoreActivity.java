@@ -574,7 +574,9 @@ public class CoreActivity extends AppCompatActivity {
         }
         List<String> coursesNameAsList = coursesName;
         ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coursesNameAsList);
-        courselist.setAdapter(coursesadapter);
+        if (courselist != null) {
+            courselist.setAdapter(coursesadapter);
+        }
     }
 
     public void handleAdd(View v) {

@@ -28,6 +28,9 @@ public class DatabaseManager {
         contentValues.put(DBOpenHelper.COLUMN_GRADE, 0);
         contentValues.put(DBOpenHelper.COLUMN_START, start);
         contentValues.put(DBOpenHelper.COLUMN_UID, uid);
+        if (!sqLiteDatabase.isOpen()) {
+            this.open();
+        }
         sqLiteDatabase.insert(DBOpenHelper.TABLE_NAME, null, contentValues);
     }
 
