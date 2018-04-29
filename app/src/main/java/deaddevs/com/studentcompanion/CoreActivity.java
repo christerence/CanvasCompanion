@@ -186,6 +186,7 @@ public class CoreActivity extends AppCompatActivity {
             cleared = savedInstanceState.getBoolean("CLEAR");
             courses = savedInstanceState.getStringArrayList("COURSE_LIST");
             currPage = savedInstanceState.getString("CURRPAGE");
+            canvas = new CanvasApi(this);
 
 
             switch (currPage) {
@@ -360,6 +361,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(profile).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -392,6 +394,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(settings).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -424,6 +427,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(calendar).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -456,6 +460,7 @@ public class CoreActivity extends AppCompatActivity {
                 courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                 currPage = savedInstanceState.getString("CURRPAGE");
                 todos = savedInstanceState.getStringArrayList("TODOLIST");
+                canvas = new CanvasApi(this);
                 getSupportFragmentManager().beginTransaction().remove(coursepage).commit();
                 if (findViewById(R.id.CourseList) != null) {
                     course = new CourseListFragment(this);
@@ -684,6 +689,7 @@ public class CoreActivity extends AppCompatActivity {
             coursepage.setArguments(outState);
             getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
         }
+        canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
         ((TextView)findViewById(R.id.CourseTitle)).setText(courseName);
 
