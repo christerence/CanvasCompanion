@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -398,6 +400,7 @@ public class CoreActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         setContentView(R.layout.activity_main);
+        overridePendingTransition(R.anim.goup, R.anim.godown);
     }
 
     public void handleBack(View v) {
@@ -645,6 +648,7 @@ public class CoreActivity extends AppCompatActivity {
         outState.putExtra("TODOLIST", todos);
         startActivity(outState);
         setContentView(R.layout.activity_add);
+        overridePendingTransition(R.anim.goup, R.anim.godown);
     }
 
     public void handleRemove(View v) {
@@ -912,7 +916,7 @@ public class CoreActivity extends AppCompatActivity {
     public void updateName(String musicName) {
         Button good = findViewById(R.id.thegood);
         if (good != null) {
-            good.setText("Now playing: " + musicName);
+            good.setText(musicName);
         }
     }
 

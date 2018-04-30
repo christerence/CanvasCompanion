@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("FROM", "LOGIN");
                     startActivity(i);
                     setContentView(R.layout.activity_core);
+                    overridePendingTransition(R.anim.goup, R.anim.godown);
                 }
             });
             task.addOnFailureListener(new OnFailureListener() {

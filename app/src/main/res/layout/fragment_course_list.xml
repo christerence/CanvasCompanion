@@ -77,15 +77,22 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#00acc1"
-            android:fontFamily="orbitron"
-            android:text="How's everything going?"
-            android:textAlignment="center"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:id="@+id/transitionhow">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00acc1"
+                android:fontFamily="orbitron"
+                android:text="How's everything going?"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
 
         <ListView
             android:id="@+id/CourseListView"

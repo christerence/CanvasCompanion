@@ -5,7 +5,7 @@
         <bitmap android:src="@drawable/splash"
             android:tileMode="disabled"
             android:gravity="fill">
-
         </bitmap>
     </item>
+
 </selector>
