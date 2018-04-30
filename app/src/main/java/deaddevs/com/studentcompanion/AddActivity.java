@@ -109,6 +109,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
 		outState.putExtra("TODOLIST", getIntent().getStringArrayListExtra("TODOLIST"));
 		startActivity(outState);
 		setContentView(R.layout.activity_core);
+		overridePendingTransition(R.anim.goup, R.anim.godown);
 	}
 
 	public void handleAddToFirebase(View v) {
