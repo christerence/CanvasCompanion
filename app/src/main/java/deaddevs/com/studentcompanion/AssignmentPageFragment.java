@@ -50,7 +50,6 @@ public class AssignmentPageFragment extends Fragment {
     }
 
 
-
     public void startStop() {
         if (!startBool) {
             startStop.setText("Stop Studying");
@@ -60,7 +59,8 @@ public class AssignmentPageFragment extends Fragment {
             Log.d("should be executing", "should be executing");
         } else {
             startStop.setText("Start Studying");
-            myTask = new TimerAsyncTask();
+            myTask.cancel();
+            //myTask = new TimerAsyncTask();
             startBool = false;
             core.startDialog();
         }
@@ -68,7 +68,6 @@ public class AssignmentPageFragment extends Fragment {
 
     public void stopAsync() {
         myTask.cancel();
-        myTask = null;
         Log.d("stopAsync", "stopAsync");
     }
 
@@ -95,10 +94,8 @@ public class AssignmentPageFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Integer... integers) {
-            if (isCancelled()) {
-                return null;
-            }
-            while (true) {
+            while (!isCancelled()) {
+                Log.d("executing", "executing");
                 while (startBool) {
                     totalSeconds += 1;
                     if (secondsRight != 9) {
@@ -132,6 +129,7 @@ public class AssignmentPageFragment extends Fragment {
                     }
                 }
             }
+            return null;
         }
     }
 }

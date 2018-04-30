@@ -971,6 +971,7 @@ public class CoreActivity extends AppCompatActivity {
                             }
                             if (addresses[0] != null) {
                                 address = addresses[0].get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                address = address.substring( 0, address.indexOf(","));
                             }
                         }
                     }
