@@ -56,12 +56,14 @@ public class AssignmentPageFragment extends Fragment {
             myTask = new TimerAsyncTask();
             myTask.execute();
             startBool = true;
+            core.startBool = true;
             Log.d("should be executing", "should be executing");
         } else {
             startStop.setText("Start Studying");
             myTask.cancel();
             //myTask = new TimerAsyncTask();
             startBool = false;
+            core.startBool = false;
             core.startDialog();
         }
     }

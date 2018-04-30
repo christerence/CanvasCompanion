@@ -32,6 +32,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -78,6 +79,9 @@ public class CoreActivity extends AppCompatActivity {
     String id;
 
     Boolean cleared = false;
+    Boolean notifications = true;
+    Boolean location = true;
+    Boolean startBool = false;
 
     CanvasApi canvas;
 
@@ -570,38 +574,41 @@ public class CoreActivity extends AppCompatActivity {
                 currPage = "Settings";
                 break;
             case "Assignment":
-                assignmentpage.stopAsync();
-                savedInstanceState = assignmentpage.getArguments();
-                first = savedInstanceState.getString("FIRST");
-                last = savedInstanceState.getString("SECOND");
-                email = savedInstanceState.getString("EMAIL");
-                canvasKey = savedInstanceState.getString("CANVASKEY");
-                cleared = savedInstanceState.getBoolean("CLEAR");
-                courses = savedInstanceState.getStringArrayList("COURSE_LIST");
-                currPage = savedInstanceState.getString("CURRPAGE");
-                todos = savedInstanceState.getStringArrayList("TODOLIST");
-                getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
-                if (findViewById(R.id.Settings) != null) {
-                    coursepage = new CoursePageFragment(this);
-                    Bundle outState = new Bundle();
-                    outState.putString("FIRST", first);
-                    outState.putString("SECOND", last);
-                    outState.putString("EMAIL", email);
-                    outState.putString("CANVASKEY", canvasKey);
-                    outState.putBoolean("CLEAR", cleared);
-                    ArrayList<String> savelist = (ArrayList<String>) courses;
-                    outState.putStringArrayList("COURSE_LIST", savelist);
-                    outState.putString("CURRPAGE", currPage);
-                    outState.putStringArrayList("TODOLIST", todos);
-                    coursepage.setArguments(outState);
-                    getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
-                }
-                getSupportFragmentManager().executePendingTransactions();
-                canvas = new CanvasApi(this);
-                ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
+                if (!startBool) {
+                    savedInstanceState = assignmentpage.getArguments();
+                    first = savedInstanceState.getString("FIRST");
+                    last = savedInstanceState.getString("SECOND");
+                    email = savedInstanceState.getString("EMAIL");
+                    canvasKey = savedInstanceState.getString("CANVASKEY");
+                    cleared = savedInstanceState.getBoolean("CLEAR");
+                    courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+                    currPage = savedInstanceState.getString("CURRPAGE");
+                    todos = savedInstanceState.getStringArrayList("TODOLIST");
+                    getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
+                    if (findViewById(R.id.Settings) != null) {
+                        coursepage = new CoursePageFragment(this);
+                        Bundle outState = new Bundle();
+                        outState.putString("FIRST", first);
+                        outState.putString("SECOND", last);
+                        outState.putString("EMAIL", email);
+                        outState.putString("CANVASKEY", canvasKey);
+                        outState.putBoolean("CLEAR", cleared);
+                        ArrayList<String> savelist = (ArrayList<String>) courses;
+                        outState.putStringArrayList("COURSE_LIST", savelist);
+                        outState.putString("CURRPAGE", currPage);
+                        outState.putStringArrayList("TODOLIST", todos);
+                        coursepage.setArguments(outState);
+                        getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
+                    }
+                    getSupportFragmentManager().executePendingTransactions();
+                    canvas = new CanvasApi(this);
+                    ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
 
-                canvas.initiateRestCallForAssignments(id);
-                currPage = "CoursePage";
+                    canvas.initiateRestCallForAssignments(id);
+                    currPage = "CoursePage";
+                } else {
+                    Toast.makeText(getApplicationContext(), "Finish Studying First", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
@@ -896,6 +903,28 @@ public class CoreActivity extends AppCompatActivity {
         currPage = "Text";
     }
 
+    public void onClickPermissions(View view) {
+        Button locButton = (Button) view.findViewById(R.id.location);
+        Button notButton = (Button) view.findViewById(R.id.notifications);
+        if (view.getId() == R.id.location) {
+            if (location) {
+                locButton.setText("OFF");
+                location = false;
+            } else {
+                locButton.setText("ON");
+                location = true;
+            }
+        } else if (view.getId() == R.id.notifications) {
+            if (notifications) {
+                notButton.setText("OFF");
+                notifications = false;
+            } else {
+                notButton.setText("ON");
+                notifications = true;
+            }
+        }
+    }
+
     public void startStop(View view) {
         assignmentpage.startStop();
         Log.d("startStop in core", "startStop in core");
@@ -975,7 +1004,7 @@ public class CoreActivity extends AppCompatActivity {
                             }
                             if (addresses[0] != null) {
                                 address = addresses[0].get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                                address = address.substring( 0, address.indexOf(","));
+                                address = address.substring(0, address.indexOf(","));
                             }
                         }
                     }
