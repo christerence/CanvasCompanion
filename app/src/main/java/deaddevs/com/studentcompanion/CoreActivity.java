@@ -1010,5 +1010,7 @@ public class CoreActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }
 
