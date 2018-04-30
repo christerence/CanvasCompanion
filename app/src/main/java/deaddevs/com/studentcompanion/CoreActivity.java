@@ -574,7 +574,9 @@ public class CoreActivity extends AppCompatActivity {
         }
         List<String> coursesNameAsList = coursesName;
         ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coursesNameAsList);
-        courselist.setAdapter(coursesadapter);
+        if (courselist != null) {
+            courselist.setAdapter(coursesadapter);
+        }
     }
 
     public void handleAdd(View v) {
@@ -809,7 +811,9 @@ public class CoreActivity extends AppCompatActivity {
 
     public void updateName(String musicName) {
         Button good = findViewById(R.id.thegood);
-        good.setText("Now playing: " + musicName);
+        if (good != null) {
+            good.setText("Now playing: " + musicName);
+        }
     }
 
     private ServiceConnection musicServiceConnection = new ServiceConnection() {
