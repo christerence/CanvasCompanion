@@ -118,9 +118,16 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
 		Spinner drop = findViewById(R.id.importancespinner);
 		Button date = findViewById(R.id.datepicker);
 
-		// tells user to enter a title if the title is empty
-		if(title.getText().toString() == null || title.getText().toString().equals("")) {
+		// toast message for when title is blank or due date has not been set
+		if(title.getText().toString() == null || title.getText().toString().equals("") &&
+				date.getText().toString().equals("Set Due Date")) {
+			Toast.makeText(getApplicationContext(),"Please enter a title and set a due date", Toast.LENGTH_SHORT).show();
+		}
+		else if (title.getText().toString() == null || title.getText().toString().equals("")) {
 			Toast.makeText(getApplicationContext(),"Please enter a title", Toast.LENGTH_SHORT).show();
+		}
+		else if (date.getText().toString().equals("Set Due Date")) {
+			Toast.makeText(getApplicationContext(),"Please set a due date", Toast.LENGTH_SHORT).show();
 		}
 		else {
 
