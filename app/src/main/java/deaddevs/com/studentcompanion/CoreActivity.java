@@ -4,13 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.PersistableBundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +50,9 @@ public class CoreActivity extends AppCompatActivity {
     String last;
     String email;
     String canvasKey;
+    String response;
+    String courseName;
+    String id;
 
     Boolean cleared = false;
 
@@ -496,6 +502,40 @@ public class CoreActivity extends AppCompatActivity {
                 getSupportFragmentManager().executePendingTransactions();
                 currPage = "Settings";
                 break;
+            case "Assignment":
+                assignmentpage.stopAsync();
+                savedInstanceState = assignmentpage.getArguments();
+                first = savedInstanceState.getString("FIRST");
+                last = savedInstanceState.getString("SECOND");
+                email = savedInstanceState.getString("EMAIL");
+                canvasKey = savedInstanceState.getString("CANVASKEY");
+                cleared = savedInstanceState.getBoolean("CLEAR");
+                courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+                currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
+                getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
+                if (findViewById(R.id.Settings) != null) {
+                    coursepage = new CoursePageFragment(this);
+                    Bundle outState = new Bundle();
+                    outState.putString("FIRST", first);
+                    outState.putString("SECOND", last);
+                    outState.putString("EMAIL", email);
+                    outState.putString("CANVASKEY", canvasKey);
+                    outState.putBoolean("CLEAR", cleared);
+                    ArrayList<String> savelist = (ArrayList<String>) courses;
+                    outState.putStringArrayList("COURSE_LIST", savelist);
+                    outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
+                    coursepage.setArguments(outState);
+                    getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
+                }
+                getSupportFragmentManager().executePendingTransactions();
+                canvas = new CanvasApi(this);
+                ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
+
+                canvas.initiateRestCallForAssignments(id);
+                currPage = "CoursePage";
+                break;
         }
     }
 
@@ -571,11 +611,16 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    public String getResponse() {
+        return response;
+    }
+
     public void saveHomeworkResponse(String response) {
         try {
+            this.response = response;
             ArrayList<String> names = new ArrayList<>();
             JSONArray obj = new JSONArray(response);
-            for(int i = 0; i < obj.length(); i++) {
+            for (int i = 0; i < obj.length(); i++) {
                 JSONObject value = obj.getJSONObject(i);
                 names.add(value.getString("name"));
             }
@@ -658,10 +703,12 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void navToCoursePage(String courseName, String id) {
+        this.courseName = courseName;
+        this.id = id;
         getSupportFragmentManager().beginTransaction().remove(course).commit();
         currPage = "CoursePage";
         if (findViewById(R.id.CourseList) != null) {
-            coursepage = new CoursePageFragment();
+            coursepage = new CoursePageFragment(this);
             Bundle outState = new Bundle();
             outState.putString("FIRST", first);
             outState.putString("SECOND", last);
@@ -677,9 +724,32 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
-        ((TextView)findViewById(R.id.CourseTitle)).setText(courseName);
+        ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
 
         canvas.initiateRestCallForAssignments(id);
+    }
+
+    public void navToAssignmentPage(String assignmentName) {
+        getSupportFragmentManager().beginTransaction().remove(coursepage).commit();
+        currPage = "Assignment";
+        if (findViewById(R.id.CoursePage) != null) {
+            assignmentpage = new AssignmentPageFragment(this);
+            Bundle outState = new Bundle();
+            outState.putString("FIRST", first);
+            outState.putString("SECOND", last);
+            outState.putString("EMAIL", email);
+            outState.putString("CANVASKEY", canvasKey);
+            outState.putBoolean("CLEAR", cleared);
+            ArrayList<String> savelist = (ArrayList<String>) courses;
+            outState.putStringArrayList("COURSE_LIST", savelist);
+            outState.putString("CURRPAGE", currPage);
+            outState.putStringArrayList("TODOLIST", todos);
+            assignmentpage.setArguments(outState);
+            getSupportFragmentManager().beginTransaction().add(R.id.AssignmentPage, assignmentpage).commit();
+        }
+        canvas = new CanvasApi(this);
+        getSupportFragmentManager().executePendingTransactions();
+        ((TextView) findViewById(R.id.AssignmentTitle)).setText(assignmentName);
     }
 
     public void onClickSettings(View view) {
@@ -718,6 +788,24 @@ public class CoreActivity extends AppCompatActivity {
                 textFragment.setString(1);
         }
         currPage = "Text";
+    }
+
+    public void startStop(View view) {
+        assignmentpage.startStop();
+        Log.d("startStop in core", "startStop in core");
+    }
+
+    public void startDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog, null);
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        Button done = (Button) mView.findViewById(R.id.doneButton);
+        done.setOnClickListener(new View.OnClickListener() {
+            dialog.
+        });
     }
 
 }
