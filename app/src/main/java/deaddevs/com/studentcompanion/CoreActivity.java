@@ -15,6 +15,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.PersistableBundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -907,23 +908,22 @@ public class CoreActivity extends AppCompatActivity {
         Button locButton = (Button) view.findViewById(R.id.location);
         Button notButton = (Button) view.findViewById(R.id.notifications);
         if (view.getId() == R.id.location) {
-            if (location) {
-                locButton.setText("OFF");
-                location = false;
-            } else {
-                locButton.setText("ON");
-                location = true;
-            }
+            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+
         } else if (view.getId() == R.id.notifications) {
-            if (notifications) {
-                notButton.setText("OFF");
-                notifications = false;
-            } else {
-                notButton.setText("ON");
-                notifications = true;
-            }
+            Intent intent = new Intent();
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", getPackageName());
+            intent.putExtra("app_uid", getApplicationInfo().uid);
+            startActivity(intent);
         }
     }
+
+//    public void onClickPermissions(View view) {
+//        if (view.getId() == R.id.location) {
+//            startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+//        }
+//    }
 
     public void startStop(View view) {
         assignmentpage.startStop();
