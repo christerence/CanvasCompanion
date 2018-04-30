@@ -77,7 +77,7 @@ public class CoreActivity extends AppCompatActivity {
 
     public static final String INITIALIZE_STATUS = "intialization status";
     public static final String MUSIC_PLAYING = "music playing";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
