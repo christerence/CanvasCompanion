@@ -1,15 +1,22 @@
 package deaddevs.com.studentcompanion;
 
+import android.*;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.PersistableBundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.TransitionManager;
@@ -34,16 +41,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import deaddevs.com.studentcompanion.utils.CanvasApi;
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
 import deaddevs.com.studentcompanion.utils.MusicCompletionReceiver;
 import deaddevs.com.studentcompanion.utils.MusicService;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class CoreActivity extends AppCompatActivity {
     CourseListFragment course;
@@ -60,6 +73,9 @@ public class CoreActivity extends AppCompatActivity {
     String last;
     String email;
     String canvasKey;
+    String response;
+    String courseName;
+    String id;
 
     Boolean cleared = false;
 
@@ -169,13 +185,16 @@ public class CoreActivity extends AppCompatActivity {
         }
         if (savedInstanceState != null && currPage.equals("Course")) {
             isInitialized = savedInstanceState.getBoolean(INITIALIZE_STATUS);
-            ((Button)findViewById(R.id.thegood)).setText(savedInstanceState.getString(MUSIC_PLAYING));
+            ((Button) findViewById(R.id.thegood)).setText(savedInstanceState.getString(MUSIC_PLAYING));
         }
         startMusicServiceIntent = new Intent(this, MusicService.class);
         if (!isInitialized) {
-            startService(startMusicServiceIntent); isInitialized = true;
+            startService(startMusicServiceIntent);
+            isInitialized = true;
         }
-        musicCompletionReceiver=new MusicCompletionReceiver(this);
+        musicCompletionReceiver = new MusicCompletionReceiver(this);
+        handleLocation();
+        //Log.d("address", address);
     }
 
     @Override
@@ -189,9 +208,9 @@ public class CoreActivity extends AppCompatActivity {
         ArrayList<String> savelist = (ArrayList<String>) courses;
         outState.putStringArrayList("COURSE_LIST", savelist);
         outState.putString("CURRPAGE", currPage);
-        if(currPage.equals("Course")) {
-            outState.putBoolean(INITIALIZE_STATUS,isInitialized);
-            outState.putString(MUSIC_PLAYING, ((Button)findViewById(R.id.thegood)).getText().toString());
+        if (currPage.equals("Course")) {
+            outState.putBoolean(INITIALIZE_STATUS, isInitialized);
+            outState.putString(MUSIC_PLAYING, ((Button) findViewById(R.id.thegood)).getText().toString());
         }
     }
 
@@ -251,7 +270,7 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleGood(View v) {
-        if(isBound){
+        if (isBound) {
             switch (musicService.getPlayingStatus()) {
                 case 0:
                     musicService.startMusic();
@@ -355,9 +374,9 @@ public class CoreActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         db.close();
-        if(isBound) {
+        if (isBound) {
             unbindService(musicServiceConnection);
-            isBound=false;
+            isBound = false;
         }
         unregisterReceiver(musicCompletionReceiver);
     }
@@ -550,6 +569,40 @@ public class CoreActivity extends AppCompatActivity {
                 getSupportFragmentManager().executePendingTransactions();
                 currPage = "Settings";
                 break;
+            case "Assignment":
+                assignmentpage.stopAsync();
+                savedInstanceState = assignmentpage.getArguments();
+                first = savedInstanceState.getString("FIRST");
+                last = savedInstanceState.getString("SECOND");
+                email = savedInstanceState.getString("EMAIL");
+                canvasKey = savedInstanceState.getString("CANVASKEY");
+                cleared = savedInstanceState.getBoolean("CLEAR");
+                courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+                currPage = savedInstanceState.getString("CURRPAGE");
+                todos = savedInstanceState.getStringArrayList("TODOLIST");
+                getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
+                if (findViewById(R.id.Settings) != null) {
+                    coursepage = new CoursePageFragment(this);
+                    Bundle outState = new Bundle();
+                    outState.putString("FIRST", first);
+                    outState.putString("SECOND", last);
+                    outState.putString("EMAIL", email);
+                    outState.putString("CANVASKEY", canvasKey);
+                    outState.putBoolean("CLEAR", cleared);
+                    ArrayList<String> savelist = (ArrayList<String>) courses;
+                    outState.putStringArrayList("COURSE_LIST", savelist);
+                    outState.putString("CURRPAGE", currPage);
+                    outState.putStringArrayList("TODOLIST", todos);
+                    coursepage.setArguments(outState);
+                    getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
+                }
+                getSupportFragmentManager().executePendingTransactions();
+                canvas = new CanvasApi(this);
+                ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
+
+                canvas.initiateRestCallForAssignments(id);
+                currPage = "CoursePage";
+                break;
         }
     }
 
@@ -628,11 +681,16 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    public String getResponse() {
+        return response;
+    }
+
     public void saveHomeworkResponse(String response) {
         try {
+            this.response = response;
             ArrayList<String> names = new ArrayList<>();
             JSONArray obj = new JSONArray(response);
-            for(int i = 0; i < obj.length(); i++) {
+            for (int i = 0; i < obj.length(); i++) {
                 JSONObject value = obj.getJSONObject(i);
                 names.add(value.getString("name"));
             }
@@ -704,7 +762,7 @@ public class CoreActivity extends AppCompatActivity {
                 try {
                     value = convertTodo.getJSONObject(j);
                     String tofind = value.getString("title");
-                    if(name.equals(tofind)) {
+                    if (name.equals(tofind)) {
                         description = value.getString("description");
                         date = value.getString("due date");
                         importance = value.getString("importance");
@@ -719,15 +777,15 @@ public class CoreActivity extends AppCompatActivity {
             TextView duedate = view.findViewById(R.id.tododate);
             duedate.setText("Due Date: " + date);
 
-            switch(importance) {
+            switch (importance) {
                 case "Low":
-                    ((LinearLayout)view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FFB4AC"));
+                    ((LinearLayout) view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FFB4AC"));
                     break;
                 case "Medium":
-                    ((LinearLayout)view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FF4A36"));
+                    ((LinearLayout) view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FF4A36"));
                     break;
                 case "High":
-                    ((LinearLayout)view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FF1B00"));
+                    ((LinearLayout) view.findViewById(R.id.wholebackground)).setBackgroundColor(Color.parseColor("#FF1B00"));
                     break;
             }
 
@@ -751,10 +809,12 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void navToCoursePage(String courseName, String id) {
+        this.courseName = courseName;
+        this.id = id;
         getSupportFragmentManager().beginTransaction().remove(course).commit();
         currPage = "CoursePage";
         if (findViewById(R.id.CourseList) != null) {
-            coursepage = new CoursePageFragment();
+            coursepage = new CoursePageFragment(this);
             Bundle outState = new Bundle();
             outState.putString("FIRST", first);
             outState.putString("SECOND", last);
@@ -770,9 +830,32 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
-        ((TextView)findViewById(R.id.CourseTitle)).setText(courseName);
+        ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
 
         canvas.initiateRestCallForAssignments(id);
+    }
+
+    public void navToAssignmentPage(String assignmentName) {
+        getSupportFragmentManager().beginTransaction().remove(coursepage).commit();
+        currPage = "Assignment";
+        if (findViewById(R.id.CoursePage) != null) {
+            assignmentpage = new AssignmentPageFragment(this);
+            Bundle outState = new Bundle();
+            outState.putString("FIRST", first);
+            outState.putString("SECOND", last);
+            outState.putString("EMAIL", email);
+            outState.putString("CANVASKEY", canvasKey);
+            outState.putBoolean("CLEAR", cleared);
+            ArrayList<String> savelist = (ArrayList<String>) courses;
+            outState.putStringArrayList("COURSE_LIST", savelist);
+            outState.putString("CURRPAGE", currPage);
+            outState.putStringArrayList("TODOLIST", todos);
+            assignmentpage.setArguments(outState);
+            getSupportFragmentManager().beginTransaction().add(R.id.AssignmentPage, assignmentpage).commit();
+        }
+        canvas = new CanvasApi(this);
+        getSupportFragmentManager().executePendingTransactions();
+        ((TextView) findViewById(R.id.AssignmentTitle)).setText(assignmentName);
     }
 
     public void onClickSettings(View view) {
@@ -813,6 +896,23 @@ public class CoreActivity extends AppCompatActivity {
         currPage = "Text";
     }
 
+    public void startStop(View view) {
+        assignmentpage.startStop();
+        Log.d("startStop in core", "startStop in core");
+    }
+
+    public void startDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog, null);
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        TextView location = (TextView) mView.findViewById(R.id.dialogLocation);
+        location.setText(address);
+        //location.setText(Double.toString(lon));
+    }
+
     public void updateName(String musicName) {
         Button good = findViewById(R.id.thegood);
         if (good != null) {
@@ -828,10 +928,57 @@ public class CoreActivity extends AppCompatActivity {
             isBound = true;
             updateName(musicService.getMusicName());
         }
+
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            musicService = null; isBound = false;
+            musicService = null;
+            isBound = false;
         }
     };
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    double lon = 0;
+    double lat = 0;
+    String address = "";
+
+    public void handleLocation() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            lon = 69;
+            lat = 69;
+            return;
+        }
+        final Geocoder geocoder;
+        final List<Address>[] addresses = new List[]{null};
+        geocoder = new Geocoder(this, Locale.getDefault());
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            lat = location.getLatitude();
+                            lon = location.getLongitude();
+
+                            try {
+                                addresses[0] = geocoder.getFromLocation(lat, lon, 5); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (addresses[0] != null) {
+                                address = addresses[0].get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            }
+                        }
+                    }
+                });
+    }
 }
+
