@@ -363,7 +363,7 @@ public class CoreActivity extends AppCompatActivity {
                                     ArrayList<String> location = (ArrayList<String>)document.get("StudyLocations");
                                     if(location.size() == 1) location1.setText(location.get(0));
                                     else if(location.size() == 2) { location1.setText(location.get(0)); location2.setText(location.get(1)); }
-                                    else if(location.size() == 3) { location1.setText(location.get(0)); location2.setText(location.get(1)); location3.setText(location.get(2));}
+                                    else if(location.size() != 0) { location1.setText(location.get(0)); location2.setText(location.get(1)); location3.setText(location.get(2));}
                                 } else {
                                     location1.setText("No Data Available");
                                     location2.setText("No Data Available");
@@ -419,7 +419,6 @@ public class CoreActivity extends AppCompatActivity {
                 break;
         }
     }
-
     @Override
     protected void onPause() {
         super.onPause();
