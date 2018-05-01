@@ -81,7 +81,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="#000"
+            android:fontFamily="orbitron"
+            android:background="#00acc1"
+            android:textStyle="bold"
+            android:textColor="#fff"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textAlignment="center"
@@ -100,6 +103,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="#000"
+            android:fontFamily="orbitron"
             android:layout_marginLeft="20dp"
             android:text="Description:"/>
         <EditText
@@ -131,6 +135,7 @@
                 android:layout_marginLeft="20dp"
                 android:onClick="handleAddToFirebase"
                 android:text="Add"
+                android:textStyle="bold"
                 android:fontFamily="orbitron"
                 android:background="#00acc1"
                 android:textColor="#fff"
@@ -144,6 +149,7 @@
                 android:layout_marginRight="20dp"
                 android:fontFamily="orbitron"
                 android:background="#00acc1"
+                android:textStyle="bold"
                 android:textColor="#fff"/>
 
         </LinearLayout>
@@ -157,6 +163,7 @@
             android:layout_marginLeft="20dp"
             android:fontFamily="orbitron"
             android:background="#00acc1"
+            android:textStyle="bold"
             android:textColor="#fff"/>
     </LinearLayout>
 
