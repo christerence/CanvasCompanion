@@ -471,8 +471,6 @@ public class CoreActivity extends AppCompatActivity {
                         newLoc.put("StudyLocations", oldLoc);
                         docRef.update(newLoc);
 
-                        ArrayList<Long> back = (ArrayList<Long>) document.get("TotalStudyTime");
-
                         TextView time = findViewById(R.id.timer);
                         String timeTxt = time.getText().toString();
                         String[] parsedTime = timeTxt.split(":");
@@ -481,18 +479,33 @@ public class CoreActivity extends AppCompatActivity {
                         Long minute = Long.parseLong(parsedTime[1]);
                         Long sec = Long.parseLong(parsedTime[2]);
 
-                        Long newhr = hour + back.get(0);
-                        Long newmin = minute + back.get(1);
-                        Long newsec = sec + back.get(2);
+                        if(document.get("TotalStudyTime") != null) {
+                            ArrayList<Long> back = (ArrayList<Long>) document.get("TotalStudyTime");
 
-                        back = new ArrayList<>();
-                        back.add(newhr);
-                        back.add(newmin);
-                        back.add(newsec);
+                            Long newhr = hour + back.get(0);
+                            Long newmin = minute + back.get(1);
+                            Long newsec = sec + back.get(2);
 
-                        Map<String, Object> newTotal = new HashMap<>();
-                        newTotal.put("TotalStudyTime", back);
-                        docRef.update(newTotal);
+                            back = new ArrayList<>();
+                            back.add(newhr);
+                            back.add(newmin);
+                            back.add(newsec);
+
+                            Map<String, Object> newTotal = new HashMap<>();
+                            newTotal.put("TotalStudyTime", back);
+                            docRef.update(newTotal);
+                        } else {
+                            ArrayList<Long> back = new ArrayList<>();
+
+                            back = new ArrayList<>();
+                            back.add(hour);
+                            back.add(minute);
+                            back.add(sec);
+
+                            Map<String, Object> newTotal = new HashMap<>();
+                            newTotal.put("TotalStudyTime", back);
+                            docRef.update(newTotal);
+                        }
 
                         TextView courseNameHw = findViewById(R.id.CourseNameHW);
                         TextView hwName = findViewById(R.id.AssignmentTitle);
@@ -1074,23 +1087,28 @@ public class CoreActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()) {
-                        ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
-                        Map<String, Object> requiredData = null;
-                        for(int i = 0; i < oldData.size(); i++) {
-                            Map<String, Object> x = oldData.get(i);
-                            if(x.get("title").equals(title)) {
-                                requiredData = x;
+                        if(document.get("Studied") != null) {
+                            ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
+                            Map<String, Object> requiredData = null;
+                            for(int i = 0; i < oldData.size(); i++) {
+                                Map<String, Object> x = oldData.get(i);
+                                if(x.get("title").equals(title)) {
+                                    requiredData = x;
+                                }
                             }
-                        }
-                        if(requiredData != null) {
-                            ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
-                            Long hour = time.get(0);
-                            Long minute = time.get(1);
-                            Long seconds = time.get(2);
+                            if(requiredData != null) {
+                                ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
+                                Long hour = time.get(0);
+                                Long minute = time.get(1);
+                                Long seconds = time.get(2);
 
-                            String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
-                            ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
-                            ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                                String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
+                                ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                            } else {
+                                ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
+                                ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                            }
                         } else {
                             ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
                             ((TextView) findViewById(R.id.confidence)).setText("0/20");
