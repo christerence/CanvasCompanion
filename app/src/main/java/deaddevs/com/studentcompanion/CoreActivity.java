@@ -344,10 +344,10 @@ public class CoreActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if(document.exists()) {
-                                if(document.get("TotalStudyTime") != null) {
+                            if (document.exists()) {
+                                if (document.get("TotalStudyTime") != null) {
                                     ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
-                                    String timeToShow = Long.toString(time.get(0)) + ":" +Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
+                                    String timeToShow = Long.toString(time.get(0)) + ":" + Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
 
                                     TextView allTime = findViewById(R.id.allTimeText);
                                     allTime.setText(timeToShow);
@@ -465,11 +465,11 @@ public class CoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if(document.exists()) {
+                    if (document.exists()) {
                         ArrayList<String> oldLoc = null;
-                        if(document.get("StudyLocations") != null) {
+                        if (document.get("StudyLocations") != null) {
                             oldLoc = (ArrayList<String>) document.get("StudyLocations");
-                            if(!oldLoc.contains(loc)) {
+                            if (!oldLoc.contains(loc)) {
                                 oldLoc.add(loc);
                             }
                         } else {
@@ -488,7 +488,7 @@ public class CoreActivity extends AppCompatActivity {
                         Long minute = Long.parseLong(parsedTime[1]);
                         Long sec = Long.parseLong(parsedTime[2]);
 
-                        if(document.get("TotalStudyTime") != null) {
+                        if (document.get("TotalStudyTime") != null) {
                             ArrayList<Long> back = (ArrayList<Long>) document.get("TotalStudyTime");
 
                             Long newhr = hour + back.get(0);
@@ -522,11 +522,11 @@ public class CoreActivity extends AppCompatActivity {
 
                         ArrayList<Map> individual;
                         Map<String, Object> curr = null;
-                        if(document.get("Studied") != null) {
-                            individual = (ArrayList<Map>)document.get("Studied");
-                            for(int i = 0; i < individual.size(); i++) {
+                        if (document.get("Studied") != null) {
+                            individual = (ArrayList<Map>) document.get("Studied");
+                            for (int i = 0; i < individual.size(); i++) {
                                 Map<String, Object> x = individual.get(i);
-                                if(x.get("title").toString().equals(title)) {
+                                if (x.get("title").toString().equals(title)) {
                                     curr = individual.get(i);
                                 }
                             }
@@ -534,7 +534,7 @@ public class CoreActivity extends AppCompatActivity {
                             individual = new ArrayList<>();
                         }
 
-                        if(curr != null) {
+                        if (curr != null) {
                             ArrayList<Long> oldStudyTime = (ArrayList<Long>) curr.get("StudyTime");
                             Long newIndividualHr = hour + oldStudyTime.get(0);
                             Long newIndividualMin = minute + oldStudyTime.get(1);
@@ -594,22 +594,22 @@ public class CoreActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if(document.exists()) {
+                                    if (document.exists()) {
                                         ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
                                         Map<String, Object> requiredData = null;
-                                        for(int i = 0; i < oldData.size(); i++) {
+                                        for (int i = 0; i < oldData.size(); i++) {
                                             Map<String, Object> x = oldData.get(i);
-                                            if(x.get("title").equals(title)) {
+                                            if (x.get("title").equals(title)) {
                                                 requiredData = x;
                                             }
                                         }
-                                        if(requiredData != null) {
+                                        if (requiredData != null) {
                                             ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
                                             Long hour = time.get(0);
                                             Long minute = time.get(1);
                                             Long seconds = time.get(2);
 
-                                            String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                            String displayTime = Long.toString(hour) + ":" + Long.toString(minute) + ":" + Long.toString(seconds);
                                             ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
                                             ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
                                         } else {
@@ -1103,25 +1103,25 @@ public class CoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if(document.exists()) {
-                        if(document.get("Studied") != null) {
+                    if (document.exists()) {
+                        if (document.get("Studied") != null) {
                             ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
                             Map<String, Object> requiredData = null;
-                            for(int i = 0; i < oldData.size(); i++) {
+                            for (int i = 0; i < oldData.size(); i++) {
                                 Map<String, Object> x = oldData.get(i);
-                                if(x.get("title").equals(title)) {
+                                if (x.get("title").equals(title)) {
                                     requiredData = x;
                                 }
                             }
-                            if(requiredData != null) {
+                            if (requiredData != null) {
                                 ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
                                 Long hour = time.get(0);
                                 Long minute = time.get(1);
                                 Long seconds = time.get(2);
 
-                                String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                String displayTime = Long.toString(hour) + ":" + Long.toString(minute) + ":" + Long.toString(seconds);
                                 ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
-                                ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                                ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                             } else {
                                 ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
                                 ((TextView) findViewById(R.id.confidence)).setText("0/20");
@@ -1200,6 +1200,7 @@ public class CoreActivity extends AppCompatActivity {
     EditText confidenceText;
     EditText concentrationText;
     TextView locText;
+
     public void startDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog, null);
