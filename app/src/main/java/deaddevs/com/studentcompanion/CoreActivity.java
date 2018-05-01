@@ -689,7 +689,7 @@ public class CoreActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        dialog.hide();
+                        dialog.dismiss();
                     } else {
                         //Need to Add Error
                     }
@@ -1352,7 +1352,7 @@ public class CoreActivity extends AppCompatActivity {
         toSend.put("Title", title);
         toSend.put("Description", description);
         docRef.set(toSend);
-        dialog.hide();
+        dialog.dismiss();
     }
 
     public void updateName(String musicName) {
