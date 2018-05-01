@@ -1,94 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/loginbg">
+        android:layout_marginTop="5dp"
+        android:background="@drawable/loginbg"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="How was studying?"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:textColor="#fff"
+            android:background="#512da8"
             android:fontFamily="orbitron"
             android:gravity="center"
-            android:background="#512da8"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:text="How was studying?"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <EditText
+                android:id="@+id/concentration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/concentration"
-                android:textSize="25dp"
-                android:textColor="#000"
                 android:fontFamily="orbitron"
-                android:hint="concentration"/>
+                android:hint="concentration"
+                android:inputType="number"
+                android:textColor="#000"
+                android:textSize="25dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="orbitron"
                 android:text=" /10"
                 android:textColor="#000"
-                android:fontFamily="orbitron"
-                android:textSize="25dp"/>
+                android:textSize="25dp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <EditText
+                android:id="@+id/confidence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/confidence"
-                android:textSize="25dp"
-                android:textColor="#000"
                 android:fontFamily="orbitron"
-                android:hint="confidence" />
+                android:hint="confidence"
+                android:inputType="number"
+                android:textColor="#000"
+                android:textSize="25dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="orbitron"
                 android:text=" /10"
                 android:textColor="#000"
-                android:fontFamily="orbitron"
-                android:textSize="25dp"/>
+                android:textSize="25dp" />
         </LinearLayout>
+
         <TextView
-            android:layout_marginTop="20dp"
+            android:id="@+id/dialogLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="orbitron"
+            android:gravity="center"
             android:text="Location"
             android:textColor="#000"
-            android:fontFamily="orbitron"
-            android:id="@+id/dialogLocation"
-            android:textSize="25dp"
-            android:gravity="center"/>
+            android:textSize="25dp" />
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center">
+
             <Button
                 android:layout_width="342dp"
                 android:layout_height="30dp"
-                android:text="Done"
-                android:fontFamily="orbitron"
-                android:textColor="#fff"
-                android:textStyle="bold"
                 android:background="#00acc1"
-                android:onClick="handleAddData" />
+                android:fontFamily="orbitron"
+                android:onClick="handleAddData"
+                android:text="Done"
+                android:textColor="#fff"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

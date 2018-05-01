@@ -63,6 +63,27 @@ public class SignUp extends AppCompatActivity {
 		String canvasKey = ((EditText)findViewById(R.id.tokensignup)).getText().toString();
 		String password = ((EditText)findViewById(R.id.passwordsignup)).getText().toString();
 
+		if (password.equals("")) {
+			Toast.makeText(SignUp.this, "Fill out all info", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if (first.equals("")) {
+			Toast.makeText(SignUp.this, "Fill out all info", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if (last.equals("")) {
+			Toast.makeText(SignUp.this, "Fill out all info", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if (email.equals("")) {
+			Toast.makeText(SignUp.this, "Fill out all info", Toast.LENGTH_LONG).show();
+			return;
+		}
+		if (canvasKey.equals("")) {
+			Toast.makeText(SignUp.this, "Fill out all info", Toast.LENGTH_LONG).show();
+			return;
+		}
+
 
 		mAuth.createUserWithEmailAndPassword(email, password)
 				.addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -90,6 +111,7 @@ public class SignUp extends AppCompatActivity {
 	}
 
 	public void writeNewUser(String uid, String first, String last, String email, String canvas) {
+
 		Map<String, Object> user = new HashMap<>();
 		user.put("uid", uid);
 		user.put("first", first);
