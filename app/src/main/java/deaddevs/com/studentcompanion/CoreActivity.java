@@ -1253,7 +1253,7 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
-        if (due.equals("null")) {
+        if (!due.equals("null")) {
             due = due.substring(0, due.indexOf("T"));
         }
         ((TextView) findViewById(R.id.due)).setText(due);
