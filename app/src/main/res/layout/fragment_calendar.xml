@@ -44,6 +44,7 @@
                     android:text="Add"
                     android:background="#00acc1"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     android:layout_marginRight="10dp"
                     android:textColor="#fff"
                     android:fontFamily="orbitron"/>
@@ -57,6 +58,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="#00acc1"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     android:textColor="#fff"
                     android:fontFamily="orbitron"/>
 
@@ -82,7 +84,7 @@
 
                     </LinearLayout>
                 </ScrollView>
-            </RelativeLayout>
+            </RelativeLayout>s
         </LinearLayout>
 
         <LinearLayout
@@ -93,7 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#512da8">
+                android:background="#512da8"
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/CourseListPic2"
@@ -111,7 +114,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/selected">
+                android:background="@drawable/selected"
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/TodoPic2"

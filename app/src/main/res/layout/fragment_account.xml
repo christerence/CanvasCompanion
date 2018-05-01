@@ -17,10 +17,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:background="#512da8"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -50,49 +49,48 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical"
-                android:background="@drawable/loginbg">
+                android:background="#5f3cb3"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/FullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:fontFamily="orbitron"
                     android:text="PlaceHolder"
+                    android:layout_marginLeft="18dp"
                     android:textSize="40sp"
-                    android:textColor="#000"/>
+                    android:textColor="#fff"/>
 
                 <TextView
                     android:id="@+id/Email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
                     android:fontFamily="orbitron"
+                    android:layout_marginLeft="18dp"
                     android:text="PlaceHolder"
                     android:textSize="20sp"
-                    android:textColor="#000"/>
+                    android:textColor="#fff"/>
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
-                android:background="@drawable/buttongradient">
+                android:background="@drawable/gradienttitle"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="17dp">
 
                 <TextView
+                    android:layout_marginLeft="18dp"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/gradienttitle"
                     android:text="All Time:"
                     android:fontFamily="orbitron"
                     android:textColor="#fff"
-                    android:textSize="30dp"/>
+                    android:textSize="30dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,6 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="99hr 59min"
+                        android:textColor="#fff"
                         android:fontFamily="orbitron"
                         android:textSize="30dp" />
 
@@ -116,18 +115,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
-                android:background="@drawable/buttongradient">
+                android:background="@drawable/gradienttitle"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="17dp">
 
                 <TextView
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/gradienttitle"
                     android:text="Locations:"
                     android:textColor="#fff"
                     android:fontFamily="orbitron"
+                    android:layout_marginLeft="18dp"
                     android:textSize="30dp"/>
 
                 <LinearLayout
@@ -143,6 +142,7 @@
                         android:layout_height="wrap_content"
                         android:text="Top Location"
                         android:fontFamily="orbitron"
+                        android:textColor="#fff"
                         android:textSize="20dp" />
 
                     <TextView
@@ -151,6 +151,7 @@
                         android:layout_height="wrap_content"
                         android:text="Second Location"
                         android:fontFamily="orbitron"
+                        android:textColor="#fff"
                         android:textSize="20dp" />
 
                     <TextView
@@ -159,6 +160,7 @@
                         android:layout_height="wrap_content"
                         android:text="3rd location"
                         android:fontFamily="orbitron"
+                        android:textColor="#fff"
                         android:textSize="20dp" />
 
                 </LinearLayout>
