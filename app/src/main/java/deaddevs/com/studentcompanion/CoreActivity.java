@@ -1,6 +1,5 @@
 package deaddevs.com.studentcompanion;
 
-import android.*;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,15 +11,14 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.IBinder;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +28,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,9 +43,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -84,6 +82,9 @@ public class CoreActivity extends AppCompatActivity {
     String id;
 
     Boolean cleared = false;
+    Boolean notifications = true;
+    Boolean location = true;
+    Boolean startBool = false;
 
     AlertDialog dialog;
 
@@ -344,16 +345,16 @@ public class CoreActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if(document.exists()) {
-                            	if(document.get("TotalStudyTime") != null) {
-									ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
-									String timeToShow = Long.toString(time.get(0)) + ":" +Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
+                                if(document.get("TotalStudyTime") != null) {
+                                    ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
+                                    String timeToShow = Long.toString(time.get(0)) + ":" +Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
 
-									TextView allTime = findViewById(R.id.allTimeText);
-									allTime.setText(timeToShow);
-								} else {
-									TextView allTime = findViewById(R.id.allTimeText);
-									allTime.setText("00:00:00");
-								}
+                                    TextView allTime = findViewById(R.id.allTimeText);
+                                    allTime.setText(timeToShow);
+                                } else {
+                                    TextView allTime = findViewById(R.id.allTimeText);
+                                    allTime.setText("00:00:00");
+                                }
                             } else {
                                 //Need to Add Error
                             }
@@ -445,7 +446,7 @@ public class CoreActivity extends AppCompatActivity {
 
         final DocumentReference docRef = db.collection("users").document(uid);
 
-        String loc = locText.getText().toString();
+        final String loc = locText.getText().toString();
         final String confidence = confidenceText.getText().toString();
         final String concentration = concentrationText.getText().toString();
 
@@ -456,6 +457,20 @@ public class CoreActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()) {
+                        ArrayList<String> oldLoc = null;
+                        if(document.get("StudyLocations") != null) {
+                            oldLoc = (ArrayList<String>) document.get("StudyLocations");
+                            if(!oldLoc.contains(loc)) {
+                                oldLoc.add(loc);
+                            }
+                        } else {
+                            oldLoc = new ArrayList<>();
+                            oldLoc.add(loc);
+                        }
+                        Map<String, Object> newLoc = new HashMap<>();
+                        newLoc.put("StudyLocations", oldLoc);
+                        docRef.update(newLoc);
+
                         ArrayList<Long> back = (ArrayList<Long>) document.get("TotalStudyTime");
 
                         TextView time = findViewById(R.id.timer);
@@ -481,20 +496,20 @@ public class CoreActivity extends AppCompatActivity {
 
                         TextView courseNameHw = findViewById(R.id.CourseNameHW);
                         TextView hwName = findViewById(R.id.AssignmentTitle);
-                        String title = courseNameHw.getText().toString() + ":" + hwName.getText().toString();
+                        final String title = courseNameHw.getText().toString() + ":" + hwName.getText().toString();
 
                         ArrayList<Map> individual;
                         Map<String, Object> curr = null;
                         if(document.get("Studied") != null) {
-                                individual = (ArrayList<Map>)document.get("Studied");
-                                for(int i = 0; i < individual.size(); i++) {
-                                    Map<String, Object> x = individual.get(i);
-                                    if(x.get("title").toString().equals(title)) {
-                                        curr = individual.get(i);
-                                    }
+                            individual = (ArrayList<Map>)document.get("Studied");
+                            for(int i = 0; i < individual.size(); i++) {
+                                Map<String, Object> x = individual.get(i);
+                                if(x.get("title").toString().equals(title)) {
+                                    curr = individual.get(i);
                                 }
+                            }
                         } else {
-                                individual = new ArrayList<>();
+                            individual = new ArrayList<>();
                         }
 
                         if(curr != null) {
@@ -540,6 +555,43 @@ public class CoreActivity extends AppCompatActivity {
                             docRef.update(newIndividual);
 
                         }
+
+                        TextView timer = findViewById(R.id.timer);
+                        timer.setText("00:00:00");
+
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if(document.exists()) {
+                                        ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
+                                        Map<String, Object> requiredData = null;
+                                        for(int i = 0; i < oldData.size(); i++) {
+                                            Map<String, Object> x = oldData.get(i);
+                                            if(x.get("title").equals(title)) {
+                                                requiredData = x;
+                                            }
+                                        }
+                                        if(requiredData != null) {
+                                            ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
+                                            Long hour = time.get(0);
+                                            Long minute = time.get(1);
+                                            Long seconds = time.get(2);
+
+                                            String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                            ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
+                                            ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                                        } else {
+                                            ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
+                                            ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                                        }
+                                    } else {
+                                        //Need to Add Error
+                                    }
+                                }
+                            }
+                        });
                         dialog.hide();
                     } else {
                         //Need to Add Error
@@ -716,38 +768,41 @@ public class CoreActivity extends AppCompatActivity {
                 currPage = "Settings";
                 break;
             case "Assignment":
-                assignmentpage.stopAsync();
-                savedInstanceState = assignmentpage.getArguments();
-                first = savedInstanceState.getString("FIRST");
-                last = savedInstanceState.getString("SECOND");
-                email = savedInstanceState.getString("EMAIL");
-                canvasKey = savedInstanceState.getString("CANVASKEY");
-                cleared = savedInstanceState.getBoolean("CLEAR");
-                courses = savedInstanceState.getStringArrayList("COURSE_LIST");
-                currPage = savedInstanceState.getString("CURRPAGE");
-                todos = savedInstanceState.getStringArrayList("TODOLIST");
-                getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
-                if (findViewById(R.id.Settings) != null) {
-                    coursepage = new CoursePageFragment(this);
-                    Bundle outState = new Bundle();
-                    outState.putString("FIRST", first);
-                    outState.putString("SECOND", last);
-                    outState.putString("EMAIL", email);
-                    outState.putString("CANVASKEY", canvasKey);
-                    outState.putBoolean("CLEAR", cleared);
-                    ArrayList<String> savelist = (ArrayList<String>) courses;
-                    outState.putStringArrayList("COURSE_LIST", savelist);
-                    outState.putString("CURRPAGE", currPage);
-                    outState.putStringArrayList("TODOLIST", todos);
-                    coursepage.setArguments(outState);
-                    getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
-                }
-                getSupportFragmentManager().executePendingTransactions();
-                canvas = new CanvasApi(this);
-                ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
+                if (!startBool) {
+                    savedInstanceState = assignmentpage.getArguments();
+                    first = savedInstanceState.getString("FIRST");
+                    last = savedInstanceState.getString("SECOND");
+                    email = savedInstanceState.getString("EMAIL");
+                    canvasKey = savedInstanceState.getString("CANVASKEY");
+                    cleared = savedInstanceState.getBoolean("CLEAR");
+                    courses = savedInstanceState.getStringArrayList("COURSE_LIST");
+                    currPage = savedInstanceState.getString("CURRPAGE");
+                    todos = savedInstanceState.getStringArrayList("TODOLIST");
+                    getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
+                    if (findViewById(R.id.Settings) != null) {
+                        coursepage = new CoursePageFragment(this);
+                        Bundle outState = new Bundle();
+                        outState.putString("FIRST", first);
+                        outState.putString("SECOND", last);
+                        outState.putString("EMAIL", email);
+                        outState.putString("CANVASKEY", canvasKey);
+                        outState.putBoolean("CLEAR", cleared);
+                        ArrayList<String> savelist = (ArrayList<String>) courses;
+                        outState.putStringArrayList("COURSE_LIST", savelist);
+                        outState.putString("CURRPAGE", currPage);
+                        outState.putStringArrayList("TODOLIST", todos);
+                        coursepage.setArguments(outState);
+                        getSupportFragmentManager().beginTransaction().add(R.id.CoursePage, coursepage).commit();
+                    }
+                    getSupportFragmentManager().executePendingTransactions();
+                    canvas = new CanvasApi(this);
+                    ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
 
-                canvas.initiateRestCallForAssignments(id);
-                currPage = "CoursePage";
+                    canvas.initiateRestCallForAssignments(id);
+                    currPage = "CoursePage";
+                } else {
+                    Toast.makeText(getApplicationContext(), "Finish Studying First", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
@@ -1087,6 +1142,21 @@ public class CoreActivity extends AppCompatActivity {
         currPage = "Text";
     }
 
+    public void onClickPermissions(View view) {
+        Button locButton = (Button) view.findViewById(R.id.location);
+        Button notButton = (Button) view.findViewById(R.id.notifications);
+        if (view.getId() == R.id.location) {
+            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+
+        } else if (view.getId() == R.id.notifications) {
+            Intent intent = new Intent();
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", getPackageName());
+            intent.putExtra("app_uid", getApplicationInfo().uid);
+            startActivity(intent);
+        }
+    }
+
     public void startStop(View view) {
         assignmentpage.startStop();
         Log.d("startStop in core", "startStop in core");
@@ -1140,13 +1210,6 @@ public class CoreActivity extends AppCompatActivity {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             lon = 69;
             lat = 69;
             return;
@@ -1158,19 +1221,18 @@ public class CoreActivity extends AppCompatActivity {
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             lat = location.getLatitude();
                             lon = location.getLongitude();
 
                             try {
-                                addresses[0] = geocoder.getFromLocation(lat, lon, 5); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                addresses[0] = geocoder.getFromLocation(lat, lon, 5);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             if (addresses[0] != null) {
-                                address = addresses[0].get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                                address = address.substring( 0, address.indexOf(","));
+                                address = addresses[0].get(0).getAddressLine(0);
+                                address = address.substring(0, address.indexOf(","));
                             }
                         }
                     }

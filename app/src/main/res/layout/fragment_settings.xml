@@ -72,7 +72,8 @@
                     android:id="@+id/notifications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="on"
+                    android:text="Toggle"
+                    android:onClick="onClickPermissions"
                     android:textSize="20sp"
                     android:background="#00acc1"
                     android:textColor="#fff"/>
@@ -109,7 +110,8 @@
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="on"
+                    android:text="Toggle"
+                    android:onClick="onClickPermissions"
                     android:textSize="20sp"
                     android:background="#00acc1"
                     android:textColor="#fff"/>
