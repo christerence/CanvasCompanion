@@ -167,13 +167,10 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="orbitron"
-                android:textColor="#000"
-                android:text="Will later put graphs down here"
-                android:textSize="50dp" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/MostVisitedLocationsPieChart"></com.github.mikephil.charting.charts.PieChart>
 
         </LinearLayout>
 
