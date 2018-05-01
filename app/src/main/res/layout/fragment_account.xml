@@ -82,43 +82,6 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/buttongradient"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/gradienttitle"
-                    android:text="This Week:"
-                    android:textColor="#fff"
-                    android:padding="5dp"
-                    android:fontFamily="orbitron"
-                    android:textSize="30dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:gravity="right">
-
-                    <TextView
-                        android:id="@+id/weekText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="9hr 59min"
-                        android:fontFamily="orbitron"
-                        android:textSize="30dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
                 android:background="@drawable/buttongradient">
 

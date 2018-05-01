@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
 import deaddevs.com.studentcompanion.utils.FontAwesomeHelper;
@@ -55,20 +59,26 @@ public class CoursePageFragment extends Fragment {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 Object o = assignmentList.getItemAtPosition(position);
                 String str = (String) o;
-                ArrayList<String> names = new ArrayList<>();
-                JSONArray obj = null;
+                String duedate = "0";
+                Log.d("Hello", core.getResponse());
                 try {
-                    obj = new JSONArray(core.getResponse());
+                    JSONArray obj = new JSONArray(core.getResponse());
                     for(int i = 0; i < obj.length(); i++) {
                         JSONObject value = obj.getJSONObject(i);
-                        names.add(value.getString("name"));
+                        if(value.get("name").equals(str)){
+							duedate = value.get("due_at").toString();
+						}
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
 
-                core.navToAssignmentPage(str);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
+                if(duedate.equals("0") || duedate.equals("null")) {
+                    duedate = "Not Available";
+                }
+                core.navToAssignmentPage(str, duedate);
             }
         });
     }

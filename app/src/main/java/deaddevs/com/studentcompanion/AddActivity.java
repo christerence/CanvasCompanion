@@ -131,7 +131,6 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
 			Toast.makeText(getApplicationContext(),"Please set a due date", Toast.LENGTH_SHORT).show();
 		}
 		else {
-
 			if (title.getText() != null && description.getText() != null && drop.getSelectedItem().toString() != null) {
 				final Map<String, Object> toadd = new HashMap<>();
 				toadd.put("title", title.getText().toString());
