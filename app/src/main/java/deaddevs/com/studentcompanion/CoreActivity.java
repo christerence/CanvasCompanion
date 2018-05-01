@@ -886,7 +886,6 @@ public class CoreActivity extends AppCompatActivity {
 
                     canvas.initiateRestCallForAssignments(id);
                     currPage = "CoursePage";
-                    randomText();
                 } else {
                     Toast.makeText(getApplicationContext(), "Finish Studying First", Toast.LENGTH_LONG).show();
                 }
@@ -1143,7 +1142,9 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
-        due = due.substring(0, due.indexOf("T"));
+        if (due.equals("null")) {
+            due = due.substring(0, due.indexOf("T"));
+        }
         ((TextView) findViewById(R.id.due)).setText(due);
         ((TextView) findViewById(R.id.CourseNameHW)).setText((courseName));
         ((TextView) findViewById(R.id.AssignmentTitle)).setText(assignmentName);
