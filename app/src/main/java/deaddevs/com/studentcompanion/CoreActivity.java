@@ -931,17 +931,15 @@ public class CoreActivity extends AppCompatActivity {
 
         final DocumentReference docRef = db.collection("users").document(uid);
 
-        final ArrayList<ArrayList<String>> access = new ArrayList<>();
-        access.add(null);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        access.set(0, (ArrayList<String>) document.get("StudyLocations"));
+                        ArrayList<String> access = (ArrayList<String>) document.get("StudyLocations");
 
-                        ArrayList<String> allLocationsList = access.get(0);
+                        ArrayList<String> allLocationsList = access;
                         MostVisitedLocationsPieChart = (PieChart) findViewById(R.id.MostVisitedLocationsPieChart);
                         if (MostVisitedLocationsPieChart != null) {
                             Description description = new Description();
