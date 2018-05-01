@@ -13,7 +13,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:background="#512da8"
             android:padding="10dp">
 
@@ -47,8 +46,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:padding="3dp"
             android:background="@drawable/gradienttitle"
             android:orientation="horizontal">
@@ -56,41 +53,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="orbitron"
-                android:text="Grade:"
+                android:text="Assignments:"
                 android:textColor="#fff"
-                android:textSize="30sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:gravity="right">
-
-                <TextView
-                    android:id="@+id/courseGrade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="orbitron"
-                    android:text="99.99%"
-                    android:textColor="#fff"
-                    android:textSize="30sp" />
-
-            </LinearLayout>
-
+                android:textSize="30dp" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="6dp"
-            android:padding="5dp"
-            android:background="@drawable/gradienttitle"
-            android:fontFamily="orbitron"
-            android:text="Assignments:"
-            android:textColor="#fff"
-            android:textSize="30dp" />
+
 
         <ListView
             android:id="@+id/AssignmentList"

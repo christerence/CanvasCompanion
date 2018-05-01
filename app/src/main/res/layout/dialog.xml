@@ -6,7 +6,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/loginbg">
 
         <TextView
             android:layout_width="match_parent"
@@ -85,7 +88,7 @@
                 android:textColor="#fff"
                 android:textStyle="bold"
                 android:background="#00acc1"
-                android:onClick="handleAddData"/>
+                android:onClick="handleAddData" />
         </LinearLayout>
 
     </LinearLayout>
