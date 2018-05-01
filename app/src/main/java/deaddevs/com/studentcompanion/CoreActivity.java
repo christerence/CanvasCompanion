@@ -464,6 +464,15 @@ public class CoreActivity extends AppCompatActivity {
         final String confidence = confidenceText.getText().toString();
         final String concentration = concentrationText.getText().toString();
 
+        if (concentration.equals("")) {
+            Toast.makeText(this, "fill in concentration", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (confidence.equals("")) {
+            Toast.makeText(this, "fill in confidence", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -554,6 +563,11 @@ public class CoreActivity extends AppCompatActivity {
                             toadd.put("title", title);
                             toadd.put("StudyTime", oldStudyTime);
                             int confidenceTotal = Integer.parseInt(confidence);
+
+                            if (confidenceTotal > 10) {
+                                Toast.makeText(CoreActivity.this, "confidence too high", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             toadd.put("Confidence", confidenceTotal);
 
                             individual.add(toadd);
@@ -574,6 +588,10 @@ public class CoreActivity extends AppCompatActivity {
                             toadd.put("title", title);
                             toadd.put("StudyTime", indi);
                             int confidenceTotal = Integer.parseInt(confidence);
+                            if (confidenceTotal > 10) {
+                                Toast.makeText(CoreActivity.this, "confidence too high", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             toadd.put("Confidence", confidenceTotal);
 
                             individual.add(toadd);
@@ -1271,5 +1289,7 @@ public class CoreActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }
 

@@ -243,7 +243,7 @@
                 android:onClick="signOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign Out"
+                android:text="Log Out"
                 android:textSize="20sp"
                 android:background="@drawable/buttongradient"/>
 
