@@ -364,7 +364,21 @@ public class CoreActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 if (document.get("TotalStudyTime") != null) {
                                     ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
-                                    String timeToShow = Long.toString(time.get(0)) + ":" + Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
+
+                                    String hourString = Long.toString(time.get(0));
+                                    String minuteString = Long.toString(time.get(1));
+                                    String secondsString = Long.toString(time.get(2));
+                                    if (time.get(0) < 10) {
+                                        hourString = "0" + hourString;
+                                    }
+                                    if (time.get(1) < 10) {
+                                        minuteString = "0" + minuteString;
+                                    }
+                                    if (time.get(2) < 10) {
+                                        secondsString = "0" + secondsString;
+                                    }
+
+                                    String timeToShow = hourString + ":" + minuteString + ":" + secondsString;
                                     TextView allTime = findViewById(R.id.allTimeText);
                                     allTime.setText(timeToShow);
                                 } else {
