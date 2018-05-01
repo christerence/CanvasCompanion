@@ -73,8 +73,6 @@ public class CoursePageFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
                 if(duedate.equals("0") || duedate.equals("null")) {
                     duedate = "Not Available";
                 }

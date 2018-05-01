@@ -43,6 +43,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -337,7 +338,6 @@ public class CoreActivity extends AppCompatActivity {
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
-
                 final DocumentReference docRef = db.collection("users").document(uid);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -348,12 +348,26 @@ public class CoreActivity extends AppCompatActivity {
                                 if(document.get("TotalStudyTime") != null) {
                                     ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
                                     String timeToShow = Long.toString(time.get(0)) + ":" +Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
-
                                     TextView allTime = findViewById(R.id.allTimeText);
                                     allTime.setText(timeToShow);
                                 } else {
                                     TextView allTime = findViewById(R.id.allTimeText);
                                     allTime.setText("00:00:00");
+                                }
+
+                                TextView location1 = findViewById(R.id.location1);
+                                TextView location2 = findViewById(R.id.location2);
+                                TextView location3 = findViewById(R.id.location3);
+
+                                if(document.get("StudyLocations") != null) {
+                                    ArrayList<String> location = (ArrayList<String>)document.get("StudyLocations");
+                                    if(location.size() == 1) location1.setText(location.get(0));
+                                    else if(location.size() == 2) { location1.setText(location.get(0)); location2.setText(location.get(1)); }
+                                    else if(location.size() == 3) { location1.setText(location.get(0)); location2.setText(location.get(1)); location3.setText(location.get(2));}
+                                } else {
+                                    location1.setText("No Data Available");
+                                    location2.setText("No Data Available");
+                                    location3.setText("No Data Available");
                                 }
                             } else {
                                 //Need to Add Error
@@ -467,6 +481,7 @@ public class CoreActivity extends AppCompatActivity {
                             oldLoc = new ArrayList<>();
                             oldLoc.add(loc);
                         }
+
                         Map<String, Object> newLoc = new HashMap<>();
                         newLoc.put("StudyLocations", oldLoc);
                         docRef.update(newLoc);
@@ -538,7 +553,7 @@ public class CoreActivity extends AppCompatActivity {
                             final Map<String, Object> toadd = new HashMap<>();
                             toadd.put("title", title);
                             toadd.put("StudyTime", oldStudyTime);
-                            int confidenceTotal = Integer.parseInt(confidence) + Integer.parseInt(concentration);
+                            int confidenceTotal = Integer.parseInt(confidence);
                             toadd.put("Confidence", confidenceTotal);
 
                             individual.add(toadd);
@@ -558,7 +573,7 @@ public class CoreActivity extends AppCompatActivity {
                             final Map<String, Object> toadd = new HashMap<>();
                             toadd.put("title", title);
                             toadd.put("StudyTime", indi);
-                            int confidenceTotal = Integer.parseInt(confidence) + Integer.parseInt(concentration);
+                            int confidenceTotal = Integer.parseInt(confidence);
                             toadd.put("Confidence", confidenceTotal);
 
                             individual.add(toadd);

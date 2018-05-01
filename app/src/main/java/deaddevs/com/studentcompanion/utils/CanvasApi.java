@@ -1,5 +1,4 @@
 package deaddevs.com.studentcompanion.utils;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import deaddevs.com.studentcompanion.CoreActivity;
-import deaddevs.com.studentcompanion.MainActivity;
 
 /**
  * Grabs the Data from Canvas Api

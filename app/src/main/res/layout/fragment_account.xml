@@ -141,7 +141,7 @@
                         android:id="@+id/location1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Top Location"
+                        android:text="No Data Available"
                         android:fontFamily="orbitron"
                         android:textSize="20dp" />
 
@@ -149,7 +149,7 @@
                         android:id="@+id/location2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Second Location"
+                        android:text="No Data Available"
                         android:fontFamily="orbitron"
                         android:textSize="20dp" />
 
@@ -157,7 +157,7 @@
                         android:id="@+id/location3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3rd location"
+                        android:text="No Data Available"
                         android:fontFamily="orbitron"
                         android:textSize="20dp" />
 
