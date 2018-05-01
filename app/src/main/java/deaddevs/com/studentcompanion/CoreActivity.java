@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import deaddevs.com.studentcompanion.utils.CanvasApi;
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
@@ -202,7 +203,6 @@ public class CoreActivity extends AppCompatActivity {
         }
         musicCompletionReceiver = new MusicCompletionReceiver(this);
         handleLocation();
-        //Log.d("address", address);
     }
 
     @Override
@@ -293,12 +293,31 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    public void randomText() {
+        TextView question = findViewById(R.id.text);
+        String[] questionList = new String[] {
+                "How's Everything Going?",
+                "I hope you're doing well!",
+                "Keep up the good work!",
+                "Keep track of Homework!",
+                "Procrastination == killer.",
+                "List Your Homework!",
+                "Keep on top on it.",
+                "Plan Ahead.",
+                "Balance is key."
+        };
+        Random rand = new Random();
+        int n = rand.nextInt(questionList.length);
+        question.setText(questionList[n]);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         if (currPage.equals("Course")) {
             TextView view = findViewById(R.id.HelloText);
             view.setText("Hello, " + first + ".");
+            randomText();
         } else if (currPage.equals("ToDo")) {
             try {
                 updateToDo();
@@ -701,6 +720,7 @@ public class CoreActivity extends AppCompatActivity {
                 view.setText("Hello, " + first + ".");
                 updateList();
                 currPage = "Course";
+                randomText();
                 break;
             case "Settings":
                 savedInstanceState = settings.getArguments();
@@ -734,6 +754,7 @@ public class CoreActivity extends AppCompatActivity {
                 view.setText("Hello, " + first + ".");
                 updateList();
                 currPage = "Course";
+                randomText();
                 break;
             case "ToDo":
                 savedInstanceState = calendar.getArguments();
@@ -767,6 +788,7 @@ public class CoreActivity extends AppCompatActivity {
                 view.setText("Hello, " + first + ".");
                 updateList();
                 currPage = "Course";
+                randomText();
                 break;
             case "CoursePage":
                 savedInstanceState = coursepage.getArguments();
@@ -799,7 +821,7 @@ public class CoreActivity extends AppCompatActivity {
                 view = findViewById(R.id.HelloText);
                 view.setText("Hello, " + first + ".");
                 updateList();
-                //course.setOnClicks();
+                randomText();
                 currPage = "Course";
                 break;
             case "Text":
@@ -864,6 +886,7 @@ public class CoreActivity extends AppCompatActivity {
 
                     canvas.initiateRestCallForAssignments(id);
                     currPage = "CoursePage";
+                    randomText();
                 } else {
                     Toast.makeText(getApplicationContext(), "Finish Studying First", Toast.LENGTH_LONG).show();
                 }
