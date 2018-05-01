@@ -1322,6 +1322,39 @@ public class CoreActivity extends AppCompatActivity {
         locText.setText(address);
     }
 
+    TextView titleReview;
+    TextView descriptionReview;
+
+
+    public void startReview(View v) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.review, null);
+        mBuilder.setView(mView);
+        dialog = mBuilder.create();
+        dialog.show();
+
+        titleReview = mView.findViewById(R.id.reviewtitle);
+        descriptionReview = mView.findViewById(R.id.reviewdescription);
+    }
+
+    public void handleSendData(View v) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+        String docTitle = uid + ":" + titleReview.getText().toString();
+        String title = titleReview.getText().toString();
+        String description = descriptionReview.getText().toString();
+
+        final DocumentReference docRef = db.collection("reviews").document(docTitle);
+
+        Map<String, Object> toSend = new HashMap<>();
+        toSend.put("Title", title);
+        toSend.put("Description", description);
+        docRef.set(toSend);
+        dialog.hide();
+    }
+
     public void updateName(String musicName) {
         Button good = findViewById(R.id.thegood);
         if (good != null) {
