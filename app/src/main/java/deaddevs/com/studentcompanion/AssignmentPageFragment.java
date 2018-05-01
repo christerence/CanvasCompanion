@@ -81,6 +81,16 @@ public class AssignmentPageFragment extends Fragment {
     int hoursRight = 0;
     int totalSeconds = 0;
 
+    public void zeroOutTime() {
+        secondsLeft = 0;
+        secondsRight = 0;
+        minutesLeft = 0;
+        minutesRight = 0;
+        hoursLeft = 0;
+        hoursRight = 0;
+        totalSeconds = 0;
+    }
+
     private class TimerAsyncTask extends AsyncTask<Integer, Integer, Void> {
 
 

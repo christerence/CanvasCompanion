@@ -476,6 +476,7 @@ public class CoreActivity extends AppCompatActivity {
             Toast.makeText(this, "fill in confidence", Toast.LENGTH_SHORT).show();
             return;
         }
+        assignmentpage.zeroOutTime();
 
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -628,8 +629,21 @@ public class CoreActivity extends AppCompatActivity {
                                             Long hour = time.get(0);
                                             Long minute = time.get(1);
                                             Long seconds = time.get(2);
+                                            
+                                            String hourString = Long.toString(hour);
+                                            String minuteString = Long.toString(minute);
+                                            String secondsString = Long.toString(seconds);
+                                            if (hour < 10) {
+                                                hourString = "0" + hourString;
+                                            }
+                                            if (minute < 10) {
+                                                minuteString = "0" + minuteString;
+                                            }
+                                            if (seconds < 10) {
+                                                secondsString = "0" + secondsString;
+                                            }
 
-                                            String displayTime = Long.toString(hour) + ":" + Long.toString(minute) + ":" + Long.toString(seconds);
+                                            String displayTime = hourString + ":" + minuteString + ":" + secondsString;
                                             ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
                                             ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                                         } else {
@@ -1106,6 +1120,7 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
+        due = due.substring(0, due.indexOf("T"));
         ((TextView) findViewById(R.id.due)).setText(due);
         ((TextView) findViewById(R.id.CourseNameHW)).setText((courseName));
         ((TextView) findViewById(R.id.AssignmentTitle)).setText(assignmentName);
@@ -1139,7 +1154,20 @@ public class CoreActivity extends AppCompatActivity {
                                 Long minute = time.get(1);
                                 Long seconds = time.get(2);
 
-                                String displayTime = Long.toString(hour) + ":" + Long.toString(minute) + ":" + Long.toString(seconds);
+                                String hourString = Long.toString(hour);
+                                String minuteString = Long.toString(minute);
+                                String secondsString = Long.toString(seconds);
+                                if (hour < 10) {
+                                    hourString = "0" + hourString;
+                                }
+                                if (minute < 10) {
+                                    minuteString = "0" + minuteString;
+                                }
+                                if (seconds < 10) {
+                                    secondsString = "0" + secondsString;
+                                }
+
+                                String displayTime = hourString + ":" + minuteString + ":" + secondsString;
                                 ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
                                 ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                             } else {
@@ -1294,7 +1322,5 @@ public class CoreActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
 
