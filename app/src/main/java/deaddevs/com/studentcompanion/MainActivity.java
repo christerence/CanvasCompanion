@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                     // handle any errors here
                 }
             });
-
         }
     }
 

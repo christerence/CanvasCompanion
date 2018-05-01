@@ -20,11 +20,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center">
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:hint="concentration"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/concentration"
+                android:textSize="25dp"
+                android:hint="concentration"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/confidence"
                 android:textSize="25dp"
                 android:hint="confidence" />
             <TextView
@@ -60,6 +62,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Done"
+                android:onClick="handleAddData"/>
         </LinearLayout>
 
     </LinearLayout>

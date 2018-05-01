@@ -14,8 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#512da8"
-            android:padding="10dp"
-            android:layout_marginBottom="30dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,6 +49,25 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:background="@drawable/gradienttitle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="orbitron"
+                android:text="Placeholder"
+                android:textSize="30dp"
+                android:id="@+id/CourseNameHW"
+                android:textAlignment="center"
+                android:textColor="#fff"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="@drawable/gradienttitle"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
@@ -73,8 +91,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="April 20"
+                    android:gravity="center"
                     android:fontFamily="orbitron"
-                    android:textSize="30dp"
+                    android:textSize="25dp"
                     android:textColor="#fff"/>
 
             </LinearLayout>
@@ -121,7 +140,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradienttitle"
-            android:layout_marginBottom="20dp"
             android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
@@ -166,7 +184,7 @@
             android:fontFamily="orbitron"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

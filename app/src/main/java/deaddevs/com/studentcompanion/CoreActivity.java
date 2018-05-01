@@ -1,6 +1,5 @@
 package deaddevs.com.studentcompanion;
 
-import android.*;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,15 +11,14 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.IBinder;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +27,17 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
@@ -44,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -83,6 +85,8 @@ public class CoreActivity extends AppCompatActivity {
     Boolean notifications = true;
     Boolean location = true;
     Boolean startBool = false;
+
+    AlertDialog dialog;
 
     CanvasApi canvas;
 
@@ -330,6 +334,33 @@ public class CoreActivity extends AppCompatActivity {
                 wholename.setText(first + " " + last);
                 TextView emailtext = findViewById(R.id.Email);
                 emailtext.setText(email);
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+                final DocumentReference docRef = db.collection("users").document(uid);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if(document.exists()) {
+                                if(document.get("TotalStudyTime") != null) {
+                                    ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
+                                    String timeToShow = Long.toString(time.get(0)) + ":" +Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
+
+                                    TextView allTime = findViewById(R.id.allTimeText);
+                                    allTime.setText(timeToShow);
+                                } else {
+                                    TextView allTime = findViewById(R.id.allTimeText);
+                                    allTime.setText("00:00:00");
+                                }
+                            } else {
+                                //Need to Add Error
+                            }
+                        }
+                    }
+                });
                 break;
             case R.id.SettingPic:
                 currPage = "Settings";
@@ -406,6 +437,181 @@ public class CoreActivity extends AppCompatActivity {
         startActivity(i);
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.goup, R.anim.godown);
+    }
+
+    public void handleAddData(View v) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+        final DocumentReference docRef = db.collection("users").document(uid);
+
+        final String loc = locText.getText().toString();
+        final String confidence = confidenceText.getText().toString();
+        final String concentration = concentrationText.getText().toString();
+
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()) {
+                        ArrayList<String> oldLoc = null;
+                        if(document.get("StudyLocations") != null) {
+                            oldLoc = (ArrayList<String>) document.get("StudyLocations");
+                            if(!oldLoc.contains(loc)) {
+                                oldLoc.add(loc);
+                            }
+                        } else {
+                            oldLoc = new ArrayList<>();
+                            oldLoc.add(loc);
+                        }
+                        Map<String, Object> newLoc = new HashMap<>();
+                        newLoc.put("StudyLocations", oldLoc);
+                        docRef.update(newLoc);
+
+                        TextView time = findViewById(R.id.timer);
+                        String timeTxt = time.getText().toString();
+                        String[] parsedTime = timeTxt.split(":");
+
+                        Long hour = Long.parseLong(parsedTime[0]);
+                        Long minute = Long.parseLong(parsedTime[1]);
+                        Long sec = Long.parseLong(parsedTime[2]);
+
+                        if(document.get("TotalStudyTime") != null) {
+                            ArrayList<Long> back = (ArrayList<Long>) document.get("TotalStudyTime");
+
+                            Long newhr = hour + back.get(0);
+                            Long newmin = minute + back.get(1);
+                            Long newsec = sec + back.get(2);
+
+                            back = new ArrayList<>();
+                            back.add(newhr);
+                            back.add(newmin);
+                            back.add(newsec);
+
+                            Map<String, Object> newTotal = new HashMap<>();
+                            newTotal.put("TotalStudyTime", back);
+                            docRef.update(newTotal);
+                        } else {
+                            ArrayList<Long> back = new ArrayList<>();
+
+                            back = new ArrayList<>();
+                            back.add(hour);
+                            back.add(minute);
+                            back.add(sec);
+
+                            Map<String, Object> newTotal = new HashMap<>();
+                            newTotal.put("TotalStudyTime", back);
+                            docRef.update(newTotal);
+                        }
+
+                        TextView courseNameHw = findViewById(R.id.CourseNameHW);
+                        TextView hwName = findViewById(R.id.AssignmentTitle);
+                        final String title = courseNameHw.getText().toString() + ":" + hwName.getText().toString();
+
+                        ArrayList<Map> individual;
+                        Map<String, Object> curr = null;
+                        if(document.get("Studied") != null) {
+                            individual = (ArrayList<Map>)document.get("Studied");
+                            for(int i = 0; i < individual.size(); i++) {
+                                Map<String, Object> x = individual.get(i);
+                                if(x.get("title").toString().equals(title)) {
+                                    curr = individual.get(i);
+                                }
+                            }
+                        } else {
+                            individual = new ArrayList<>();
+                        }
+
+                        if(curr != null) {
+                            ArrayList<Long> oldStudyTime = (ArrayList<Long>) curr.get("StudyTime");
+                            Long newIndividualHr = hour + oldStudyTime.get(0);
+                            Long newIndividualMin = minute + oldStudyTime.get(1);
+                            Long newIndividualSec = sec + oldStudyTime.get(2);
+
+                            oldStudyTime.set(0, newIndividualHr);
+                            oldStudyTime.set(1, newIndividualMin);
+                            oldStudyTime.set(2, newIndividualSec);
+
+                            final Map<String, Object> toadd = new HashMap<>();
+                            toadd.put("title", title);
+                            toadd.put("StudyTime", oldStudyTime);
+                            int confidenceTotal = Integer.parseInt(confidence) + Integer.parseInt(concentration);
+                            toadd.put("Confidence", confidenceTotal);
+
+                            individual.add(toadd);
+
+                            Map<String, Object> newIndividual = new HashMap<>();
+                            newIndividual.put("Studied", individual);
+                            docRef.update(newIndividual);
+                        } else {
+                            ArrayList<Long> indi = new ArrayList<>(3);
+                            indi.add(1L);
+                            indi.add(1L);
+                            indi.add(1L);
+                            indi.set(0, hour);
+                            indi.set(1, minute);
+                            indi.set(2, sec);
+
+                            final Map<String, Object> toadd = new HashMap<>();
+                            toadd.put("title", title);
+                            toadd.put("StudyTime", indi);
+                            int confidenceTotal = Integer.parseInt(confidence) + Integer.parseInt(concentration);
+                            toadd.put("Confidence", confidenceTotal);
+
+                            individual.add(toadd);
+
+                            Map<String, Object> newIndividual = new HashMap<>();
+                            newIndividual.put("Studied", individual);
+                            docRef.update(newIndividual);
+
+                        }
+
+                        TextView timer = findViewById(R.id.timer);
+                        timer.setText("00:00:00");
+
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if(document.exists()) {
+                                        ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
+                                        Map<String, Object> requiredData = null;
+                                        for(int i = 0; i < oldData.size(); i++) {
+                                            Map<String, Object> x = oldData.get(i);
+                                            if(x.get("title").equals(title)) {
+                                                requiredData = x;
+                                            }
+                                        }
+                                        if(requiredData != null) {
+                                            ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
+                                            Long hour = time.get(0);
+                                            Long minute = time.get(1);
+                                            Long seconds = time.get(2);
+
+                                            String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                            ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
+                                            ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                                        } else {
+                                            ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
+                                            ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                                        }
+                                    } else {
+                                        //Need to Add Error
+                                    }
+                                }
+                            }
+                        });
+                        dialog.hide();
+                    } else {
+                        //Need to Add Error
+                    }
+                }
+            }
+        });
     }
 
     public void handleBack(View v) {
@@ -839,11 +1045,11 @@ public class CoreActivity extends AppCompatActivity {
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
         ((TextView) findViewById(R.id.CourseTitle)).setText(courseName);
-
         canvas.initiateRestCallForAssignments(id);
     }
 
-    public void navToAssignmentPage(String assignmentName) {
+    public void navToAssignmentPage(String assignmentName, String due) {
+        String courseName = ((TextView) findViewById(R.id.CourseTitle)).getText().toString();
         getSupportFragmentManager().beginTransaction().remove(coursepage).commit();
         currPage = "Assignment";
         if (findViewById(R.id.CoursePage) != null) {
@@ -863,8 +1069,58 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
+        ((TextView) findViewById(R.id.due)).setText(due);
+        ((TextView) findViewById(R.id.CourseNameHW)).setText((courseName));
         ((TextView) findViewById(R.id.AssignmentTitle)).setText(assignmentName);
+
+        final String title = courseName + ":" + assignmentName;
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+        final DocumentReference docRef = db.collection("users").document(uid);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()) {
+                        if(document.get("Studied") != null) {
+                            ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
+                            Map<String, Object> requiredData = null;
+                            for(int i = 0; i < oldData.size(); i++) {
+                                Map<String, Object> x = oldData.get(i);
+                                if(x.get("title").equals(title)) {
+                                    requiredData = x;
+                                }
+                            }
+                            if(requiredData != null) {
+                                ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
+                                Long hour = time.get(0);
+                                Long minute = time.get(1);
+                                Long seconds = time.get(2);
+
+                                String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
+                                ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                            } else {
+                                ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
+                                ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                            }
+                        } else {
+                            ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
+                            ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                        }
+                    } else {
+                        //Need to Add Error
+                    }
+                }
+            }
+        });
     }
+
 
     public void onClickSettings(View view) {
         Bundle savedInstanceState;
@@ -919,27 +1175,25 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-//    public void onClickPermissions(View view) {
-//        if (view.getId() == R.id.location) {
-//            startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-//        }
-//    }
-
     public void startStop(View view) {
         assignmentpage.startStop();
         Log.d("startStop in core", "startStop in core");
     }
 
+    EditText confidenceText;
+    EditText concentrationText;
+    TextView locText;
     public void startDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog, null);
         mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
+        dialog = mBuilder.create();
         dialog.show();
 
-        TextView location = (TextView) mView.findViewById(R.id.dialogLocation);
-        location.setText(address);
-        //location.setText(Double.toString(lon));
+        locText = (TextView) mView.findViewById(R.id.dialogLocation);
+        confidenceText = (EditText) mView.findViewById(R.id.confidence);
+        concentrationText = (EditText) mView.findViewById(R.id.concentration);
+        locText.setText(address);
     }
 
     public void updateName(String musicName) {
@@ -974,13 +1228,6 @@ public class CoreActivity extends AppCompatActivity {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             lon = 69;
             lat = 69;
             return;
@@ -992,18 +1239,17 @@ public class CoreActivity extends AppCompatActivity {
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             lat = location.getLatitude();
                             lon = location.getLongitude();
 
                             try {
-                                addresses[0] = geocoder.getFromLocation(lat, lon, 5); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                addresses[0] = geocoder.getFromLocation(lat, lon, 5);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             if (addresses[0] != null) {
-                                address = addresses[0].get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                address = addresses[0].get(0).getAddressLine(0);
                                 address = address.substring(0, address.indexOf(","));
                             }
                         }
