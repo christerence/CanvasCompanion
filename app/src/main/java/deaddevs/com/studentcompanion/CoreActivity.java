@@ -751,7 +751,7 @@ public class CoreActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        dialog.hide();
+                        dialog.dismiss();
                     } else {
                         //Need to Add Error
                     }
@@ -977,13 +977,14 @@ public class CoreActivity extends AppCompatActivity {
         final DocumentReference docRef = db.collection("users").document(uid);
 
         final ArrayList<ArrayList<String>> access = new ArrayList<>();
+        access.add(null);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        access.add((ArrayList<String>) document.get("StudyLocations"));
+                        access.set(0, (ArrayList<String>) document.get("StudyLocations"));
                     }
                 }
             }
@@ -1382,6 +1383,39 @@ public class CoreActivity extends AppCompatActivity {
         confidenceText = (EditText) mView.findViewById(R.id.confidence);
         concentrationText = (EditText) mView.findViewById(R.id.concentration);
         locText.setText(address);
+    }
+
+    TextView titleReview;
+    TextView descriptionReview;
+
+
+    public void startReview(View v) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.review, null);
+        mBuilder.setView(mView);
+        dialog = mBuilder.create();
+        dialog.show();
+
+        titleReview = mView.findViewById(R.id.reviewtitle);
+        descriptionReview = mView.findViewById(R.id.reviewdescription);
+    }
+
+    public void handleSendData(View v) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+        String docTitle = uid + ":" + titleReview.getText().toString();
+        String title = titleReview.getText().toString();
+        String description = descriptionReview.getText().toString();
+
+        final DocumentReference docRef = db.collection("reviews").document(docTitle);
+
+        Map<String, Object> toSend = new HashMap<>();
+        toSend.put("Title", title);
+        toSend.put("Description", description);
+        docRef.set(toSend);
+        dialog.dismiss();
     }
 
     public void updateName(String musicName) {
