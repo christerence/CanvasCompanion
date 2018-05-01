@@ -105,7 +105,7 @@
                         android:text="99hr 59min"
                         android:textColor="#fff"
                         android:fontFamily="orbitron"
-                        android:textSize="30dp" />
+                        android:textSize="30sp" />
 
                 </LinearLayout>
 
@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:background="@drawable/gradienttitle"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="17dp">
@@ -133,8 +133,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:gravity="right"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="18dp">
 
                     <TextView
                         android:id="@+id/location1"

@@ -13,8 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#512da8"
-            android:padding="10dp">
+            android:background="#512da8">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -46,11 +45,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:background="@drawable/gradienttitle"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:background="@drawable/gradienttitle">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,24 +72,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="orbitron"
+                android:layout_marginLeft="18dp"
                 android:text="Due:"
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:textColor="#fff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="17dp"
                 android:gravity="right">
 
                 <TextView
                     android:id="@+id/due"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="April 20"
                     android:gravity="center"
                     android:fontFamily="orbitron"
-                    android:textSize="25dp"
+                    android:textSize="20sp"
                     android:textColor="#fff"/>
 
             </LinearLayout>
@@ -111,24 +108,26 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time Studied:"
-                android:textSize="30dp"
+                android:layout_height="match_parent"
+                android:text="Study Time:"
+                android:textSize="30sp"
+                android:layout_marginLeft="18dp"
                 android:fontFamily="orbitron"
                 android:textColor="#fff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:gravity="right">
 
                 <TextView
                     android:id="@+id/timeStudied"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4hr 20 min"
-                    android:textSize="30dp"
+                    android:layout_height="match_parent"
+                    android:text="4hr 20min"
+                    android:textSize="20sp"
+                    android:gravity="center"
                     android:fontFamily="orbitron"
                     android:textColor="#fff"/>
 
@@ -146,24 +145,26 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="Confidence:"
                 android:textSize="30dp"
                 android:fontFamily="orbitron"
+                android:layout_marginLeft="18dp"
                 android:textColor="#fff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="17dp"
                 android:gravity="right">
 
                 <TextView
                     android:id="@+id/confidence"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="4/20"
-                    android:textSize="30dp"
+                    android:textSize="20sp"
+                    android:gravity="center"
                     android:fontFamily="orbitron"
                     android:textColor="#fff"/>
 
