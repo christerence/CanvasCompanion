@@ -25,7 +25,6 @@ public class CourseListFragment extends Fragment {
     DatabaseManager db;
 
     public CourseListFragment() {
-
     }
 
     @SuppressLint("ValidFragment")
