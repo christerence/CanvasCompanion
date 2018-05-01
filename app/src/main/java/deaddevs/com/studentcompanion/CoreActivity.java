@@ -626,10 +626,10 @@ public class CoreActivity extends AppCompatActivity {
 
                                             String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
                                             ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
-                                            ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/20");
+                                            ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                                         } else {
                                             ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
-                                            ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                                            ((TextView) findViewById(R.id.confidence)).setText("0/10");
                                         }
                                     } else {
                                         //Need to Add Error
