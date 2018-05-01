@@ -662,7 +662,7 @@ public class CoreActivity extends AppCompatActivity {
                                             Long hour = time.get(0);
                                             Long minute = time.get(1);
                                             Long seconds = time.get(2);
-                                            
+
                                             String hourString = Long.toString(hour);
                                             String minuteString = Long.toString(minute);
                                             String secondsString = Long.toString(seconds);
@@ -907,8 +907,26 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    public void getLocationList() {
+    public ArrayList<String> getLocationList() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
 
+        final DocumentReference docRef = db.collection("users").document(uid);
+
+        final ArrayList<ArrayList<String>> access = new ArrayList<>();
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        access.add((ArrayList<String>) document.get("StudyLocations"));
+                    }
+                }
+            }
+        });
+        return access.get(0);
     }
 
     public void updateToDo() throws JSONException {

@@ -102,7 +102,7 @@
                         android:id="@+id/allTimeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="99hr 59min"
+                        android:text="00:00:00"
                         android:textColor="#fff"
                         android:fontFamily="orbitron"
                         android:textSize="30sp" />
