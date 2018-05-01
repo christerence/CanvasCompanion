@@ -364,64 +364,7 @@ public class CoreActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().add(R.id.Profile, profile).commit();
                 }
                 getSupportFragmentManager().executePendingTransactions();
-
-                ArrayList<String> allLocationsList = getLocationList();
-                MostVisitedLocationsPieChart = (PieChart) findViewById(R.id.MostVisitedLocationsPieChart);
-                if (MostVisitedLocationsPieChart != null) {
-                    Description description = new Description();
-                    description.setText("Most Studied Locations");
-                    MostVisitedLocationsPieChart.setRotationEnabled(true);
-                    MostVisitedLocationsPieChart.setDescription(description);
-                    MostVisitedLocationsPieChart.setHoleRadius(25f);
-                    MostVisitedLocationsPieChart.setTransparentCircleAlpha(0);
-                    MostVisitedLocationsPieChart.setCenterText("Most Studied Locations");
-                    if (allLocationsList != null) {
-
-                        Log.d("Pie", "Piechart is not null");
-
-                        ArrayList<String> xEntrys = new ArrayList<>();
-                        Set<String> uniqueLocations = new HashSet<String>(allLocationsList);
-                        ArrayList<PieEntry> yData = new ArrayList<>();
-                        Iterator<String> uniqueIterator = uniqueLocations.iterator();
-                        for (int i = 0; i < uniqueLocations.size(); i++) {
-                            String currLocation = uniqueIterator.next();
-                            float tempCount = 0;
-                            for (int j = 0; j < allLocationsList.size(); j++) {
-                                //allLocationsList.get(j);
-                                if (allLocationsList.get(j).equals(currLocation)) {
-                                    tempCount++;
-                                }
-                            }
-                            //yData.add(new PieEntry(tempCount));
-                            yData.add(new PieEntry(tempCount));
-                            xEntrys.add(currLocation);
-                        }
-
-                        //get sum of all locations and then calculate the percentages
-                        //float sum = 0;
-                        //for (int i = 0; i < )
-
-//            ArrayList<PieEntry> yEntrys = new ArrayList<>();
-//            for (int i = 0; i < yData.size(); i++) {
-//                yE
-//            }
-
-                        PieDataSet pieDataSet = new PieDataSet(yData, "Count of Most Visited");
-                        pieDataSet.setSliceSpace(2);
-                        pieDataSet.setValueTextSize(12);
-                        // haven't set any colors so default colors should be used
-                        Legend legend = MostVisitedLocationsPieChart.getLegend();
-                        legend.setForm(Legend.LegendForm.CIRCLE);
-                        PieData pieData = new PieData(pieDataSet);
-                        MostVisitedLocationsPieChart.setData(pieData);
-                        MostVisitedLocationsPieChart.invalidate();
-                    }
-                }
-                else {
-                    Log.d("Piechart: ", "The pie chart is still null");
-                }
-
-
+                getLocationList();
                 TextView wholename = findViewById(R.id.FullName);
                 wholename.setText(first + " " + last);
                 TextView emailtext = findViewById(R.id.Email);
@@ -981,7 +924,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> getLocationList() {
+    public void getLocationList() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
@@ -997,11 +940,59 @@ public class CoreActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         access.set(0, (ArrayList<String>) document.get("StudyLocations"));
+
+                        ArrayList<String> allLocationsList = access.get(0);
+                        MostVisitedLocationsPieChart = (PieChart) findViewById(R.id.MostVisitedLocationsPieChart);
+                        if (MostVisitedLocationsPieChart != null) {
+                            Description description = new Description();
+                            description.setText("Most Studied Locations");
+                            MostVisitedLocationsPieChart.setRotationEnabled(true);
+                            MostVisitedLocationsPieChart.setDescription(description);
+                            MostVisitedLocationsPieChart.setHoleRadius(25f);
+                            MostVisitedLocationsPieChart.setTransparentCircleAlpha(0);
+                            MostVisitedLocationsPieChart.setCenterText("Most Studied Locations");
+                            if (allLocationsList != null) {
+
+                                Log.d("Pie", "Piechart is not null");
+
+                                ArrayList<String> xEntrys = new ArrayList<>();
+                                Set<String> uniqueLocations = new HashSet<String>(allLocationsList);
+                                ArrayList<PieEntry> yData = new ArrayList<>();
+                                Iterator<String> uniqueIterator = uniqueLocations.iterator();
+                                for (int i = 0; i < uniqueLocations.size(); i++) {
+                                    String currLocation = uniqueIterator.next();
+                                    float tempCount = 0;
+                                    for (int j = 0; j < allLocationsList.size(); j++) {
+                                        //allLocationsList.get(j);
+                                        if (allLocationsList.get(j).equals(currLocation)) {
+                                            tempCount++;
+                                        }
+                                    }
+                                    //yData.add(new PieEntry(tempCount));
+                                    yData.add(new PieEntry(tempCount));
+                                    xEntrys.add(currLocation);
+                                }
+
+
+                                PieDataSet pieDataSet = new PieDataSet(yData, "Count of Most Visited");
+                                pieDataSet.setSliceSpace(2);
+                                pieDataSet.setValueTextSize(12);
+                                // haven't set any colors so default colors should be used
+                                Legend legend = MostVisitedLocationsPieChart.getLegend();
+                                legend.setForm(Legend.LegendForm.CIRCLE);
+                                PieData pieData = new PieData(pieDataSet);
+                                MostVisitedLocationsPieChart.setData(pieData);
+                                MostVisitedLocationsPieChart.invalidate();
+                            }
+                        }
+                        else {
+                            Log.d("Piechart: ", "The pie chart is still null");
+                        }
+
                     }
                 }
             }
         });
-        return access.get(0);
     }
 
     public void updateToDo() throws JSONException {
