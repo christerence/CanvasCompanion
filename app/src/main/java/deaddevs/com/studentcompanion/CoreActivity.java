@@ -907,6 +907,10 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    public void getLocationList() {
+        //
+    }
+
     public void updateToDo() throws JSONException {
         getSupportFragmentManager().executePendingTransactions();
         ListView todo = findViewById(R.id.ToDos);
