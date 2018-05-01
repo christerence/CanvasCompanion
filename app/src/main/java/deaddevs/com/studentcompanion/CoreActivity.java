@@ -43,10 +43,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1146,11 +1144,11 @@ public class CoreActivity extends AppCompatActivity {
                                 ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                             } else {
                                 ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
-                                ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                                ((TextView) findViewById(R.id.confidence)).setText("0/10");
                             }
                         } else {
                             ((TextView) findViewById(R.id.timeStudied)).setText("00:00:00");
-                            ((TextView) findViewById(R.id.confidence)).setText("0/20");
+                            ((TextView) findViewById(R.id.confidence)).setText("0/10");
                         }
                     } else {
                         //Need to Add Error
