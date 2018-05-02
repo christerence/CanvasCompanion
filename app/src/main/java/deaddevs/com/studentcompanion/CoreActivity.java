@@ -20,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -33,6 +34,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,9 +57,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import deaddevs.com.studentcompanion.utils.CanvasApi;
 import deaddevs.com.studentcompanion.utils.DatabaseManager;
@@ -103,6 +116,8 @@ public class CoreActivity extends AppCompatActivity {
 
     public static final String INITIALIZE_STATUS = "intialization status";
     public static final String MUSIC_PLAYING = "music playing";
+
+    PieChart MostVisitedLocationsPieChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,7 +217,9 @@ public class CoreActivity extends AppCompatActivity {
         }
         musicCompletionReceiver = new MusicCompletionReceiver(this);
         handleLocation();
-        //Log.d("address", address);
+
+
+
     }
 
     @Override
@@ -250,6 +267,7 @@ public class CoreActivity extends AppCompatActivity {
                         profile = new AccountFragment();
                         profile.setArguments(getIntent().getExtras());
                         getSupportFragmentManager().beginTransaction().add(R.id.Profile, profile).commit();
+
                     }
                     break;
                 case "Settings":
@@ -293,12 +311,31 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
+    public void randomText() {
+        TextView question = findViewById(R.id.text);
+        String[] questionList = new String[] {
+                "How's Everything Going?",
+                "I hope you're doing well!",
+                "Keep up the good work!",
+                "Keep track of Homework!",
+                "Procrastination == killer.",
+                "List Your Homework!",
+                "Keep on top on it.",
+                "Plan Ahead.",
+                "Balance is key."
+        };
+        Random rand = new Random();
+        int n = rand.nextInt(questionList.length);
+        question.setText(questionList[n]);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         if (currPage.equals("Course")) {
             TextView view = findViewById(R.id.HelloText);
             view.setText("Hello, " + first + ".");
+            randomText();
         } else if (currPage.equals("ToDo")) {
             try {
                 updateToDo();
@@ -329,6 +366,7 @@ public class CoreActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().add(R.id.Profile, profile).commit();
                 }
                 getSupportFragmentManager().executePendingTransactions();
+                getLocationList();
                 TextView wholename = findViewById(R.id.FullName);
                 wholename.setText(first + " " + last);
                 TextView emailtext = findViewById(R.id.Email);
@@ -342,10 +380,24 @@ public class CoreActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if(document.exists()) {
-                                if(document.get("TotalStudyTime") != null) {
+                            if (document.exists()) {
+                                if (document.get("TotalStudyTime") != null) {
                                     ArrayList<Long> time = (ArrayList<Long>) document.get("TotalStudyTime");
-                                    String timeToShow = Long.toString(time.get(0)) + ":" +Long.toString(time.get(1)) + ":" + Long.toString(time.get(2));
+
+                                    String hourString = Long.toString(time.get(0));
+                                    String minuteString = Long.toString(time.get(1));
+                                    String secondsString = Long.toString(time.get(2));
+                                    if (time.get(0) < 10) {
+                                        hourString = "0" + hourString;
+                                    }
+                                    if (time.get(1) < 10) {
+                                        minuteString = "0" + minuteString;
+                                    }
+                                    if (time.get(2) < 10) {
+                                        secondsString = "0" + secondsString;
+                                    }
+
+                                    String timeToShow = hourString + ":" + minuteString + ":" + secondsString;
                                     TextView allTime = findViewById(R.id.allTimeText);
                                     allTime.setText(timeToShow);
                                 } else {
@@ -357,11 +409,17 @@ public class CoreActivity extends AppCompatActivity {
                                 TextView location2 = findViewById(R.id.location2);
                                 TextView location3 = findViewById(R.id.location3);
 
-                                if(document.get("StudyLocations") != null) {
-                                    ArrayList<String> location = (ArrayList<String>)document.get("StudyLocations");
-                                    if(location.size() == 1) location1.setText(location.get(0));
-                                    else if(location.size() == 2) { location1.setText(location.get(0)); location2.setText(location.get(1)); }
-                                    else if(location.size() != 0) { location1.setText(location.get(0)); location2.setText(location.get(1)); location3.setText(location.get(2));}
+                                if (document.get("StudyLocations") != null) {
+                                    ArrayList<String> location = (ArrayList<String>) document.get("StudyLocations");
+                                    if (location.size() == 1) location1.setText(location.get(0));
+                                    else if (location.size() == 2) {
+                                        location1.setText(location.get(0));
+                                        location2.setText(location.get(1));
+                                    } else if (location.size() != 0) {
+                                        location1.setText(location.get(0));
+                                        location2.setText(location.get(1));
+                                        location3.setText(location.get(2));
+                                    }
                                 } else {
                                     location1.setText("No Data Available");
                                     location2.setText("No Data Available");
@@ -417,6 +475,7 @@ public class CoreActivity extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -469,6 +528,7 @@ public class CoreActivity extends AppCompatActivity {
             Toast.makeText(this, "fill in confidence", Toast.LENGTH_SHORT).show();
             return;
         }
+        assignmentpage.zeroOutTime();
 
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -476,11 +536,11 @@ public class CoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if(document.exists()) {
+                    if (document.exists()) {
                         ArrayList<String> oldLoc = null;
-                        if(document.get("StudyLocations") != null) {
+                        if (document.get("StudyLocations") != null) {
                             oldLoc = (ArrayList<String>) document.get("StudyLocations");
-                            if(!oldLoc.contains(loc)) {
+                            if (!oldLoc.contains(loc)) {
                                 oldLoc.add(loc);
                             }
                         } else {
@@ -500,7 +560,7 @@ public class CoreActivity extends AppCompatActivity {
                         Long minute = Long.parseLong(parsedTime[1]);
                         Long sec = Long.parseLong(parsedTime[2]);
 
-                        if(document.get("TotalStudyTime") != null) {
+                        if (document.get("TotalStudyTime") != null) {
                             ArrayList<Long> back = (ArrayList<Long>) document.get("TotalStudyTime");
 
                             Long newhr = hour + back.get(0);
@@ -534,11 +594,11 @@ public class CoreActivity extends AppCompatActivity {
 
                         ArrayList<Map> individual;
                         Map<String, Object> curr = null;
-                        if(document.get("Studied") != null) {
-                            individual = (ArrayList<Map>)document.get("Studied");
-                            for(int i = 0; i < individual.size(); i++) {
+                        if (document.get("Studied") != null) {
+                            individual = (ArrayList<Map>) document.get("Studied");
+                            for (int i = 0; i < individual.size(); i++) {
                                 Map<String, Object> x = individual.get(i);
-                                if(x.get("title").toString().equals(title)) {
+                                if (x.get("title").toString().equals(title)) {
                                     curr = individual.get(i);
                                 }
                             }
@@ -546,7 +606,7 @@ public class CoreActivity extends AppCompatActivity {
                             individual = new ArrayList<>();
                         }
 
-                        if(curr != null) {
+                        if (curr != null) {
                             ArrayList<Long> oldStudyTime = (ArrayList<Long>) curr.get("StudyTime");
                             Long newIndividualHr = hour + oldStudyTime.get(0);
                             Long newIndividualMin = minute + oldStudyTime.get(1);
@@ -607,22 +667,35 @@ public class CoreActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if(document.exists()) {
+                                    if (document.exists()) {
                                         ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
                                         Map<String, Object> requiredData = null;
-                                        for(int i = 0; i < oldData.size(); i++) {
+                                        for (int i = 0; i < oldData.size(); i++) {
                                             Map<String, Object> x = oldData.get(i);
-                                            if(x.get("title").equals(title)) {
+                                            if (x.get("title").equals(title)) {
                                                 requiredData = x;
                                             }
                                         }
-                                        if(requiredData != null) {
+                                        if (requiredData != null) {
                                             ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
                                             Long hour = time.get(0);
                                             Long minute = time.get(1);
                                             Long seconds = time.get(2);
 
-                                            String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                            String hourString = Long.toString(hour);
+                                            String minuteString = Long.toString(minute);
+                                            String secondsString = Long.toString(seconds);
+                                            if (hour < 10) {
+                                                hourString = "0" + hourString;
+                                            }
+                                            if (minute < 10) {
+                                                minuteString = "0" + minuteString;
+                                            }
+                                            if (seconds < 10) {
+                                                secondsString = "0" + secondsString;
+                                            }
+
+                                            String displayTime = hourString + ":" + minuteString + ":" + secondsString;
                                             ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
                                             ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                                         } else {
@@ -635,7 +708,7 @@ public class CoreActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        dialog.hide();
+                        dialog.dismiss();
                     } else {
                         //Need to Add Error
                     }
@@ -680,6 +753,7 @@ public class CoreActivity extends AppCompatActivity {
                 view.setText("Hello, " + first + ".");
                 updateList();
                 currPage = "Course";
+                randomText();
                 break;
             case "Settings":
                 savedInstanceState = settings.getArguments();
@@ -713,6 +787,7 @@ public class CoreActivity extends AppCompatActivity {
                 view.setText("Hello, " + first + ".");
                 updateList();
                 currPage = "Course";
+                randomText();
                 break;
             case "ToDo":
                 savedInstanceState = calendar.getArguments();
@@ -746,6 +821,7 @@ public class CoreActivity extends AppCompatActivity {
                 view.setText("Hello, " + first + ".");
                 updateList();
                 currPage = "Course";
+                randomText();
                 break;
             case "CoursePage":
                 savedInstanceState = coursepage.getArguments();
@@ -778,7 +854,7 @@ public class CoreActivity extends AppCompatActivity {
                 view = findViewById(R.id.HelloText);
                 view.setText("Hello, " + first + ".");
                 updateList();
-                //course.setOnClicks();
+                randomText();
                 currPage = "Course";
                 break;
             case "Text":
@@ -848,6 +924,65 @@ public class CoreActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public void getLocationList() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+        final DocumentReference docRef = db.collection("users").document(uid);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> access = (ArrayList<String>) document.get("StudyLocations");
+
+                        ArrayList<String> allLocationsList = access;
+                        MostVisitedLocationsPieChart = (PieChart) findViewById(R.id.MostVisitedLocationsPieChart);
+                        if (MostVisitedLocationsPieChart != null) {
+                            MostVisitedLocationsPieChart.setCenterText("Study Locations");
+                            MostVisitedLocationsPieChart.setCenterTextSize(30);
+                            if (allLocationsList != null) {
+
+                                Log.d("Pie", "Piechart is not null");
+
+                                ArrayList<String> xEntrys = new ArrayList<>();
+                                Set<String> uniqueLocations = new HashSet<String>(allLocationsList);
+                                ArrayList<PieEntry> yData = new ArrayList<>();
+                                Iterator<String> uniqueIterator = uniqueLocations.iterator();
+                                for (int i = 0; i < uniqueLocations.size(); i++) {
+                                    String currLocation = uniqueIterator.next();
+                                    float tempCount = 0;
+                                    for (int j = 0; j < allLocationsList.size(); j++) {
+                                        if (allLocationsList.get(j).equals(currLocation)) {
+                                            tempCount++;
+                                        }
+                                    }
+                                    yData.add(new PieEntry(tempCount, currLocation));
+                                    xEntrys.add(currLocation);
+                                }
+                                PieDataSet pieDataSet = new PieDataSet(yData, "");
+                                pieDataSet.setValueTextSize(0);
+                                pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                                PieData pieData = new PieData(pieDataSet);
+                                MostVisitedLocationsPieChart.setData(pieData);
+                                MostVisitedLocationsPieChart.animateY(1000);
+                                MostVisitedLocationsPieChart.getDescription().setEnabled(false);
+                                MostVisitedLocationsPieChart.invalidate();
+                            }
+                        }
+                        else {
+                            Log.d("Piechart: ", "The pie chart is still null");
+                        }
+
+                    }
+                }
+            }
+        });
     }
 
     public void updateToDo() throws JSONException {
@@ -1099,6 +1234,9 @@ public class CoreActivity extends AppCompatActivity {
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
+        if (!due.equals("null")) {
+            due = due.substring(0, due.indexOf("T"));
+        }
         ((TextView) findViewById(R.id.due)).setText(due);
         ((TextView) findViewById(R.id.CourseNameHW)).setText((courseName));
         ((TextView) findViewById(R.id.AssignmentTitle)).setText(assignmentName);
@@ -1116,23 +1254,36 @@ public class CoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if(document.exists()) {
-                        if(document.get("Studied") != null) {
+                    if (document.exists()) {
+                        if (document.get("Studied") != null) {
                             ArrayList<Map> oldData = (ArrayList<Map>) document.get("Studied");
                             Map<String, Object> requiredData = null;
-                            for(int i = 0; i < oldData.size(); i++) {
+                            for (int i = 0; i < oldData.size(); i++) {
                                 Map<String, Object> x = oldData.get(i);
-                                if(x.get("title").equals(title)) {
+                                if (x.get("title").equals(title)) {
                                     requiredData = x;
                                 }
                             }
-                            if(requiredData != null) {
+                            if (requiredData != null) {
                                 ArrayList<Long> time = (ArrayList<Long>) requiredData.get("StudyTime");
                                 Long hour = time.get(0);
                                 Long minute = time.get(1);
                                 Long seconds = time.get(2);
 
-                                String displayTime = Long.toString(hour) + ":" +  Long.toString(minute)+ ":" + Long.toString(seconds);
+                                String hourString = Long.toString(hour);
+                                String minuteString = Long.toString(minute);
+                                String secondsString = Long.toString(seconds);
+                                if (hour < 10) {
+                                    hourString = "0" + hourString;
+                                }
+                                if (minute < 10) {
+                                    minuteString = "0" + minuteString;
+                                }
+                                if (seconds < 10) {
+                                    secondsString = "0" + secondsString;
+                                }
+
+                                String displayTime = hourString + ":" + minuteString + ":" + secondsString;
                                 ((TextView) findViewById(R.id.timeStudied)).setText(displayTime);
                                 ((TextView) findViewById(R.id.confidence)).setText(requiredData.get("Confidence").toString() + "/10");
                             } else {
@@ -1213,6 +1364,7 @@ public class CoreActivity extends AppCompatActivity {
     EditText confidenceText;
     EditText concentrationText;
     TextView locText;
+
     public void startDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog, null);
@@ -1224,6 +1376,39 @@ public class CoreActivity extends AppCompatActivity {
         confidenceText = (EditText) mView.findViewById(R.id.confidence);
         concentrationText = (EditText) mView.findViewById(R.id.concentration);
         locText.setText(address);
+    }
+
+    TextView titleReview;
+    TextView descriptionReview;
+
+
+    public void startReview(View v) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.review, null);
+        mBuilder.setView(mView);
+        dialog = mBuilder.create();
+        dialog.show();
+
+        titleReview = mView.findViewById(R.id.reviewtitle);
+        descriptionReview = mView.findViewById(R.id.reviewdescription);
+    }
+
+    public void handleSendData(View v) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
+
+        String docTitle = uid + ":" + titleReview.getText().toString();
+        String title = titleReview.getText().toString();
+        String description = descriptionReview.getText().toString();
+
+        final DocumentReference docRef = db.collection("reviews").document(docTitle);
+
+        Map<String, Object> toSend = new HashMap<>();
+        toSend.put("Title", title);
+        toSend.put("Description", description);
+        docRef.set(toSend);
+        dialog.dismiss();
     }
 
     public void updateName(String musicName) {
@@ -1286,7 +1471,5 @@ public class CoreActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
 

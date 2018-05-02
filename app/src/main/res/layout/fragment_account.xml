@@ -102,6 +102,7 @@
                         android:id="@+id/allTimeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="00:00:00"
                         android:textColor="#fff"
                         android:fontFamily="orbitron"
                         android:textSize="30sp" />
@@ -166,13 +167,10 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="orbitron"
-                android:textColor="#000"
-                android:text="Will later put graphs down here"
-                android:textSize="50dp" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:id="@+id/MostVisitedLocationsPieChart"></com.github.mikephil.charting.charts.PieChart>
 
         </LinearLayout>
 
