@@ -55,6 +55,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -950,20 +951,23 @@ public class CoreActivity extends AppCompatActivity {
 
                                 Log.d("Pie", "Piechart is not null");
 
+                                allLocationsList.removeAll(Arrays.asList(""));
                                 ArrayList<String> xEntrys = new ArrayList<>();
                                 Set<String> uniqueLocations = new HashSet<String>(allLocationsList);
                                 ArrayList<PieEntry> yData = new ArrayList<>();
                                 Iterator<String> uniqueIterator = uniqueLocations.iterator();
                                 for (int i = 0; i < uniqueLocations.size(); i++) {
                                     String currLocation = uniqueIterator.next();
-                                    float tempCount = 0;
-                                    for (int j = 0; j < allLocationsList.size(); j++) {
-                                        if (allLocationsList.get(j).equals(currLocation)) {
-                                            tempCount++;
+                                    if (currLocation != null || currLocation.isEmpty()) {
+                                        float tempCount = 0;
+                                        for (int j = 0; j < allLocationsList.size(); j++) {
+                                            if (allLocationsList.get(j).equals(currLocation)) {
+                                                tempCount++;
+                                            }
                                         }
+                                        yData.add(new PieEntry(tempCount, currLocation));
+                                        xEntrys.add(currLocation);
                                     }
-                                    yData.add(new PieEntry(tempCount, currLocation));
-                                    xEntrys.add(currLocation);
                                 }
                                 PieDataSet pieDataSet = new PieDataSet(yData, "");
                                 pieDataSet.setValueTextSize(0);
@@ -972,6 +976,8 @@ public class CoreActivity extends AppCompatActivity {
                                 MostVisitedLocationsPieChart.setData(pieData);
                                 MostVisitedLocationsPieChart.animateY(1000);
                                 MostVisitedLocationsPieChart.getDescription().setEnabled(false);
+                                MostVisitedLocationsPieChart.getLegend().setEnabled(false);
+                                MostVisitedLocationsPieChart.setEntryLabelColor(Color.BLACK);
                                 MostVisitedLocationsPieChart.invalidate();
                             }
                         }
