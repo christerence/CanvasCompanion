@@ -121,9 +121,9 @@
                 android:layout_marginRight="17dp">
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Locations:"
+                    android:text="Favorite Locations:"
                     android:textColor="#fff"
                     android:fontFamily="orbitron"
                     android:layout_marginLeft="18dp"
