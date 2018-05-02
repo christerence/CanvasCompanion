@@ -512,6 +512,7 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     public void handleAddData(View v) {
+        findViewById(R.id.doggif).setVisibility(View.INVISIBLE);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         @SuppressLint("RestrictedApi") String uid = mAuth.getUid();
@@ -1011,14 +1012,17 @@ public class CoreActivity extends AppCompatActivity {
     public void updateList() {
         ListView courselist = findViewById(R.id.CourseListView);
         ArrayList<String> coursesName = new ArrayList<>();
-        for (int i = 0; i < courses.size(); i++) {
-            String name = courses.get(i).split("///")[1];
-            coursesName.add(name);
-        }
-        List<String> coursesNameAsList = coursesName;
-        ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coursesNameAsList);
-        if (courselist != null) {
-            courselist.setAdapter(coursesadapter);
+        if(courses != null) {
+            for (int i = 0; i < courses.size(); i++) {
+                String name = courses.get(i).split("///")[1];
+                coursesName.add(name);
+            }
+            List<String> coursesNameAsList = coursesName;
+            ArrayAdapter<String> coursesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coursesNameAsList);
+            if (courselist != null) {
+                courselist.setAdapter(coursesadapter);
+            }
+            findViewById(R.id.loadinggif).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -1088,6 +1092,8 @@ public class CoreActivity extends AppCompatActivity {
             if (list != null) {
                 list.setAdapter(coursesadapter);
             }
+
+            findViewById(R.id.loadinggif2).setVisibility(View.INVISIBLE);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1367,6 +1373,7 @@ public class CoreActivity extends AppCompatActivity {
 
     public void startStop(View view) {
         assignmentpage.startStop();
+        findViewById(R.id.doggif).setVisibility(View.VISIBLE);
         Log.d("startStop in core", "startStop in core");
     }
 
@@ -1375,6 +1382,7 @@ public class CoreActivity extends AppCompatActivity {
     TextView locText;
 
     public void startDialog() {
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(CoreActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog, null);
         mBuilder.setView(mView);

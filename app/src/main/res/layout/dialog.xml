@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/concentration"
                 android:numStars="10"
-                android:stepSize="1.0" />
+                android:stepSize="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -60,7 +60,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/confidence"
                 android:numStars="10"
-                android:stepSize="1.0"/>
+                android:stepSize="1"/>
         </LinearLayout>
 
         <TextView

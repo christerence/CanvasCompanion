@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,14 +105,11 @@ public class SignUp extends AppCompatActivity {
 		if(mAuth.getCurrentUser() != null) {
 			String uid = mAuth.getCurrentUser().getUid();
 			writeNewUser(uid, first, last, email, canvasKey);
-			Intent i = new Intent(getApplicationContext(), CoreActivity.class);
-			startActivity(i);
-			setContentView(R.layout.activity_core);
+
 		}
 	}
 
-	public void writeNewUser(String uid, String first, String last, String email, String canvas) {
-
+	public void writeNewUser(String uid, final String first, final String last, final String email, final String canvas) {
 		Map<String, Object> user = new HashMap<>();
 		user.put("uid", uid);
 		user.put("first", first);
@@ -124,6 +122,17 @@ public class SignUp extends AppCompatActivity {
 					@Override
 					public void onSuccess(Void aVoid) {
 						Log.d(TAG, "DocumentSnapshot successfully written!");
+						Intent i = new Intent(getApplicationContext(), CoreActivity.class);
+						i.putExtra("USER_FIRST", first);
+						i.putExtra("USER_LAST", last);
+						i.putExtra("CANVAS_KEY", canvas);
+						i.putExtra("USER_EMAIL", email);
+						ArrayList<String> collection = new ArrayList<>();
+						i.putExtra("TO_DO_LIST", collection);
+						i.putExtra("FROM", "LOGIN");
+						startActivity(i);
+						setContentView(R.layout.activity_core);
+						overridePendingTransition(R.anim.goup, R.anim.godown);
 					}
 				})
 				.addOnFailureListener(new OnFailureListener() {

@@ -95,11 +95,28 @@
         </LinearLayout>
 
 
-        <ListView
-            android:id="@+id/CourseListView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+            <ListView
+                android:id="@+id/CourseListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/loading"
+                android:id="@+id/loadinggif"
+                android:visibility="visible"
+                android:layout_marginBottom="20dp"
+                />
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/thegood"

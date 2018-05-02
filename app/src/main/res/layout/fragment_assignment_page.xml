@@ -5,6 +5,7 @@
     android:background="@drawable/loginbg"
     tools:context="deaddevs.com.studentcompanion.AssignmentPageFragment">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,171 +43,211 @@
                 />
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/gradienttitle">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="orbitron"
-                android:text="Placeholder"
-                android:textSize="30dp"
-                android:id="@+id/CourseNameHW"
-                android:textAlignment="center"
-                android:textColor="#fff"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:background="@drawable/gradienttitle"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="orbitron"
-                android:layout_marginLeft="18dp"
-                android:text="Due:"
-                android:textSize="30sp"
-                android:textColor="#fff"/>
-
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="17dp"
-                android:gravity="right">
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/gradienttitle">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="orbitron"
+                        android:text="Placeholder"
+                        android:textSize="30dp"
+                        android:id="@+id/CourseNameHW"
+                        android:textAlignment="center"
+                        android:textColor="#fff"/>
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/due"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="April 20"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/boxes"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="orbitron"
+                        android:layout_marginLeft="18dp"
+                        android:text="Due:"
+                        android:textSize="30sp"
+                        android:textColor="#fff"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="17dp"
+                        android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/due"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="April 20"
+                            android:gravity="center"
+                            android:fontFamily="orbitron"
+                            android:textSize="20sp"
+                            android:textColor="#fff"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/boxes"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Study Time:"
+                        android:textSize="30sp"
+                        android:layout_marginLeft="18dp"
+                        android:fontFamily="orbitron"
+                        android:textColor="#fff"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/timeStudied"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="4hr 20min"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:fontFamily="orbitron"
+                            android:textColor="#fff"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boxes"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Confidence:"
+                        android:textSize="30dp"
+                        android:fontFamily="orbitron"
+                        android:layout_marginLeft="18dp"
+                        android:textColor="#fff"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="17dp"
+                        android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/confidence"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:text="--/10"
+                            android:fontFamily="orbitron"
+                            android:textColor="#fff"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical"
                     android:gravity="center"
-                    android:fontFamily="orbitron"
-                    android:textSize="20sp"
-                    android:textColor="#fff"/>
+                    android:background="@drawable/boxes">
+                    <TextView
+                        android:id="@+id/timer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:textSize="50dp"
+                        android:textColor="#fff"
+                        android:fontFamily="orbitron" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:text="Hour:Minute:Second"
+                        android:padding="10dp"
+                        android:textColor="#fff"
+                        android:gravity="center"
+                        android:fontFamily="orbitron"
+                        />
+                </LinearLayout>
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/dog"
+                    android:id="@+id/doggif"
+                    android:visibility="invisible"
+                    android:layout_marginBottom="20dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/stopStudying"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Start Studying"
+                        android:textColor="#fff"
+                        android:textSize="20sp"
+                        android:fontFamily="orbitron"
+                        android:background="#00acc1"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:onClick="startStop"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/gradienttitle"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+        </ScrollView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Study Time:"
-                android:textSize="30sp"
-                android:layout_marginLeft="18dp"
-                android:fontFamily="orbitron"
-                android:textColor="#fff"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="right">
-
-                <TextView
-                    android:id="@+id/timeStudied"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="4hr 20min"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:fontFamily="orbitron"
-                    android:textColor="#fff"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradienttitle"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Confidence:"
-                android:textSize="30dp"
-                android:fontFamily="orbitron"
-                android:layout_marginLeft="18dp"
-                android:textColor="#fff"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="17dp"
-                android:gravity="right">
-
-                <TextView
-                    android:id="@+id/confidence"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:text="--/10"
-                    android:fontFamily="orbitron"
-                    android:textColor="#fff"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/timer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:gravity="center"
-            android:text="00:00:00"
-            android:textSize="50dp"
-            android:background="@drawable/selected"
-            android:textColor="#fff"
-            android:fontFamily="orbitron"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/stopStudying"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Start Studying"
-                android:textColor="#fff"
-                android:textSize="20sp"
-                android:fontFamily="orbitron"
-                android:background="#00acc1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:onClick="startStop"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
