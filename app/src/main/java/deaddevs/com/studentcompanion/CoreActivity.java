@@ -1093,7 +1093,10 @@ public class CoreActivity extends AppCompatActivity {
                 list.setAdapter(coursesadapter);
             }
 
-            findViewById(R.id.loadinggif2).setVisibility(View.INVISIBLE);
+            if(findViewById(R.id.loadinggif2) != null) {
+                findViewById(R.id.loadinggif2).setVisibility(View.INVISIBLE);
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1374,7 +1377,6 @@ public class CoreActivity extends AppCompatActivity {
     public void startStop(View view) {
         assignmentpage.startStop();
         findViewById(R.id.doggif).setVisibility(View.VISIBLE);
-        Log.d("startStop in core", "startStop in core");
     }
 
     RatingBar confidenceText;
