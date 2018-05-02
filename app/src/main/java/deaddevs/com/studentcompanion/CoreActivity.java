@@ -31,6 +31,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -518,8 +519,8 @@ public class CoreActivity extends AppCompatActivity {
         final DocumentReference docRef = db.collection("users").document(uid);
 
         final String loc = locText.getText().toString();
-        final String confidence = confidenceText.getText().toString();
-        final String concentration = concentrationText.getText().toString();
+        final String confidence = Integer.toString((int)(confidenceText.getRating()));
+        final String concentration = Integer.toString((int)(concentrationText.getRating()));
 
         if (concentration.equals("")) {
             Toast.makeText(this, "fill in concentration", Toast.LENGTH_SHORT).show();
@@ -898,6 +899,7 @@ public class CoreActivity extends AppCompatActivity {
                     courses = savedInstanceState.getStringArrayList("COURSE_LIST");
                     currPage = savedInstanceState.getString("CURRPAGE");
                     todos = savedInstanceState.getStringArrayList("TODOLIST");
+                    response = savedInstanceState.getString("RESPONSE");
                     getSupportFragmentManager().beginTransaction().remove(assignmentpage).commit();
                     if (findViewById(R.id.Settings) != null) {
                         coursepage = new CoursePageFragment(this);
@@ -1235,12 +1237,13 @@ public class CoreActivity extends AppCompatActivity {
             outState.putStringArrayList("COURSE_LIST", savelist);
             outState.putString("CURRPAGE", currPage);
             outState.putStringArrayList("TODOLIST", todos);
+            outState.putString("RESPONSE", response);
             assignmentpage.setArguments(outState);
             getSupportFragmentManager().beginTransaction().add(R.id.AssignmentPage, assignmentpage).commit();
         }
         canvas = new CanvasApi(this);
         getSupportFragmentManager().executePendingTransactions();
-        if (!due.equals("null")) {
+        if (!due.equals("Not Available")) {
             due = due.substring(0, due.indexOf("T"));
         }
         ((TextView) findViewById(R.id.due)).setText(due);
@@ -1367,8 +1370,8 @@ public class CoreActivity extends AppCompatActivity {
         Log.d("startStop in core", "startStop in core");
     }
 
-    EditText confidenceText;
-    EditText concentrationText;
+    RatingBar confidenceText;
+    RatingBar concentrationText;
     TextView locText;
 
     public void startDialog() {
@@ -1379,8 +1382,8 @@ public class CoreActivity extends AppCompatActivity {
         dialog.show();
 
         locText = (TextView) mView.findViewById(R.id.dialogLocation);
-        confidenceText = (EditText) mView.findViewById(R.id.confidence);
-        concentrationText = (EditText) mView.findViewById(R.id.concentration);
+        confidenceText =  mView.findViewById(R.id.confidence);
+        concentrationText = mView.findViewById(R.id.concentration);
         locText.setText(address);
     }
 

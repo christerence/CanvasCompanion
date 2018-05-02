@@ -60,7 +60,6 @@ public class CoursePageFragment extends Fragment {
                 Object o = assignmentList.getItemAtPosition(position);
                 String str = (String) o;
                 String duedate = "0";
-                Log.d("Hello", core.getResponse());
                 try {
                     JSONArray obj = new JSONArray(core.getResponse());
                     for(int i = 0; i < obj.length(); i++) {

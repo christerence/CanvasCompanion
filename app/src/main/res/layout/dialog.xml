@@ -27,50 +27,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/concentration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="orbitron"
-                android:hint="concentration"
-                android:inputType="number"
-                android:textColor="#000"
-                android:textSize="25dp" />
-
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="orbitron"
-                android:text=" /10"
+                android:text="Concentration"
                 android:textColor="#000"
                 android:textSize="25dp" />
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/concentration"
+                android:numStars="10"
+                android:stepSize="1.0" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/confidence"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="orbitron"
-                android:hint="confidence"
-                android:inputType="number"
-                android:textColor="#000"
-                android:textSize="25dp" />
-
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="orbitron"
-                android:text=" /10"
+                android:text="Confidence"
                 android:textColor="#000"
                 android:textSize="25dp" />
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/confidence"
+                android:numStars="10"
+                android:stepSize="1.0"/>
         </LinearLayout>
 
         <TextView
