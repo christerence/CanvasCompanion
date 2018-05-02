@@ -37,9 +37,11 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -942,13 +944,8 @@ public class CoreActivity extends AppCompatActivity {
                         ArrayList<String> allLocationsList = access;
                         MostVisitedLocationsPieChart = (PieChart) findViewById(R.id.MostVisitedLocationsPieChart);
                         if (MostVisitedLocationsPieChart != null) {
-                            Description description = new Description();
-                            description.setText("Most Studied Locations");
-                            MostVisitedLocationsPieChart.setRotationEnabled(true);
-                            MostVisitedLocationsPieChart.setDescription(description);
-                            MostVisitedLocationsPieChart.setHoleRadius(25f);
-                            MostVisitedLocationsPieChart.setTransparentCircleAlpha(0);
-                            MostVisitedLocationsPieChart.setCenterText("Most Studied Locations");
+                            MostVisitedLocationsPieChart.setCenterText("Study Locations");
+                            MostVisitedLocationsPieChart.setCenterTextSize(30);
                             if (allLocationsList != null) {
 
                                 Log.d("Pie", "Piechart is not null");
@@ -961,25 +958,20 @@ public class CoreActivity extends AppCompatActivity {
                                     String currLocation = uniqueIterator.next();
                                     float tempCount = 0;
                                     for (int j = 0; j < allLocationsList.size(); j++) {
-                                        //allLocationsList.get(j);
                                         if (allLocationsList.get(j).equals(currLocation)) {
                                             tempCount++;
                                         }
                                     }
-                                    //yData.add(new PieEntry(tempCount));
-                                    yData.add(new PieEntry(tempCount));
+                                    yData.add(new PieEntry(tempCount, currLocation));
                                     xEntrys.add(currLocation);
                                 }
-
-
-                                PieDataSet pieDataSet = new PieDataSet(yData, "Count of Most Visited");
-                                pieDataSet.setSliceSpace(2);
-                                pieDataSet.setValueTextSize(12);
-                                // haven't set any colors so default colors should be used
-                                Legend legend = MostVisitedLocationsPieChart.getLegend();
-                                legend.setForm(Legend.LegendForm.CIRCLE);
+                                PieDataSet pieDataSet = new PieDataSet(yData, "");
+                                pieDataSet.setValueTextSize(0);
+                                pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
                                 PieData pieData = new PieData(pieDataSet);
                                 MostVisitedLocationsPieChart.setData(pieData);
+                                MostVisitedLocationsPieChart.animateY(1000);
+                                MostVisitedLocationsPieChart.getDescription().setEnabled(false);
                                 MostVisitedLocationsPieChart.invalidate();
                             }
                         }
