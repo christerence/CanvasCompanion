@@ -11,6 +11,12 @@ With Helpful Study Solutions
 - Koofers
 
 ## Collaborators
-- Christian Terence S. Cabauatan(christernece)
-- Davis Crawford(davis1)
-- Parker Pfaff(parkerp1)
+- Christian Terence S. Cabauatan(christerence)
+- Davis Crawford(daviscrawford)
+- Parker Pfaff(parkpfaf76)
+
+
+## Websites
+christianterence.me
+daviscrawford.github.io
+
