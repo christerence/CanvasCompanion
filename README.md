@@ -17,6 +17,6 @@ With Helpful Study Solutions
 
 
 ## Websites
-- [link text itself]: christianterence.me
-- [link text itself]: daviscrawford.github.io
+- [Christian's Website link](christerence.me)
+- [Davis' Website link](daviscrawford.github.io)
 
