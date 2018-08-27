@@ -1,5 +1,5 @@
 # StudentCompanion
-Android Development Class Project
+This project is made through Android Studio as a collaborative project.
 
 Canvas Integrated Companion Application. 
 With Helpful Study Solutions
