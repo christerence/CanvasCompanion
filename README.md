@@ -17,6 +17,6 @@ With Helpful Study Solutions
 
 
 ## Websites
-- [christianterence.me]: christerence's website
-- [daviscrawford.github.io]: daviscrawford's website
+- [link]christianterence.me
+- [link]daviscrawford.github.io
 
