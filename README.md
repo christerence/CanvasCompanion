@@ -15,8 +15,7 @@ With Helpful Study Solutions
 - Davis Crawford(daviscrawford)
 - Parker Pfaff(parkpfaf76)
 
-
 ## Websites
-- [Christian's Website link](christerence.me)
-- [Davis' Website link](daviscrawford.github.io)
+- [Christian's Website](christerence.me)
+- [Davis' Website](daviscrawford.github.io)
 
