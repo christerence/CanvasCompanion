@@ -9,13 +9,7 @@ With Helpful Study Solutions
 - Google Calendar API 
 - Koofers
 
-
-## Android-Chan
-- Christian Terence S. Cabauatan
-- Davis CrawFord
-- Parker Pfaff
-- Hithesh P.
-- Kevin Song
-
-## COMPLETED: 
-Good Project Boys.
+## Collaborators
+- Christian Terence S. Cabauatan(christernece)
+- Davis Crawford(davis1)
+- Parker Pfaff(parkerp1)
